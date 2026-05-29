@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Huyệt Vị 888</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --j:    #1a3c34;
+      --jd:   #0f2520;
+      --jm:   #245044;
+      --gold: #c9a84c;
+      --goldp:#f0dea0;
+      --cr:   #f5f0e8;
+      --crd:  #ede5d5;
+      --red:  #c0392b;
+      --grn:  #27ae60;
+      --txt:  #2c2c2c;
+      --txl:  #777;
+      --white:#ffffff;
+      --sh:   0 2px 12px rgba(0,0,0,0.1);
+      --r:    8px;
+    }
+    html { font-size: 15px; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--cr); color: var(--txt); min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; }
+    input, select, textarea { font-family: inherit; }
+    textarea { resize: vertical; }
+
+    /* ── Admin Layout ── */
+    .admin-header {
+      background: var(--jd);
+      border-bottom: 2px solid rgba(201,168,76,0.3);
+      padding: 0.75rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-logo {
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .admin-logo span { font-size: 0.75rem; color: rgba(245,240,232,0.5); font-weight: 400; }
+    .admin-nav-links { display: flex; gap: 0.75rem; align-items: center; }
+    .admin-nav-links a {
+      color: rgba(245,240,232,0.7); font-size: 0.82rem;
+      padding: 0.3rem 0.65rem; border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .admin-nav-links a:hover { background: rgba(201,168,76,0.1); color: var(--gold); }
+
+    .admin-body {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
+
+    /* ── Sidebar ── */
+    .admin-sidebar {
+      width: 300px; flex-shrink: 0;
+      background: var(--white);
+      border-right: 1px solid rgba(0,0,0,0.08);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-top {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      background: var(--jd);
+    }
+    .sidebar-actions { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .btn { padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .btn-primary { background: var(--j); color: var(--goldp); }
+    .btn-primary:hover { background: var(--jm); }
+    .btn-success { background: var(--grn); color: #fff; }
+    .btn-success:hover { background: #219a52; }
+    .btn-danger  { background: var(--red); color: #fff; }
+    .btn-danger:hover  { background: #a93226; }
+    .btn-ghost   { background: rgba(245,240,232,0.1); color: var(--goldp); border: 1px solid rgba(201,168,76,0.2); }
+    .btn-ghost:hover { background: rgba(201,168,76,0.15); }
+    .btn-gold    { background: var(--gold); color: var(--jd); font-weight: 700; }
+    .btn-gold:hover { background: #e0bc60; }
+
+    .sidebar-search {
+      width: 100%;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      color: var(--goldp);
+      font-size: 0.82rem;
+      outline: none;
+    }
+    .sidebar-search::placeholder { color: rgba(245,240,232,0.35); }
+    .sidebar-search:focus { border-color: var(--gold); }
+
+    .sidebar-list-wrap {
+      flex: 1; overflow-y: auto;
+    }
+    .sidebar-list-info {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      color: var(--txl);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sidebar-item:hover { background: rgba(26,60,52,0.05); }
+    .sidebar-item.active { background: rgba(26,60,52,0.1); }
+    .sitem-info { min-width: 0; }
+    .sitem-name { font-size: 0.85rem; font-weight: 600; color: var(--j); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sitem-code { font-size: 0.7rem; color: var(--gold); font-weight: 600; }
+    .sitem-actions { display: flex; gap: 0.3rem; flex-shrink: 0; }
+    .sitem-btn { width: 26px; height: 26px; border-radius: 4px; border: none; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .sitem-btn.edit { background: rgba(26,60,52,0.1); color: var(--j); }
+    .sitem-btn.edit:hover { background: var(--j); color: var(--goldp); }
+    .sitem-btn.del  { background: rgba(192,57,43,0.1); color: var(--red); }
+    .sitem-btn.del:hover  { background: var(--red); color: #fff; }
+
+    /* Pagination */
+    .pagination {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.35rem; padding: 0.75rem;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      flex-shrink: 0;
+    }
+    .pg-btn {
+      width: 28px; height: 28px; border-radius: 5px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: var(--white); font-size: 0.78rem; font-weight: 600;
+      color: var(--j); cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pg-btn:hover { background: var(--j); color: var(--goldp); border-color: var(--j); }
+    .pg-btn.active { background: var(--j); color: var(--goldp); border-color: var(--j); }
+    .pg-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ── Main Form Area ── */
+    .admin-main {
+      flex: 1; overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .form-area {
+      background: var(--white);
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .form-header {
+      background: var(--j);
+      padding: 1rem 1.5rem;
+      border-radius: var(--r) var(--r) 0 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .form-title { color: var(--goldp); font-size: 1rem; font-weight: 700; }
+    .form-subtitle { color: rgba(240,222,160,0.6); font-size: 0.78rem; margin-top: 0.15rem; }
+
+    .form-body { padding: 1.5rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 0.78rem; font-weight: 600; color: var(--j); letter-spacing: 0.02em; }
+    .form-group label .req { color: var(--red); margin-left: 2px; }
+    .form-group input[type="text"],
+    .form-group input[type="url"],
+    .form-group select,
+    .form-group textarea {
+      padding: 0.5rem 0.75rem;
+      border: 1.5px solid rgba(0,0,0,0.12);
+      border-radius: 6px; font-size: 0.85rem; color: var(--txt);
+      background: var(--cr); outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--j); background: #fff; }
+    .form-group textarea { min-height: 90px; }
+    .form-group textarea.tall { min-height: 120px; }
+
+    /* Image + Video preview */
+    .media-row { display: flex; gap: 0.75rem; align-items: flex-start; }
+    .media-row input { flex: 1; }
+    .preview-box {
+      width: 64px; height: 64px; border-radius: 6px;
+      background: var(--crd); border: 1px solid rgba(0,0,0,0.1);
+      overflow: hidden; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--txl);
+    }
+    .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .yt-thumb { width: 80px; height: 45px; }
+    .yt-thumb img { object-fit: cover; }
+
+    /* Toggle */
+    .toggle-group { display: flex; align-items: center; gap: 0.75rem; }
+    .toggle-switch {
+      position: relative; width: 42px; height: 22px;
+      display: inline-block;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #ccc; border-radius: 22px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #fff; left: 3px; top: 3px;
+      transition: transform 0.2s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--j); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+    .toggle-label { font-size: 0.82rem; color: var(--txl); }
+
+    .form-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      background: rgba(26,60,52,0.03);
+      border-radius: 0 0 var(--r) var(--r);
+      flex-wrap: wrap; gap: 0.75rem;
+    }
+    .form-footer-left { display: flex; gap: 0.5rem; }
+    .form-footer-right { display: flex; gap: 0.5rem; align-items: center; }
+
+    /* ── File Load Panel ── */
+    .file-panel {
+      background: var(--jd);
+      border-radius: var(--r);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--cr);
+      max-width: 540px;
+      margin: 3rem auto;
+      box-shadow: var(--sh);
+    }
+    .file-panel h2 {
+      font-size: 1.4rem; color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .file-panel p {
+      color: rgba(245,240,232,0.6); font-size: 0.88rem;
+      line-height: 1.7; margin-bottom: 1.5rem;
+    }
+    .file-panel-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Status bar ── */
+    .status-bar {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.6rem 1rem;
+      background: var(--jd);
+      border-radius: var(--r);
+      margin-bottom: 1.25rem;
+      font-size: 0.82rem;
+      color: var(--goldp);
+      flex-wrap: wrap;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot.saved   { background: var(--grn); }
+    .status-dot.unsaved { background: #f39c12; animation: blink 1.2s infinite; }
+    .status-dot.nofile  { background: var(--red); }
+    @keyframes blink { 50% { opacity: 0.3; } }
+    .status-text { flex: 1; }
+    .status-actions { display: flex; gap: 0.4rem; }
+
+    /* ── Empty state ── */
+    .empty-panel {
+      text-align: center; padding: 4rem 1.5rem;
+      color: var(--txl);
+    }
+    .empty-panel .ep-icon { font-size: 3rem; margin-bottom: 0.75rem; opacity: 0.4; }
+    .empty-panel h3 { font-size: 1.1rem; color: var(--j); margin-bottom: 0.4rem; }
+    .empty-panel p { font-size: 0.85rem; }
+
+    /* ── Toast ── */
+    #admin-toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--j); color: var(--goldp);
+      padding: 0.65rem 1.2rem; border-radius: 8px;
+      font-size: 0.85rem; z-index: 9999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    #admin-toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Confirm Modal ── */
+    .confirm-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 5000; display: none;
+      align-items: center; justify-content: center;
+    }
+    .confirm-overlay.open { display: flex; }
+    .confirm-modal {
+      background: var(--white); border-radius: 12px;
+      padding: 2rem; max-width: 380px; width: 90%;
+      text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    }
+    .confirm-modal h3 { font-size: 1.05rem; color: var(--j); margin-bottom: 0.5rem; }
+    .confirm-modal p  { font-size: 0.88rem; color: var(--txl); margin-bottom: 1.5rem; line-height: 1.6; }
+    .confirm-btns { display: flex; gap: 0.6rem; justify-content: center; }
+
+    /* Meridian datalist helper */
+    .hint { font-size: 0.72rem; color: var(--txl); margin-top: 0.2rem; }
+
+    @media (max-width: 768px) {
+      .admin-body { flex-direction: column; height: auto; }
+      .admin-sidebar { width: 100%; height: auto; max-height: 50vh; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+  <div class="admin-logo">
+    ☯ Huyệt Vị 888
+    <span>/ Admin</span>
+  </div>
+  <div class="admin-nav-links">
+    <a href="index.html">🏠 Trang chủ</a>
+    <a href="search.html">🔍 Tìm kiếm</a>
+  </div>
+</header>
+
+<div class="admin-body">
+
+  <!-- ══ SIDEBAR ══════════════════════════════════════ -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-actions">
+        <button class="btn btn-gold" id="btn-add-new" title="Thêm huyệt mới">➕ Thêm mới</button>
+        <button class="btn btn-ghost" id="btn-open-file" title="Mở file data.js">📂 Mở file</button>
+      </div>
+      <input type="text" class="sidebar-search" id="sidebar-search"
+             placeholder="🔍 Tìm theo tên hoặc mã..." autocomplete="off">
+    </div>
+    <div class="sidebar-list-info">
+      <span id="list-info-text">Chưa tải dữ liệu</span>
+    </div>
+    <div class="sidebar-list-wrap">
+      <div id="sidebar-list"></div>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </aside>
+
+  <!-- ══ MAIN ═════════════════════════════════════════ -->
+  <main class="admin-main" id="admin-main">
+
+    <!-- Status bar -->
+    <div class="status-bar" id="status-bar">
+      <span class="status-dot nofile" id="status-dot"></span>
+      <span class="status-text" id="status-text">Chưa chọn file data.js — Bấm "Mở file" để bắt đầu</span>
+      <div class="status-actions">
+        <button class="btn btn-success" id="btn-save" style="display:none;" title="Lưu vào file data.js">💾 Lưu</button>
+        <button class="btn btn-ghost"   id="btn-download" style="display:none;" title="Tải xuống data.js">📥 Tải về</button>
+      </div>
+    </div>
+
+    <!-- Initial state -->
+    <div id="welcome-panel">
+      <div class="file-panel">
+        <div style="font-size:3rem;margin-bottom:1rem;">☯</div>
+        <h2>Huyệt Vị 888 — Admin</h2>
+        <p>
+          Trang quản trị nội dung chạy hoàn toàn local, không cần server.<br>
+          Dùng <strong>File System Access API</strong> để đọc và ghi trực tiếp vào <code>data.js</code>.<br><br>
+          Bấm nút bên dưới để chọn file <code>assets/js/data.js</code> từ máy tính.
+        </p>
+        <div class="file-panel-actions">
+          <button class="btn btn-gold" id="btn-open-file-2">📂 Chọn file data.js</button>
+          <button class="btn btn-ghost" id="btn-paste-data">📋 Dán dữ liệu JSON</button>
+        </div>
+        <p style="margin-top:1.25rem;font-size:0.75rem;opacity:0.45;">
+          Nếu trình duyệt không hỗ trợ File System API (Firefox), dùng nút "Dán dữ liệu JSON"
+        </p>
+      </div>
+    </div>
+
+    <!-- Form area -->
+    <div id="form-area" style="display:none;" class="form-area">
+      <div class="form-header">
+        <div>
+          <div class="form-title" id="form-title">✏️ Chỉnh sửa huyệt vị</div>
+          <div class="form-subtitle" id="form-subtitle">Điền đầy đủ thông tin bên dưới</div>
+        </div>
+        <button class="btn btn-ghost" id="btn-cancel-edit">✕ Hủy</button>
+      </div>
+
+      <div class="form-body">
+        <div class="form-grid">
+
+          <!-- Mã huyệt -->
+          <div class="form-group">
+            <label>Mã Huyệt <span class="req">*</span></label>
+            <input type="text" id="f-ma" placeholder="VD: ST36, LI4, CV4" autocomplete="off">
+            <span class="hint">Mã chuẩn quốc tế (viết hoa + số)</span>
+          </div>
+
+          <!-- Tên Việt -->
+          <div class="form-group">
+            <label>Tên Tiếng Việt <span class="req">*</span></label>
+            <input type="text" id="f-ten" placeholder="VD: TÚC TAM LÝ" autocomplete="off">
+          </div>
+
+          <!-- Đường kinh -->
+          <div class="form-group">
+            <label>Đường Kinh / Kinh Lạc</label>
+            <input type="text" id="f-duong" list="meridian-list" placeholder="VD: Kinh Vị" autocomplete="off">
+            <datalist id="meridian-list">
+              <option value="Kinh Phế">
+              <option value="Kinh Đại Trường">
+              <option value="Kinh Vị">
+              <option value="Kinh Tỳ">
+              <option value="Kinh Tâm">
+              <option value="Kinh Tiểu Trường">
+              <option value="Kinh Bàng Quang">
+              <option value="Kinh Thận">
+              <option value="Kinh Tâm Bào">
+              <option value="Kinh Tam Tiêu">
+              <option value="Kinh Đởm">
+              <option value="Kinh Can">
+              <option value="Mạch Nhâm">
+              <option value="Mạch Đốc">
+              <option value="Kỳ huyệt">
+            </datalist>
+          </div>
+
+          <!-- Huyệt nổi bật toggle -->
+          <div class="form-group" style="justify-content:flex-end;padding-bottom:0.4rem;">
+            <label style="margin-bottom:0.6rem;">Huyệt Nổi Bật</label>
+            <div class="toggle-group">
+              <label class="toggle-switch">
+                <input type="checkbox" id="f-featured">
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label" id="featured-label">Không</span>
+            </div>
+          </div>
+
+                    <!-- Vị trí -->
+          <div class="form-group full">
+            <label>Vị Trí</label>
+            <textarea id="f-vitri" class="tall" placeholder="Mô tả vị trí giải phẫu (từ cột Vị Trí trong Excel)..."></textarea>
+          </div>
+
+          <!-- Cách xác định huyệt -->
+          <div class="form-group full">
+            <label>Cách Xác Định Huyệt <span class="req">*</span></label>
+            <textarea id="f-cachxacdinh" class="tall" placeholder="Mô tả cách xác định huyệt vị..."></textarea>          </div>
+
+          <!-- Cách châm -->
+          <div class="form-group full">
+            <label>Cách Châm</label>
+            <textarea id="f-cachcham" class="tall" placeholder="Hướng dẫn kỹ thuật châm cứu..."></textarea>
+          </div>
+
+          <!-- Tác dụng -->
+          <div class="form-group full">
+            <label>Tác Dụng</label>
+            <textarea id="f-tacdung" class="tall" placeholder="Tác dụng theo y học cổ truyền (mỗi dòng một tác dụng)..."></textarea>
+          </div>
+
+          <!-- Chủ trị -->
+          <div class="form-group full">
+            <label>Chủ Trị</label>
+            <textarea id="f-chutri" placeholder="Các chứng bệnh chủ trị, cách nhau bằng dấu phẩy hoặc xuống dòng..."></textarea>
+          </div>
+
+          <!-- Hình ảnh -->
+          <div class="form-group full">
+            <label>Link Hình Ảnh Minh Họa</label>
+            <div class="media-row">
+              <input type="url" id="f-hinhanh" placeholder="https://...">
+              <div class="preview-box" id="preview-img">🖼️</div>
+            </div>
+          </div>
+
+          <!-- Video URL -->
+          <div class="form-group full">
+            <label>Link Video YouTube</label>
+            <div class="media-row">
+              <input type="url" id="f-video" placeholder="https://youtu.be/...">
+              <div class="preview-box yt-thumb" id="preview-video">▶️</div>
+            </div>
+          </div>
+
+        </div><!-- /form-grid -->
+      </div><!-- /form-body -->
+
+      <div class="form-footer">
+        <div class="form-footer-left">
+          <button class="btn btn-danger" id="btn-delete-current" style="display:none;">🗑️ Xóa huyệt này</button>
+        </div>
+        <div class="form-footer-right">
+          <button class="btn btn-ghost" id="btn-cancel-edit2">Hủy</button>
+          <button class="btn btn-primary" id="btn-save-item">✔ Lưu huyệt vị</button>
+        </div>
+      </div>
+    </div><!-- /form-area -->
+
+    <!-- Empty select state -->
+    <div id="select-state" style="display:none;" class="form-area">
+      <div class="empty-panel">
+        <div class="ep-icon">📋</div>
+        <h3>Chọn huyệt vị từ danh sách bên trái</h3>
+        <p>Hoặc bấm "➕ Thêm mới" để tạo huyệt vị mới</p>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /admin-body -->
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-modal">
+    <h3 id="confirm-title">Xác nhận xóa</h3>
+    <p id="confirm-msg">Bạn có chắc muốn xóa huyệt này?</p>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost" id="confirm-cancel">Hủy</button>
+      <button class="btn btn-danger" id="confirm-ok">Xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASTE MODAL -->
+<div class="confirm-overlay" id="paste-overlay">
+  <div class="confirm-modal" style="max-width:520px;">
+    <h3>📋 Dán dữ liệu JSON</h3>
+    <p style="margin-bottom:0.75rem;">Dán toàn bộ nội dung file <code>data.js</code> vào đây:</p>
+    <textarea id="paste-input" style="width:100%;height:180px;padding:0.5rem;font-size:0.78rem;border:1px solid #ccc;border-radius:6px;resize:vertical;" placeholder="const HUYET_DATA = [...];"></textarea>
+    <div class="confirm-btns" style="margin-top:1rem;">
+      <button class="btn btn-ghost" id="paste-cancel">Hủy</button>
+      <button class="btn btn-primary" id="paste-ok">✔ Tải dữ liệu</button>
+    </div>
+  </div>
+</div>
+
+<div id="admin-toast"></div>
+
+<script>
+/* =====================================================
+   ADMIN.JS — Huyệt Vị 888 Admin
+   ===================================================== */
+
+// ── State ──────────────────────────────────────────
+let DATA         = [];        // Full dataset
+let fileHandle   = null;      // File System Access API handle
+let isDirty      = false;     // Unsaved changes?
+let editingIdx   = -1;        // Index in DATA (-1 = new)
+let currentPage  = 1;
+const PAGE_SIZE  = 20;
+let searchQ      = '';
+let savedAt      = null;
+
+// ── DOM refs ───────────────────────────────────────
+const $ = id => document.getElementById(id);
+const sidebarList   = $('sidebar-list');
+const pagination    = $('pagination');
+const formArea      = $('form-area');
+const welcomePanel  = $('welcome-panel');
+const selectState   = $('select-state');
+const listInfoText  = $('list-info-text');
+const statusDot     = $('status-dot');
+const statusText    = $('status-text');
+const btnSave       = $('btn-save');
+const btnDownload   = $('btn-download');
+
+// ── Toast ──────────────────────────────────────────
+function toast(msg, dur = 2500) {
+  const el = $('admin-toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// ── Status bar ─────────────────────────────────────
+function setStatus(state, msg) {
+  statusDot.className = 'status-dot ' + state;
+  statusText.textContent = msg;
+}
+
+function markDirty() {
+  isDirty = true;
+  setStatus('unsaved', '⚠️ Có thay đổi chưa lưu');
+}
+function markSaved() {
+  isDirty = false;
+  savedAt = new Date();
+  const t = savedAt.toLocaleTimeString('vi-VN');
+  setStatus('saved', `✅ Đã lưu lúc ${t}`);
+}
+
+// ── Parse data.js content ─────────────────────────
+function parseDataJs(content) {
+  // Strip 'const HUYET_DATA = ' prefix and trailing semicolon
+  let json = content.trim();
+  json = json.replace(/^const\s+HUYET_DATA\s*=\s*/, '').replace(/;\s*$/, '');
+  try {
+    return JSON.parse(json);
+  } catch(e) {
+    toast('❌ Lỗi parse JSON: ' + e.message, 4000);
+    return null;
+  }
+}
+
+// ── Serialize data back to JS ─────────────────────
+function serializeDataJs(data) {
+  return 'const HUYET_DATA = ' + JSON.stringify(data, null, 2) + ';\n';
+}
+
+// ── Open file via File System Access API ──────────
+async function openFileSystemFile() {
+  if (!window.showOpenFilePicker) {
+    toast('⚠️ Trình duyệt không hỗ trợ File System API. Dùng "Dán JSON".', 4000);
+    showPasteModal();
+    return;
+  }
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: 'JavaScript', accept: { 'text/javascript': ['.js'] } }],
+    });
+    fileHandle = handle;
+    const file    = await handle.getFile();
+    const content = await file.text();
+    const parsed  = parseDataJs(content);
+    if (!parsed) return;
+    DATA = parsed;
+    initAfterLoad();
+    toast(`✅ Đã tải ${DATA.length} huyệt vị từ ${file.name}`);
+  } catch(e) {
+    if (e.name !== 'AbortError') toast('❌ Lỗi: ' + e.message, 4000);
+  }
+}
+
+function initAfterLoad() {
+  welcomePanel.style.display = 'none';
+  selectState.style.display  = 'block';
+  formArea.style.display     = 'none';
+  btnSave.style.display      = fileHandle ? 'inline-flex' : 'none';
+  btnDownload.style.display  = 'inline-flex';
+  setStatus('saved', `✅ Đã tải ${DATA.length} huyệt vị${fileHandle ? ' • Sẵn sàng lưu' : ' (chế độ download)'}`);
+  renderList();
+}
+
+// ── Paste modal ────────────────────────────────────
+function showPasteModal() { $('paste-overlay').classList.add('open'); }
+$('paste-cancel').addEventListener('click', () => $('paste-overlay').classList.remove('open'));
+$('paste-ok').addEventListener('click', () => {
+  const content = $('paste-input').value.trim();
+  if (!content) { toast('Vui lòng dán nội dung file data.js'); return; }
+  const parsed = parseDataJs(content);
+  if (!parsed) return;
+  DATA = parsed;
+  $('paste-overlay').classList.remove('open');
+  initAfterLoad();
+  toast(`✅ Đã tải ${DATA.length} huyệt vị từ clipboard`);
+});
+
+// ── Save ───────────────────────────────────────────
+async function saveFile() {
+  if (!fileHandle) { downloadFile(); return; }
+  try {
+    const writable = await fileHandle.createWritable();
+    await writable.write(serializeDataJs(DATA));
+    await writable.close();
+    markSaved();
+    toast('💾 Đã lưu vào file data.js');
+  } catch(e) {
+    toast('❌ Lỗi lưu file: ' + e.message, 4000);
+  }
+}
+
+function downloadFile() {
+  const blob = new Blob([serializeDataJs(DATA)], { type: 'text/javascript' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'data.js';
+  a.click(); URL.revokeObjectURL(url);
+  markSaved();
+  toast('📥 Đã tải xuống data.js');
+}
+
+// ── Render sidebar list ────────────────────────────
+function getFiltered() {
+  if (!searchQ) return DATA;
+  const q = searchQ.toLowerCase();
+  return DATA.filter(d =>
+    (d.tenViet  || '').toLowerCase().includes(q) ||
+    (d.maHuyet  || '').toLowerCase().includes(q) ||
+    (d.duongKinh|| '').toLowerCase().includes(q)
+  );
+}
+
+function renderList() {
+  const filtered = getFiltered();
+  const total    = filtered.length;
+  const pages    = Math.ceil(total / PAGE_SIZE);
+  if (currentPage > pages) currentPage = Math.max(1, pages);
+  const start  = (currentPage - 1) * PAGE_SIZE;
+  const slice  = filtered.slice(start, start + PAGE_SIZE);
+
+  listInfoText.textContent = searchQ
+    ? `${total} kết quả (tổng: ${DATA.length})`
+    : `${DATA.length} huyệt vị`;
+
+  if (slice.length === 0) {
+    sidebarList.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#999;font-size:0.82rem;">Không có kết quả</div>';
+  } else {
+    sidebarList.innerHTML = slice.map(item => {
+      const realIdx = DATA.indexOf(item);
+      return `<div class="sidebar-item ${realIdx === editingIdx ? 'active' : ''}" data-idx="${realIdx}">
+        <div class="sitem-info">
+          <div class="sitem-name">${escH(item.tenViet)}</div>
+          <div class="sitem-code">${escH(item.maHuyet)} · ${escH(item.duongKinh || '—')}</div>
+        </div>
+        <div class="sitem-actions">
+          <button class="sitem-btn edit" title="Sửa" data-edit="${realIdx}">✏️</button>
+          <button class="sitem-btn del"  title="Xóa" data-del="${realIdx}">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Pagination
+  renderPagination(pages);
+
+  // Events on list items
+  sidebarList.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); editItem(+btn.dataset.edit); });
+  });
+  sidebarList.querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); confirmDelete(+btn.dataset.del); });
+  });
+  sidebarList.querySelectorAll('.sidebar-item').forEach(row => {
+    row.addEventListener('click', () => editItem(+row.dataset.idx));
+  });
+}
+
+function renderPagination(pages) {
+  if (pages <= 1) { pagination.innerHTML = ''; return; }
+  let html = `<button class="pg-btn" ${currentPage===1?'disabled':''} data-pg="${currentPage-1}">‹</button>`;
+  const delta = 2;
+  for (let i = 1; i <= pages; i++) {
+    if (i === 1 || i === pages || Math.abs(i - currentPage) <= delta) {
+      html += `<button class="pg-btn ${i===currentPage?'active':''}" data-pg="${i}">${i}</button>`;
+    } else if (Math.abs(i - currentPage) === delta + 1) {
+      html += `<span style="color:#999;font-size:0.8rem;padding:0 0.2rem;">…</span>`;
+    }
+  }
+  html += `<button class="pg-btn" ${currentPage===pages?'disabled':''} data-pg="${currentPage+1}">›</button>`;
+  pagination.innerHTML = html;
+  pagination.querySelectorAll('[data-pg]').forEach(btn => {
+    btn.addEventListener('click', () => { currentPage = +btn.dataset.pg; renderList(); });
+  });
+}
+
+// ── Edit item ──────────────────────────────────────
+function editItem(idx) {
+  editingIdx = idx;
+  const item = DATA[idx];
+  selectState.style.display = 'none';
+  formArea.style.display    = 'block';
+  $('form-title').textContent   = `✏️ Sửa: ${item.tenViet || ''}`;
+  $('form-subtitle').textContent = `Mã: ${item.maHuyet || '—'} · ${item.duongKinh || '—'}`;
+  $('btn-delete-current').style.display = 'inline-flex';
+
+  $('f-ma').value      = item.maHuyet  || '';
+  $('f-ten').value     = item.tenViet  || '';
+  $('f-duong').value   = item.duongKinh|| '';
+  $('f-vitri').value      = item.viTri       || '';
+  $('f-cachxacdinh').value = item.CachXacDinh || '';
+  $('f-cachcham').value    = item.cachCham    || '';
+  $('f-tacdung').value = item.tacDung  || '';
+  $('f-chutri').value  = item.chuTri   || '';
+  $('f-hinhanh').value = item.urlHinhAnh|| '';
+  $('f-video').value   = item.videoURL || '';
+  $('f-featured').checked = !!(item.featured);
+  updateFeaturedLabel();
+  updateMediaPreviews();
+  renderList();
+  $('admin-main').scrollTop = 0;
+}
+
+// ── Add new ────────────────────────────────────────
+function addNew() {
+  editingIdx = -1;
+  selectState.style.display = 'none';
+  formArea.style.display    = 'block';
+  $('form-title').textContent   = '➕ Thêm huyệt vị mới';
+  $('form-subtitle').textContent = 'Điền đầy đủ thông tin bên dưới';
+  $('btn-delete-current').style.display = 'none';
+  // Clear form
+  ['f-ma','f-ten','f-duong','f-vitri','f-cachxacdinh','f-cachcham','f-tacdung','f-chutri','f-hinhanh','f-video'].forEach(id => $(id).value = '');
+  $('f-featured').checked = false;
+  updateFeaturedLabel();
+  updateMediaPreviews();
+  $('admin-main').scrollTop = 0;
+}
+
+// ── Save item ──────────────────────────────────────
+async function saveItem() {
+  const ma  = $('f-ma').value.trim();
+  const ten = $('f-ten').value.trim();
+  if (!ma || !ten) { toast('⚠️ Mã huyệt và Tên là bắt buộc'); return; }
+
+  const obj = {
+    tenViet:   ten,
+    maHuyet:   ma,
+    urlHinhAnh:$('f-hinhanh').value.trim(),
+    viTri:      $('f-vitri').value.trim(),
+    CachXacDinh:     $('f-cachxacdinh').value.trim(),
+    cachCham:   $('f-cachcham').value.trim(),
+    duongKinh: $('f-duong').value.trim(),
+    tacDung:   $('f-tacdung').value.trim(),
+    chuTri:    $('f-chutri').value.trim(),
+    videoURL:  $('f-video').value.trim(),
+    featured:  $('f-featured').checked,
+  };
+
+  if (editingIdx >= 0) {
+    DATA[editingIdx] = obj;
+  } else {
+    DATA.unshift(obj);
+    editingIdx = 0;
+  }
+
+  renderList();
+  $('form-title').textContent   = `✏️ Sửa: ${ten}`;
+  $('form-subtitle').textContent = `Mã: ${ma}`;
+  $('btn-delete-current').style.display = 'inline-flex';
+
+  // Tự động lưu vào file (hoặc download nếu không có fileHandle)
+  await saveFile();
+}
+
+// ── Delete ─────────────────────────────────────────
+let deleteTargetIdx = -1;
+function confirmDelete(idx) {
+  deleteTargetIdx = idx;
+  $('confirm-title').textContent = 'Xác nhận xóa';
+  $('confirm-msg').textContent   = `Xóa huyệt "${DATA[idx].tenViet}" (${DATA[idx].maHuyet})?`;
+  $('confirm-overlay').classList.add('open');
+}
+$('confirm-cancel').addEventListener('click', () => $('confirm-overlay').classList.remove('open'));
+$('confirm-ok').addEventListener('click', () => {
+  if (deleteTargetIdx < 0) return;
+  const name = DATA[deleteTargetIdx].tenViet;
+  DATA.splice(deleteTargetIdx, 1);
+  $('confirm-overlay').classList.remove('open');
+  if (editingIdx === deleteTargetIdx) {
+    editingIdx = -1;
+    formArea.style.display   = 'none';
+    selectState.style.display = 'block';
+  } else if (editingIdx > deleteTargetIdx) {
+    editingIdx--;
+  }
+  markDirty();
+  renderList();
+  toast(`🗑️ Đã xóa: ${name}`);
+  deleteTargetIdx = -1;
+});
+
+// ── Media previews ──────────────────────────────────
+function updateMediaPreviews() {
+  const imgUrl   = $('f-hinhanh').value.trim();
+  const videoUrl = $('f-video').value.trim();
+  const prevImg  = $('preview-img');
+  const prevVid  = $('preview-video');
+
+  if (imgUrl) {
+    prevImg.innerHTML = `<img src="${escH(imgUrl)}" alt="preview" onerror="this.parentNode.innerHTML='🖼️'">`;
+  } else {
+    prevImg.innerHTML = '🖼️';
+  }
+
+  if (videoUrl) {
+    const m = videoUrl.match(/(?:youtu\.be\/|watch\?v=|embed\/)([A-Za-z0-9_-]{11})/);
+    if (m) {
+      prevVid.innerHTML = `<img src="https://img.youtube.com/vi/${m[1]}/mqdefault.jpg" alt="yt" onerror="this.parentNode.innerHTML='▶️'">`;
+    } else {
+      prevVid.innerHTML = '▶️';
+    }
+  } else {
+    prevVid.innerHTML = '▶️';
+  }
+}
+
+// ── Featured toggle label ───────────────────────────
+function updateFeaturedLabel() {
+  $('featured-label').textContent = $('f-featured').checked ? 'Có' : 'Không';
+}
+$('f-featured').addEventListener('change', updateFeaturedLabel);
+
+// ── Escape HTML ────────────────────────────────────
+function escH(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Event bindings ─────────────────────────────────
+$('btn-open-file').addEventListener('click',  openFileSystemFile);
+$('btn-open-file-2').addEventListener('click', openFileSystemFile);
+$('btn-paste-data').addEventListener('click',  showPasteModal);
+$('btn-add-new').addEventListener('click',    () => { if (!DATA.length) { toast('⚠️ Vui lòng tải dữ liệu trước'); return; } addNew(); });
+$('btn-save').addEventListener('click',       saveFile);
+$('btn-download').addEventListener('click',   downloadFile);
+$('btn-save-item').addEventListener('click',  saveItem);
+$('btn-cancel-edit').addEventListener('click',  cancelEdit);
+$('btn-cancel-edit2').addEventListener('click', cancelEdit);
+$('btn-delete-current').addEventListener('click', () => { if (editingIdx >= 0) confirmDelete(editingIdx); });
+
+function cancelEdit() {
+  editingIdx = -1;
+  formArea.style.display   = 'none';
+  selectState.style.display = DATA.length ? 'block' : 'none';
+  renderList();
+}
+
+$('sidebar-search').addEventListener('input', function() {
+  searchQ = this.value.trim();
+  currentPage = 1;
+  renderList();
+});
+
+// Media preview on blur
+$('f-hinhanh').addEventListener('change', updateMediaPreviews);
+$('f-video').addEventListener('change', updateMediaPreviews);
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    if (DATA.length) saveFile();
+  }
+});
+
+// Warn on unload if dirty
+window.addEventListener('beforeunload', e => {
+  if (isDirty) {
+    e.preventDefault(); e.returnValue = '';
+  }
+});
+
+</script>
+</body>
+</html>

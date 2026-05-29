@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết Huyệt Vị — Huyệt Vị 888</title>
+  <meta name="description" content="Xem chi tiết huyệt vị: cách xác định huyệt, tác dụng, chủ trị và video hướng dẫn.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-symbol">☯</div>
+  <div class="loader-text">Đang tải...</div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">☯</span>
+      Huyệt Vị 888
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Trang Chủ</a>
+      <a href="search.html">Tìm Kiếm</a>
+      <a href="filter.html">Lọc Chứng Bệnh</a>
+      <a href="about.html">Giới Thiệu</a>
+      <a href="admin.html" class="nav-admin-link">⚙ Admin</a>
+    </div>
+    <div class="theme-switcher" id="theme-switcher"><button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Đổi theme">🎨</button><div class="theme-dropdown" id="theme-dropdown"><div class="theme-dropdown-title">Giao Diện</div><button class="theme-opt" data-theme="jade"><span class="theme-swatch" style="background:#1a3c34"></span> Ngọc Bích</button><button class="theme-opt" data-theme="brown"><span class="theme-swatch" style="background:#5c2e0a"></span> Nâu Trầm</button><button class="theme-opt" data-theme="red"><span class="theme-swatch" style="background:#7a1515"></span> Đỏ Son</button><button class="theme-opt" data-theme="ink"><span class="theme-swatch" style="background:#1a1a2e"></span> Mực Tàu</button></div></div>
+    <button class="hamburger" id="hamburger" aria-label="Mở menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" aria-label="Menu di động">
+  <a href="index.html">🏠 Trang Chủ</a>
+  <a href="search.html">🔍 Tìm Kiếm</a>
+  <a href="filter.html">🌿 Lọc Chứng Bệnh</a>
+  <a href="about.html">ℹ️ Giới Thiệu</a>
+</div>
+
+<main class="main-content page-content">
+  <section class="detail-section">
+    <div id="detail-container">
+      <!-- Filled by detail.js -->
+      <div style="text-align:center;padding:5rem 1rem;">
+        <div style="font-size:3rem;animation:spin 2s linear infinite;display:inline-block;">☯</div>
+        <p style="margin-top:1rem;color:var(--text-light);">Đang tải thông tin huyệt vị...</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Xem hình lớn">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Đóng">✕</button>
+  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">☯ Huyệt Vị 888</div>
+  <div class="footer-divider"></div>
+  <p class="footer-disclaimer">
+    © 2025 Huyệt Vị 888 — Thông tin mang tính tham khảo, không thay thế chẩn đoán y khoa.
+  </p>
+</footer>
+
+<button id="back-to-top" title="Lên đầu trang" aria-label="Lên đầu trang">▲</button>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/detail.js"></script>
+</body>
+</html>

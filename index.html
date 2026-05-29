@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huyệt Vị 888 — Tra cứu huyệt vị Đông Y</title>
+  <meta name="description" content="Tra cứu huyệt vị Đông Y chính xác, đầy đủ. Hơn 400 huyệt vị với hình ảnh, vị trí, tác dụng và video hướng dẫn.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-symbol">☯</div>
+  <div class="loader-text">Huyệt Vị 888</div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">☯</span>
+      Huyệt Vị 888
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Trang Chủ</a>
+      <a href="search.html">Tìm Kiếm</a>
+      <a href="filter.html">Lọc Chứng Bệnh</a>
+      <a href="about.html">Giới Thiệu</a>
+      <a href="admin.html" class="nav-admin-link">⚙ Admin</a>
+    </div>
+    <!-- Theme switcher -->
+    <div class="theme-switcher" id="theme-switcher" title="Đổi giao diện">
+      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Đổi theme">🎨</button>
+      <div class="theme-dropdown" id="theme-dropdown">
+        <div class="theme-dropdown-title">Giao Diện</div>
+        <button class="theme-opt" data-theme="jade" title="Xanh ngọc (mặc định)">
+          <span class="theme-swatch" style="background:#1a3c34"></span> Ngọc Bích
+        </button>
+        <button class="theme-opt" data-theme="brown" title="Nâu trầm">
+          <span class="theme-swatch" style="background:#5c2e0a"></span> Nâu Trầm
+        </button>
+        <button class="theme-opt" data-theme="red" title="Đỏ son">
+          <span class="theme-swatch" style="background:#7a1515"></span> Đỏ Son
+        </button>
+        <button class="theme-opt" data-theme="ink" title="Đen mực Tàu">
+          <span class="theme-swatch" style="background:#1a1a2e"></span> Mực Tàu
+        </button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Mở menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" aria-label="Menu di động">
+  <a href="index.html">🏠 Trang Chủ</a>
+  <a href="search.html">🔍 Tìm Kiếm</a>
+  <a href="filter.html">🌿 Lọc Chứng Bệnh</a>
+  <a href="about.html">ℹ️ Giới Thiệu</a>
+  <a href="admin.html">⚙️ Admin</a>
+</div>
+
+<main class="main-content page-content">
+
+  <!-- ══ HERO ══════════════════════════════════════════ -->
+  <section class="hero hero-compact" aria-label="Giới thiệu">
+    <div class="hero-bg"></div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none">
+        <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--cream)"/>
+      </svg>
+    </div>
+    <div class="hero-content hero-content-compact">
+      <div class="hero-badge">
+        <span>☯</span>
+        <span>Đông Y Truyền Thống</span>
+      </div>
+      <h1 class="hero-title">
+        Huyệt Vị <span>888</span>
+      </h1>
+      <p class="hero-subtitle">
+        Tra cứu huyệt vị Đông Y — Chính xác, Đầy đủ, Dễ dùng
+      </p>
+      <!-- Quick search -->
+      <div class="hero-search-wrap" role="search">
+        <input type="text" id="hero-search"
+          placeholder="Tìm huyệt vị... (ST36, Túc Tam Lý, đau lưng...)"
+          aria-label="Tìm kiếm huyệt vị" autocomplete="off">
+        <button id="hero-search-btn" aria-label="Tìm kiếm">🔍 Tìm</button>
+      </div>
+      <!-- Stats -->
+      <div class="hero-stats" id="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number" id="stat-total">—</div>
+          <div class="stat-label">Huyệt vị</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-meridians">—</div>
+          <div class="stat-label">Đường kinh</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-video">—</div>
+          <div class="stat-label">Có video</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DANH Y SLIDER ══════════════════════════════════ -->
+  <section id="danh-y-section" aria-label="Danh ngôn danh y"
+           style="background:var(--cream);padding:2.5rem 1.5rem 0;"></section>
+
+  <!-- ══ FEATURED ══════════════════════════════════════ -->
+  <section class="home-section" aria-labelledby="featured-title">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 id="featured-title">Huyệt Vị Nổi Bật</h2>
+        <div class="gold-line"></div>
+        <p>Những huyệt vị phổ biến và quan trọng nhất trong y học cổ truyền</p>
+      </div>
+      <div class="featured-grid" id="featured-grid">
+        <!-- Filled by JS — FEATURED_COUNT = 8 -->
+      </div>
+      <div style="text-align:center;margin-top:2rem;" class="reveal">
+        <a href="search.html" class="btn-primary">Xem tất cả huyệt vị →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MERIDIAN CHIPS ══════════════════════════════ -->
+  <section class="home-section alt-bg" aria-labelledby="meridian-title">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 id="meridian-title">Tra Cứu Theo Đường Kinh</h2>
+        <div class="gold-line"></div>
+        <p>Chọn đường kinh để xem các huyệt vị thuộc đường kinh đó</p>
+      </div>
+      <div class="chips-wrap reveal" id="meridian-chips"></div>
+    </div>
+  </section>
+
+  <!-- ══ HOW TO USE ════════════════════════════════════ -->
+  <section class="home-section" aria-labelledby="howto-title">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 id="howto-title">Cách Sử Dụng</h2>
+        <div class="gold-line"></div>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <span class="step-icon">🔍</span>
+          <div class="step-num">1</div>
+          <div class="step-title">Tìm Kiếm</div>
+          <div class="step-desc">Nhập tên huyệt, mã huyệt hoặc triệu chứng bệnh. Hỗ trợ gõ không dấu tiếng Việt và bộ gõ Telex.</div>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-icon">🌿</span>
+          <div class="step-num">2</div>
+          <div class="step-title">Lọc Chứng Bệnh</div>
+          <div class="step-desc">Chọn triệu chứng hoặc bệnh lý để tìm huyệt vị phù hợp — đơn lẻ hoặc kết hợp nhiều chứng.</div>
+        </div>
+        <div class="step-card reveal">
+          <span class="step-icon">📖</span>
+          <div class="step-num">3</div>
+          <div class="step-title">Xem Chi Tiết</div>
+          <div class="step-desc">Nhấn vào huyệt vị để xem vị trí, tác dụng, chủ trị và video hướng dẫn thực hành.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DISCLAIMER ════════════════════════════════════ -->
+  <section class="home-section dark-bg" style="padding:2.5rem 1.5rem;">
+    <div class="container" style="max-width:680px;text-align:center;">
+      <div class="reveal">
+        <div style="font-size:1.75rem;margin-bottom:0.5rem;">⚕️</div>
+        <h2 style="font-family:var(--font-display);color:var(--gold-pale);font-size:1.15rem;margin-bottom:0.6rem;">Lưu Ý Quan Trọng</h2>
+        <p style="color:rgba(245,240,232,0.62);font-size:0.88rem;line-height:1.75;">
+          Thông tin trên trang web này chỉ mang tính tham khảo về y học cổ truyền.<br>
+          Không thay thế chẩn đoán hoặc điều trị của bác sĩ chuyên khoa.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- POPUP THỐN -->
+<div class="thon-overlay" id="thon-overlay" onclick="closeThonPopup(event)">
+  <div class="thon-modal">
+    <div class="thon-modal-header">
+      <h3 class="thon-modal-title">📐 Cách xác định thốn</h3>
+      <button class="thon-modal-close" onclick="closeThonPopup()" aria-label="Đóng">✕</button>
+    </div>
+    <div class="thon-modal-body">
+      <div class="thon-img-wrap">
+        <img id="thon-img" src="images/cach_xac_dinh_thon.png" alt="Cách xác định thốn" class="thon-img"/>
+      </div>
+    </div>
+    <div class="thon-modal-footer">
+      <button class="thon-tab-btn active" id="btn-thon" onclick="switchThon('thon')">📏 Xem thốn</button>
+      <button class="thon-tab-btn" id="btn-dong-than" onclick="switchThon('dong-than')">🧍 Thân đồng thân</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">☯ Huyệt Vị 888</div>
+  <div class="footer-divider"></div>
+  <p class="footer-disclaimer">
+    © 2025 Huyệt Vị 888 — Thông tin mang tính tham khảo, không thay thế chẩn đoán y khoa.<br>
+    Xây dựng với ❤️ cho cộng đồng Đông Y Việt Nam.
+  </p>
+</footer>
+
+<button id="back-to-top" title="Lên đầu trang" aria-label="Lên đầu trang">▲</button>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function() {
+  // ══ CẤU HÌNH ══════════════════════════════════════
+  const FEATURED_COUNT = 8; // ← Thay đổi số này để điều chỉnh số huyệt nổi bật
+
+  // ── Stats ─────────────────────────────────────────
+  const total     = HUYET_DATA.length;
+  const meridians = new Set(HUYET_DATA.map(d => d.duongKinh).filter(Boolean));
+  const withVideo = HUYET_DATA.filter(d => d.videoURL && d.videoURL.trim()).length;
+
+  document.getElementById('stat-total').textContent     = total;
+  document.getElementById('stat-meridians').textContent = meridians.size;
+  document.getElementById('stat-video').textContent     = withVideo;
+
+  // ── Featured ──────────────────────────────────────
+  const featuredCodes = ['ST36','LI4','PC6','HT7','GB20','GV20','CV4','SP6',
+                         'BL40','BL23','LU7','ST25','KD3','LR3','TE5','GV14'];
+  let featured = HUYET_DATA.filter(d => featuredCodes.includes(d.maHuyet));
+  if (featured.length < FEATURED_COUNT) {
+    const extras = HUYET_DATA.filter(d => !featuredCodes.includes(d.maHuyet))
+                              .slice(0, FEATURED_COUNT - featured.length);
+    featured = [...featured, ...extras];
+  }
+  featured = featured.slice(0, FEATURED_COUNT);
+  document.getElementById('featured-grid').innerHTML = featured.map(item => buildCardHTML(item)).join('');
+
+  // ── Meridian chips ────────────────────────────────
+  const mainMeridians = [
+    'Kinh Phế','Kinh Đại Trường','Kinh Vị','Kinh Tỳ','Kinh Tâm',
+    'Kinh Tiểu Trường','Kinh Bàng Quang','Kinh Thận','Kinh Tâm Bào',
+    'Kinh Tam Tiêu','Kinh Đởm','Kinh Can','Mạch Nhâm','Mạch Đốc','Kỳ huyệt'
+  ];
+  const allMeridians = [...meridians];
+  const ordered = mainMeridians.filter(m => allMeridians.includes(m));
+  const others  = allMeridians.filter(m => !mainMeridians.includes(m) && m.trim());
+  const chipsWrap = document.getElementById('meridian-chips');
+  [...ordered, ...others].forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = m;
+    btn.addEventListener('click', () => {
+      window.location.href = 'filter.html?duongKinh=' + encodeURIComponent(m);
+    });
+    chipsWrap.appendChild(btn);
+  });
+
+  // ── Hero search ───────────────────────────────────
+  const heroSearch = document.getElementById('hero-search');
+  const heroBtn    = document.getElementById('hero-search-btn');
+  function doSearch() {
+    const q = heroSearch.value.trim();
+    window.location.href = q ? 'search.html?q=' + encodeURIComponent(q) : 'search.html';
+  }
+  heroBtn.addEventListener('click', doSearch);
+  heroSearch.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+})();
+</script>
+</body>
+</html>

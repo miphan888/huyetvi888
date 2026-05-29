@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tìm Kiếm Huyệt Vị — Huyệt Vị 888</title>
+  <meta name="description" content="Tìm kiếm huyệt vị theo tên, mã huyệt, đường kinh hoặc triệu chứng. Hỗ trợ gõ không dấu tiếng Việt.">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-symbol">☯</div>
+  <div class="loader-text">Đang tải...</div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">☯</span>
+      Huyệt Vị 888
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Trang Chủ</a>
+      <a href="search.html">Tìm Kiếm</a>
+      <a href="filter.html">Lọc Chứng Bệnh</a>
+      <a href="about.html">Giới Thiệu</a>
+      <a href="admin.html" class="nav-admin-link">⚙ Admin</a>
+    </div>
+    <div class="theme-switcher" id="theme-switcher"><button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Đổi theme">🎨</button><div class="theme-dropdown" id="theme-dropdown"><div class="theme-dropdown-title">Giao Diện</div><button class="theme-opt" data-theme="jade"><span class="theme-swatch" style="background:#1a3c34"></span> Ngọc Bích</button><button class="theme-opt" data-theme="brown"><span class="theme-swatch" style="background:#5c2e0a"></span> Nâu Trầm</button><button class="theme-opt" data-theme="red"><span class="theme-swatch" style="background:#7a1515"></span> Đỏ Son</button><button class="theme-opt" data-theme="ink"><span class="theme-swatch" style="background:#1a1a2e"></span> Mực Tàu</button></div></div>
+    <button class="hamburger" id="hamburger" aria-label="Mở menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" aria-label="Menu di động">
+  <a href="index.html">🏠 Trang Chủ</a>
+  <a href="search.html">🔍 Tìm Kiếm</a>
+  <a href="filter.html">🌿 Lọc Chứng Bệnh</a>
+  <a href="about.html">ℹ️ Giới Thiệu</a>
+</div>
+
+<main class="main-content page-content">
+
+  <!-- BANNER -->
+  <div class="page-banner">
+    <h1>🔍 Tìm Kiếm Huyệt Vị</h1>
+    <p>Tìm theo tên, mã huyệt, đường kinh hoặc triệu chứng • Hỗ trợ gõ không dấu</p>
+  </div>
+
+  <!-- SEARCH SECTION -->
+  <section class="search-section">
+    <!-- Search box -->
+    <div class="search-box-wrap" role="search">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="Nhập tên huyệt, mã huyệt, hoặc triệu chứng... (ví dụ: ST36, hop coc, đau lưng)"
+        aria-label="Tìm kiếm huyệt vị"
+        autocomplete="off"
+        autofocus
+      >
+      <button class="search-clear" id="search-clear" aria-label="Xóa tìm kiếm">✕</button>
+    </div>
+
+    <!-- Meta bar -->
+    <div class="search-meta" style="max-width:640px;margin:0 auto 1.5rem;">
+      <span class="result-count" id="result-count">Đang tải...</span>
+      <select class="sort-select" id="sort-select" aria-label="Sắp xếp kết quả">
+        <option value="default">Mặc định</option>
+        <option value="az">Tên A → Z</option>
+        <option value="za">Tên Z → A</option>
+        <option value="meridian">Theo đường kinh</option>
+        <option value="code">Theo mã huyệt</option>
+      </select>
+    </div>
+
+    <!-- Suggestion chips -->
+    <div class="chips-wrap" style="max-width:640px;margin:0 auto 2rem;justify-content:flex-start;">
+      <span style="font-size:0.78rem;color:var(--text-light);flex-shrink:0;">Gợi ý:</span>
+      <button class="chip" onclick="document.getElementById('search-input').value='đau lưng';document.getElementById('search-input').dispatchEvent(new Event('input'))">Đau lưng</button>
+      <button class="chip" onclick="document.getElementById('search-input').value='mất ngủ';document.getElementById('search-input').dispatchEvent(new Event('input'))">Mất ngủ</button>
+      <button class="chip" onclick="document.getElementById('search-input').value='đau đầu';document.getElementById('search-input').dispatchEvent(new Event('input'))">Đau đầu</button>
+      <button class="chip" onclick="document.getElementById('search-input').value='Kinh Vị';document.getElementById('search-input').dispatchEvent(new Event('input'))">Kinh Vị</button>
+      <button class="chip" onclick="document.getElementById('search-input').value='Mạch Đốc';document.getElementById('search-input').dispatchEvent(new Event('input'))">Mạch Đốc</button>
+    </div>
+
+    <!-- Results -->
+    <div class="results-grid" id="results-grid" aria-live="polite" aria-label="Kết quả tìm kiếm">
+      <!-- Filled by search.js -->
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">☯ Huyệt Vị 888</div>
+  <div class="footer-divider"></div>
+  <p class="footer-disclaimer">
+    © 2025 Huyệt Vị 888 — Thông tin mang tính tham khảo, không thay thế chẩn đoán y khoa.
+  </p>
+</footer>
+
+<button id="back-to-top" title="Lên đầu trang" aria-label="Lên đầu trang">▲</button>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/search.js"></script>
+</body>
+</html>
