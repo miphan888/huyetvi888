@@ -6,6 +6,49 @@
   <title>Huyệt Vị 888 — Tra cứu huyệt vị Đông Y</title>
   <meta name="description" content="Tra cứu huyệt vị Đông Y chính xác, đầy đủ. Hơn 400 huyệt vị với hình ảnh, vị trí, tác dụng và video hướng dẫn.">
   <link rel="stylesheet" href="assets/css/style.css">
+
+<style>
+.map-nav-dropdown { position: relative; }
+.map-nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--cream, #f5f0e8); font: inherit; font-size: 0.88rem;
+  font-weight: 500; letter-spacing: 0.02em;
+  padding: 0.4rem 0.85rem; border-radius: 4px;
+  transition: color 0.2s, background 0.2s; white-space: nowrap;
+}
+.map-nav-btn:hover { background: rgba(201,168,76,0.1); color: var(--gold, #c9a84c); }
+.map-nav-panel {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  min-width: 280px; max-width: 340px;
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 500; padding: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.map-nav-dropdown.open .map-nav-panel {
+  opacity: 1; pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.mnd-card {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0.6rem; border-radius: 7px; cursor: pointer;
+  transition: background 0.15s; text-decoration: none; color: #1a3c34;
+}
+.mnd-card:hover { background: rgba(26,60,52,0.07); }
+.mnd-thumb {
+  width: 48px; height: 36px; border-radius: 5px;
+  background: #e8e2d6; overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+.mnd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.mnd-info .mnd-name { font-size: 0.85rem; font-weight: 700; color: #1a3c34; }
+.mnd-info .mnd-count { font-size: 0.72rem; color: #555; }
+.mnd-empty { padding: 0.75rem; font-size: 0.82rem; color: #aaa; text-align: center; }
+.mnd-empty a { color: #1a3c34; font-weight: 600; }
+</style>
 </head>
 <body>
 
@@ -24,10 +67,15 @@
     </a>
     <div class="nav-links">
       <a href="index.html">Trang Chủ</a>
-      <a href="search.html">Tìm Kiếm</a>
-      <a href="filter.html">Lọc Chứng Bệnh</a>
+      <a href="search.html">Tra Cứu</a>
+            <div class="map-nav-dropdown" id="map-nav-dd">
+        <button class="map-nav-btn" id="map-nav-btn">🗺️ Huyệt Theo Vùng ▾</button>
+        <div class="map-nav-panel" id="map-nav-panel">
+          <div class="mnd-loading" style="padding:.75rem;color:#aaa;font-size:.82rem;">Đang tải...</div>
+        </div>
+      </div>
+      <a href="benh.html">🔍 Hội Chứng</a>
       <a href="about.html">Giới Thiệu</a>
-      <a href="admin.html" class="nav-admin-link">⚙ Admin</a>
     </div>
     <!-- Theme switcher -->
     <div class="theme-switcher" id="theme-switcher" title="Đổi giao diện">
@@ -57,10 +105,9 @@
 <!-- MOBILE NAV -->
 <div id="mobile-nav" aria-label="Menu di động">
   <a href="index.html">🏠 Trang Chủ</a>
-  <a href="search.html">🔍 Tìm Kiếm</a>
-  <a href="filter.html">🌿 Lọc Chứng Bệnh</a>
+  <a href="search.html">🔍 Tra Cứu</a>
+  <a href="benh.html">🔍 Hội Chứng</a>
   <a href="about.html">ℹ️ Giới Thiệu</a>
-  <a href="admin.html">⚙️ Admin</a>
 </div>
 
 <main class="main-content page-content">
@@ -154,12 +201,12 @@
           <span class="step-icon">🔍</span>
           <div class="step-num">1</div>
           <div class="step-title">Tìm Kiếm</div>
-          <div class="step-desc">Nhập tên huyệt, mã huyệt hoặc triệu chứng bệnh. Hỗ trợ gõ không dấu tiếng Việt và bộ gõ Telex.</div>
+          <div class="step-desc">Nhập tên huyệt, mã huyệt hoặc triệu hội chứng. Hỗ trợ gõ không dấu tiếng Việt và bộ gõ Telex.</div>
         </div>
         <div class="step-card reveal">
           <span class="step-icon">🌿</span>
           <div class="step-num">2</div>
-          <div class="step-title">Lọc Chứng Bệnh</div>
+          <div class="step-title">Lọc Hội Chứng</div>
           <div class="step-desc">Chọn triệu chứng hoặc bệnh lý để tìm huyệt vị phù hợp — đơn lẻ hoặc kết hợp nhiều chứng.</div>
         </div>
         <div class="step-card reveal">
@@ -222,61 +269,140 @@
 
 <script src="assets/js/data.js"></script>
 <script src="assets/js/main.js"></script>
+
+<script>
+/* ── 8 Huyệt Nổi Bật — 8 huyệt quan trọng nhất Đông y ── */
+(function() {
+  var grid = document.getElementById('featured-grid');
+  if (!grid) return;
+  var src = (typeof HUYET_DATA !== 'undefined') ? HUYET_DATA : [];
+  if (!src.length) {
+    grid.innerHTML = '<p style="text-align:center;color:#aaa;">Chưa có dữ liệu.</p>';
+    return;
+  }
+
+  // 8 huyệt quan trọng nhất theo Đông y: nguyên huyệt, bộ huyệt, tổng huyệt
+  var FEATURED_MA = ['ST36','LI4','PC6','SP6','GV20','BL23','HT7','LU7'];
+
+  function findByMa(ma) {
+    var norm = ma.trim().toUpperCase();
+    for (var i = 0; i < src.length; i++) {
+      if ((src[i].maHuyet || '').trim().toUpperCase() === norm) return src[i];
+    }
+    return null;
+  }
+
+  var items = [];
+  for (var fi = 0; fi < FEATURED_MA.length; fi++) {
+    var found = findByMa(FEATURED_MA[fi]);
+    if (found) items.push(found);
+  }
+
+  // Fallback: nếu không tìm thấy đủ 4 huyệt, lấy phân tán
+  if (items.length < 4) {
+    items = [];
+    var step = Math.max(1, Math.floor(src.length / 8));
+    for (var si = 0; si < src.length && items.length < 8; si += step) {
+      items.push(src[si]);
+    }
+  }
+
+  // buildCardHTML được định nghĩa trong main.js đã load trước
+  grid.innerHTML = items.map(function(item) {
+    return buildCardHTML(item);
+  }).join('');
+})();
+</script>
+
+
+
+<script>
+/* ── Stats + Meridian chips + Hero search ── */
+(function() {
+  var data = (typeof HUYET_DATA !== 'undefined') ? HUYET_DATA : [];
+  // Stats
+  var totalEl    = document.getElementById('stat-total');
+  var merEl      = document.getElementById('stat-meridians');
+  var videoEl    = document.getElementById('stat-video');
+  if (totalEl) totalEl.textContent = data.length;
+  if (merEl) {
+    var meridians = {};
+    data.forEach(function(h) { if (h.duongKinh) meridians[h.duongKinh] = 1; });
+    merEl.textContent = Object.keys(meridians).length;
+  }
+  if (videoEl) {
+    var vcount = data.filter(function(h) { return h.videoURL; }).length;
+    videoEl.textContent = vcount;
+  }
+
+  // Meridian chips
+  var chipsWrap = document.getElementById('meridian-chips');
+  if (chipsWrap && data.length) {
+    var merMap = {};
+    data.forEach(function(h) {
+      if (!h.duongKinh) return;
+      if (!merMap[h.duongKinh]) merMap[h.duongKinh] = 0;
+      merMap[h.duongKinh]++;
+    });
+    chipsWrap.innerHTML = Object.keys(merMap).map(function(mer) {
+      return '<a href="search.html?q='+encodeURIComponent(mer)+'" class="meridian-chip" style="'
+        + 'display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;'
+        + 'background:#fff;border:1.5px solid rgba(26,60,52,.18);border-radius:24px;'
+        + 'font-size:.82rem;font-weight:600;color:var(--jade,#1a3c34);text-decoration:none;'
+        + 'margin:.3rem;transition:all .2s;cursor:pointer;"'
+        + ' onmouseover="this.style.background='var(--jade,#1a3c34)';this.style.color='var(--gold-pale,#f0dea0)'"'
+        + ' onmouseout="this.style.background='#fff';this.style.color='var(--jade,#1a3c34)'">'
+        + '<span>⛩</span><span>'+mer+'</span>'
+        + '<span style="font-size:.72rem;opacity:.65;">'+merMap[mer]+'</span>'
+        + '</a>';
+    }).join('');
+  }
+
+  // Hero search
+  var heroInput = document.getElementById('hero-search');
+  var heroBtn   = document.getElementById('hero-search-btn');
+  function doSearch() {
+    var q = heroInput ? heroInput.value.trim() : '';
+    if (q) window.location.href = 'search.html?q=' + encodeURIComponent(q);
+  }
+  if (heroBtn) heroBtn.addEventListener('click', doSearch);
+  if (heroInput) {
+    heroInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doSearch(); });
+  }
+})();
+</script>
+
 <script>
 (function() {
-  // ══ CẤU HÌNH ══════════════════════════════════════
-  const FEATURED_COUNT = 8; // ← Thay đổi số này để điều chỉnh số huyệt nổi bật
-
-  // ── Stats ─────────────────────────────────────────
-  const total     = HUYET_DATA.length;
-  const meridians = new Set(HUYET_DATA.map(d => d.duongKinh).filter(Boolean));
-  const withVideo = HUYET_DATA.filter(d => d.videoURL && d.videoURL.trim()).length;
-
-  document.getElementById('stat-total').textContent     = total;
-  document.getElementById('stat-meridians').textContent = meridians.size;
-  document.getElementById('stat-video').textContent     = withVideo;
-
-  // ── Featured ──────────────────────────────────────
-  const featuredCodes = ['ST36','LI4','PC6','HT7','GB20','GV20','CV4','SP6',
-                         'BL40','BL23','LU7','ST25','KD3','LR3','TE5','GV14'];
-  let featured = HUYET_DATA.filter(d => featuredCodes.includes(d.maHuyet));
-  if (featured.length < FEATURED_COUNT) {
-    const extras = HUYET_DATA.filter(d => !featuredCodes.includes(d.maHuyet))
-                              .slice(0, FEATURED_COUNT - featured.length);
-    featured = [...featured, ...extras];
+  const btn   = document.getElementById('map-nav-btn');
+  const dd    = document.getElementById('map-nav-dd');
+  const panel = document.getElementById('map-nav-panel');
+  if (!btn || !dd || !panel) return;
+  function getMaps() {
+    try {
+      const raw = localStorage.getItem('huyet888-maps');
+      if (raw) { const data = JSON.parse(raw); if (data && Array.isArray(data.maps) && data.maps.length) return Promise.resolve(data.maps); }
+    } catch(e) {}
+    return fetch('assets/js/map-data.json').then(r => r.json()).then(data => (data && data.maps) ? data.maps : []).catch(() => []);
   }
-  featured = featured.slice(0, FEATURED_COUNT);
-  document.getElementById('featured-grid').innerHTML = featured.map(item => buildCardHTML(item)).join('');
-
-  // ── Meridian chips ────────────────────────────────
-  const mainMeridians = [
-    'Kinh Phế','Kinh Đại Trường','Kinh Vị','Kinh Tỳ','Kinh Tâm',
-    'Kinh Tiểu Trường','Kinh Bàng Quang','Kinh Thận','Kinh Tâm Bào',
-    'Kinh Tam Tiêu','Kinh Đởm','Kinh Can','Mạch Nhâm','Mạch Đốc','Kỳ huyệt'
-  ];
-  const allMeridians = [...meridians];
-  const ordered = mainMeridians.filter(m => allMeridians.includes(m));
-  const others  = allMeridians.filter(m => !mainMeridians.includes(m) && m.trim());
-  const chipsWrap = document.getElementById('meridian-chips');
-  [...ordered, ...others].forEach(m => {
-    const btn = document.createElement('button');
-    btn.className = 'chip';
-    btn.textContent = m;
-    btn.addEventListener('click', () => {
-      window.location.href = 'filter.html?duongKinh=' + encodeURIComponent(m);
-    });
-    chipsWrap.appendChild(btn);
-  });
-
-  // ── Hero search ───────────────────────────────────
-  const heroSearch = document.getElementById('hero-search');
-  const heroBtn    = document.getElementById('hero-search-btn');
-  function doSearch() {
-    const q = heroSearch.value.trim();
-    window.location.href = q ? 'search.html?q=' + encodeURIComponent(q) : 'search.html';
+  function renderMaps(maps) {
+    if (!maps.length) { panel.innerHTML = '<div class="mnd-empty">Chưa có bản đồ. <a href="admin.html">Vào Admin để tạo →</a></div>'; return; }
+    panel.innerHTML = maps.map(m => {
+      const thumb = m.imageData ? '<img src="' + m.imageData + '" alt="">' : '🗺️';
+      const count = (m.points || []).length;
+      return '<a class="mnd-card" href="map-viewer.html?id=' + encodeURIComponent(m.id) + '">' +
+        '<div class="mnd-thumb">' + thumb + '</div>' +
+        '<div class="mnd-info"><div class="mnd-name">' + (m.title || 'Bản đồ') + '</div>' +
+        '<div class="mnd-count">' + count + ' huyệt vị</div></div></a>';
+    }).join('');
   }
-  heroBtn.addEventListener('click', doSearch);
-  heroSearch.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+  function toggle(open) {
+    dd.classList.toggle('open', open);
+    if (open) { getMaps().then(renderMaps); }
+  }
+  btn.addEventListener('click', e => { e.stopPropagation(); toggle(!dd.classList.contains('open')); });
+  document.addEventListener('click', () => toggle(false));
+  panel.addEventListener('click', e => e.stopPropagation());
 })();
 </script>
 </body>

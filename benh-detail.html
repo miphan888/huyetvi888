@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tìm Kiếm Huyệt Vị — Huyệt Vị 888</title>
-  <meta name="description" content="Tìm kiếm huyệt vị theo tên, mã huyệt, đường kinh hoặc triệu chứng. Hỗ trợ gõ không dấu tiếng Việt.">
+  <title>Chi Tiết Hội Chứng — Huyệt Vị 888</title>
+  <meta name="description" content="Xem chi tiết hội chứng: triệu chứng, nguyên nhân, trọng tâm trị liệu và các huyệt đạo liên quan.">
   <link rel="stylesheet" href="assets/css/style.css">
-
 <style>
 .map-nav-dropdown { position: relative; }
 .map-nav-btn {
@@ -111,58 +110,12 @@
 </div>
 
 <main class="main-content page-content">
-
-  <!-- BANNER -->
-  <div class="page-banner">
-    <h1>🔍 Tìm Kiếm Huyệt Vị</h1>
-    <p>Tìm theo tên, mã huyệt, đường kinh hoặc triệu chứng • Hỗ trợ gõ không dấu</p>
+  <div id="benh-detail-container">
+    <div style="text-align:center;padding:5rem 1rem;">
+      <div style="font-size:3rem;animation:spin 2s linear infinite;display:inline-block;">☯</div>
+      <p style="margin-top:1rem;color:var(--text-light);">Đang tải thông tin hội chứng...</p>
+    </div>
   </div>
-
-  <!-- SEARCH SECTION -->
-  <section class="search-section">
-    <!-- Search box -->
-    <div class="search-box-wrap" role="search">
-      <span class="search-icon" aria-hidden="true">🔍</span>
-      <input
-        type="text"
-        id="search-input"
-        class="search-input"
-        placeholder="Nhập tên huyệt, mã huyệt, hoặc triệu chứng... (ví dụ: ST36, hop coc, đau lưng)"
-        aria-label="Tìm kiếm huyệt vị"
-        autocomplete="off"
-        autofocus
-      >
-      <button class="search-clear" id="search-clear" aria-label="Xóa tìm kiếm">✕</button>
-    </div>
-
-    <!-- Meta bar -->
-    <div class="search-meta" style="max-width:640px;margin:0 auto 1.5rem;">
-      <span class="result-count" id="result-count">Đang tải...</span>
-      <select class="sort-select" id="sort-select" aria-label="Sắp xếp kết quả">
-        <option value="default">Mặc định</option>
-        <option value="az">Tên A → Z</option>
-        <option value="za">Tên Z → A</option>
-        <option value="meridian">Theo đường kinh</option>
-        <option value="code">Theo mã huyệt</option>
-      </select>
-    </div>
-
-    <!-- Suggestion chips -->
-    <div class="chips-wrap" style="max-width:640px;margin:0 auto 2rem;justify-content:flex-start;">
-      <span style="font-size:0.78rem;color:var(--text-light);flex-shrink:0;">Gợi ý:</span>
-      <button class="chip" onclick="document.getElementById('search-input').value='đau lưng';document.getElementById('search-input').dispatchEvent(new Event('input'))">Đau lưng</button>
-      <button class="chip" onclick="document.getElementById('search-input').value='mất ngủ';document.getElementById('search-input').dispatchEvent(new Event('input'))">Mất ngủ</button>
-      <button class="chip" onclick="document.getElementById('search-input').value='đau đầu';document.getElementById('search-input').dispatchEvent(new Event('input'))">Đau đầu</button>
-      <button class="chip" onclick="document.getElementById('search-input').value='Kinh Vị';document.getElementById('search-input').dispatchEvent(new Event('input'))">Kinh Vị</button>
-      <button class="chip" onclick="document.getElementById('search-input').value='Mạch Đốc';document.getElementById('search-input').dispatchEvent(new Event('input'))">Mạch Đốc</button>
-    </div>
-
-    <!-- Results -->
-    <div class="results-grid" id="results-grid" aria-live="polite" aria-label="Kết quả tìm kiếm">
-      <!-- Filled by search.js -->
-    </div>
-  </section>
-
 </main>
 
 <!-- FOOTER -->
@@ -180,7 +133,7 @@
 <script src="assets/js/data.js"></script>
 <script src="assets/js/benh-data.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/search.js"></script>
+<script src="assets/js/benh.js"></script>
 
 
 
@@ -217,92 +170,5 @@
   panel.addEventListener('click', e => e.stopPropagation());
 })();
 </script>
-
-<script>
-// ── Augment search to include hội chứng results ─────────────
-(function() {
-  const LS_KEY = 'huyet888-benh-data';
-  function loadBenh() {
-    try {
-      const raw = localStorage.getItem(LS_KEY);
-      if (raw) { const p = JSON.parse(raw); if (Array.isArray(p)) return p; }
-    } catch(e) {}
-    return (typeof BENH_DATA !== 'undefined' && Array.isArray(BENH_DATA)) ? BENH_DATA : [];
-  }
-  function normalize(s) {
-    return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/gi,'d');
-  }
-  function escH(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-  function toSlug(str) {
-    return (str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/đ/gi,'d').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
-  }
-
-  const resultsGrid = document.getElementById('results-grid');
-  const resultCount = document.getElementById('result-count');
-  if (!resultsGrid) return;
-
-  // We need to hook into the search input
-  const searchInput = document.getElementById('search-input');
-  if (!searchInput) return;
-
-  const BENH_SECTION_ID = 'benh-results-section';
-
-  function renderBenhResults(query) {
-    // Remove old benh section
-    const old = document.getElementById(BENH_SECTION_ID);
-    if (old) old.remove();
-
-    if (!query.trim()) return;
-
-    const q = normalize(query);
-    const ALL = loadBenh();
-    const filtered = ALL.filter(b =>
-      normalize(b.ten).includes(q) ||
-      normalize(b.trieuChung||'').includes(q) ||
-      normalize(b.trongTam||'').includes(q)
-    );
-    if (!filtered.length) return;
-
-    const section = document.createElement('div');
-    section.id = BENH_SECTION_ID;
-    section.style.cssText = 'margin-top:2rem;';
-    section.innerHTML = '<h3 style="font-size:.95rem;color:var(--jade,#1a3c34);margin-bottom:1rem;' +
-      'padding-bottom:.4rem;border-bottom:2px solid rgba(26,60,52,.1);">🩺 Hội Chứng Liên Quan (' + filtered.length + ')</h3>' +
-      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;">' +
-      filtered.map(b => {
-        const slug = b.slug || toSlug(b.ten);
-        return '<a href="benh-detail.html?slug=' + encodeURIComponent(slug) + '" style="' +
-          'display:block;background:#fff;border-radius:10px;padding:1rem;' +
-          'box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);' +
-          'text-decoration:none;color:inherit;transition:box-shadow .2s;"' +
-          ' onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.13)'"' +
-          ' onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.07)'">' +
-          '<div style="font-size:1.2rem;margin-bottom:.4rem;">🩺</div>' +
-          '<div style="font-weight:700;font-size:.9rem;color:var(--jade,#1a3c34);">' + escH(b.ten) + '</div>' +
-          '<div style="font-size:.75rem;color:#888;margin-top:.3rem;">' + (b.huyetLienQuan||[]).length + ' huyệt liên quan</div>' +
-          '</a>';
-      }).join('') + '</div>';
-
-    // Insert after results-grid
-    resultsGrid.parentNode.insertBefore(section, resultsGrid.nextSibling);
-  }
-
-  // Debounce wrapper
-  let benhTimer;
-  function onSearchChange() {
-    clearTimeout(benhTimer);
-    benhTimer = setTimeout(() => renderBenhResults(searchInput.value.trim()), 350);
-  }
-  searchInput.addEventListener('input', onSearchChange);
-
-  // Run on page load if there's a query
-  const urlQ = new URLSearchParams(location.search).get('q') || '';
-  if (urlQ) setTimeout(() => renderBenhResults(urlQ), 400);
-})();
-</script>
-
 </body>
 </html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bản Đồ Huyệt Vị — Huyệt Vị 888</title>
+  <meta name="description" content="Xem bản đồ huyệt vị tương tác. Click vào từng điểm để xem chi tiết.">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .viewer-hero {
+      background: var(--jade, #1a3c34);
+      color: var(--cream, #f5f0e8);
+      padding: 2.5rem 1.5rem 2rem;
+    }
+    .viewer-hero-inner { max-width: 1100px; margin: 0 auto; }
+    .viewer-breadcrumb {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.55);
+      margin-bottom: 0.75rem;
+    }
+    .viewer-breadcrumb a { color: rgba(245,240,232,0.7); text-decoration: none; }
+    .viewer-breadcrumb a:hover { color: var(--gold, #c9a84c); }
+    .viewer-breadcrumb span { margin: 0 0.4rem; }
+    .viewer-title {
+      font-size: 2rem; font-weight: 800;
+      color: var(--gold, #c9a84c);
+      margin-bottom: 0.4rem;
+    }
+    .viewer-subtitle {
+      font-size: 0.88rem;
+      color: rgba(245,240,232,0.55);
+    }
+
+    .viewer-body {
+      max-width: 1100px; margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    .viewer-map-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      /* overflow:hidden removed — it was clipping the SVG overlay */
+      overflow: visible;
+      margin-bottom: 2rem;
+      padding: 1rem;
+    }
+
+    .viewer-map-wrap .huyet-map-widget {
+      max-width: 100%;
+    }
+
+    .viewer-badges {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+    .viewer-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--jade-dim, rgba(26,60,52,0.08));
+      border: 1px solid rgba(26,60,52,0.15);
+      border-radius: 20px;
+      font-size: 0.8rem; cursor: pointer;
+      transition: all 0.2s;
+      color: var(--jade, #1a3c34);
+    }
+    .viewer-badge:hover {
+      background: var(--jade, #1a3c34);
+      color: var(--cream, #f5f0e8);
+      border-color: transparent;
+    }
+    .viewer-badge .badge-code {
+      font-weight: 700;
+      color: var(--gold, #c9a84c);
+    }
+    .viewer-badge:hover .badge-code { color: #f0dea0; }
+
+    .viewer-empty {
+      text-align: center; padding: 4rem 1rem;
+      color: #888;
+    }
+    .viewer-empty .vi-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+    .viewer-empty h2 { font-size: 1.2rem; margin-bottom: 0.5rem; color: #555; }
+
+    .viewer-section-title {
+      font-size: 1rem; font-weight: 700;
+      color: var(--jade, #1a3c34);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .viewer-section-title::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: rgba(26,60,52,0.12);
+    }
+  
+    @keyframes hvmap-pulse {
+      0%   { r: 10px; opacity: 0.8; }
+      100% { r: 26px; opacity: 0; }
+    }
+</style>
+<style>
+.map-nav-dropdown { position: relative; }
+.map-nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--cream, #f5f0e8); font: inherit; font-size: 0.88rem;
+  font-weight: 500; letter-spacing: 0.02em;
+  padding: 0.4rem 0.85rem; border-radius: 4px;
+  transition: color 0.2s, background 0.2s; white-space: nowrap;
+}
+.map-nav-btn:hover { background: rgba(201,168,76,0.1); color: var(--gold, #c9a84c); }
+.map-nav-panel {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  min-width: 280px; max-width: 340px;
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 500; padding: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.map-nav-dropdown.open .map-nav-panel {
+  opacity: 1; pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.mnd-card {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0.6rem; border-radius: 7px; cursor: pointer;
+  transition: background 0.15s; text-decoration: none; color: #1a3c34;
+}
+.mnd-card:hover { background: rgba(26,60,52,0.07); }
+.mnd-thumb {
+  width: 48px; height: 36px; border-radius: 5px;
+  background: #e8e2d6; overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+.mnd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.mnd-info .mnd-name { font-size: 0.85rem; font-weight: 700; color: #1a3c34; }
+.mnd-info .mnd-count { font-size: 0.72rem; color: #555; }
+.mnd-empty { padding: 0.75rem; font-size: 0.82rem; color: #aaa; text-align: center; }
+.mnd-empty a { color: #1a3c34; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR (đồng bộ với index.html) -->
+<!-- NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-icon">☯</span>
+      Huyệt Vị 888
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Trang Chủ</a>
+      <a href="search.html">Tra Cứu</a>
+            <div class="map-nav-dropdown" id="map-nav-dd">
+        <button class="map-nav-btn" id="map-nav-btn">🗺️ Huyệt Theo Vùng ▾</button>
+        <div class="map-nav-panel" id="map-nav-panel">
+          <div class="mnd-loading" style="padding:.75rem;color:#aaa;font-size:.82rem;">Đang tải...</div>
+        </div>
+      </div>
+      <a href="benh.html">🔍 Hội Chứng</a>
+      <a href="about.html">Giới Thiệu</a>
+    </div>
+    <!-- Theme switcher -->
+    <div class="theme-switcher" id="theme-switcher" title="Đổi giao diện">
+      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Đổi theme">🎨</button>
+      <div class="theme-dropdown" id="theme-dropdown">
+        <div class="theme-dropdown-title">Giao Diện</div>
+        <button class="theme-opt" data-theme="jade" title="Xanh ngọc (mặc định)">
+          <span class="theme-swatch" style="background:#1a3c34"></span> Ngọc Bích
+        </button>
+        <button class="theme-opt" data-theme="brown" title="Nâu trầm">
+          <span class="theme-swatch" style="background:#5c2e0a"></span> Nâu Trầm
+        </button>
+        <button class="theme-opt" data-theme="red" title="Đỏ son">
+          <span class="theme-swatch" style="background:#7a1515"></span> Đỏ Son
+        </button>
+        <button class="theme-opt" data-theme="ink" title="Đen mực Tàu">
+          <span class="theme-swatch" style="background:#1a1a2e"></span> Mực Tàu
+        </button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Mở menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" aria-label="Menu di động">
+  <a href="index.html">🏠 Trang Chủ</a>
+  <a href="search.html">🔍 Tra Cứu</a>
+  <a href="benh.html">🔍 Hội Chứng</a>
+  <a href="about.html">ℹ️ Giới Thiệu</a>
+</div>
+
+<!-- HERO -->
+<div class="viewer-hero">
+  <div class="viewer-hero-inner">
+    <div class="viewer-breadcrumb">
+      <a href="index.html">Trang chủ</a>
+      <span>›</span>
+      <a href="#">Huyệt Vị Theo Vùng</a>
+      <span>›</span>
+      <span id="bc-name">Đang tải...</span>
+    </div>
+    <h1 class="viewer-title" id="viewer-title">Bản Đồ Huyệt Vị</h1>
+    <p class="viewer-subtitle" id="viewer-subtitle">Tải dữ liệu...</p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="viewer-body">
+  <div id="viewer-content">
+    <div class="viewer-empty">
+      <div class="vi-icon">🗺️</div>
+      <h2>Đang tải bản đồ...</h2>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">☯ Huyệt Vị 888</div>
+  <div class="footer-divider"></div>
+  <p class="footer-disclaimer">
+    © 2025 Huyệt Vị 888 — Thông tin mang tính tham khảo, không thay thế chẩn đoán y khoa.<br>
+    Xây dựng với ❤️ cho cộng đồng Đông Y Việt Nam.
+  </p>
+</footer>
+
+<button id="back-to-top" title="Lên đầu trang" aria-label="Lên đầu trang">▲</button>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function () {
+  const params = new URLSearchParams(location.search);
+  const mapId  = params.get('id');
+
+  const $ = id => document.getElementById(id);
+
+  function showError(msg) {
+    $('viewer-content').innerHTML = `
+      <div class="viewer-empty">
+        <div class="vi-icon">⚠️</div>
+        <h2>${msg}</h2>
+        <p><a href="index.html" style="color:var(--jade,#1a3c34)">← Về trang chủ</a></p>
+      </div>`;
+  }
+
+  if (!mapId) { showError('Không có ID bản đồ trong URL.'); return; }
+
+  // Đọc từ localStorage trước (admin lưu ở đây), fallback sang fetch
+  function getMapData() {
+    try {
+      const raw = localStorage.getItem('huyet888-maps');
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data && Array.isArray(data.maps) && data.maps.length)
+          return Promise.resolve(data);
+      }
+    } catch(e) {}
+    return fetch('assets/js/map-data.json').then(r => r.json());
+  }
+
+  getMapData()
+    .then(data => {
+      const map = (data.maps || []).find(m => m.id === mapId);
+      if (!map) { showError('Không tìm thấy bản đồ với ID: ' + mapId); return; }
+
+      /* Breadcrumb + title */
+      $('bc-name').textContent   = map.title || 'Bản đồ';
+      $('viewer-title').textContent = map.title || 'Bản Đồ Huyệt Vị';
+      document.title = (map.title || 'Bản Đồ') + ' — Huyệt Vị 888';
+      const pts = map.points || [];
+      $('viewer-subtitle').textContent =
+        pts.length ? `${pts.length} huyệt vị được đánh dấu trên bản đồ` : 'Chưa có huyệt vị';
+
+      /* Build map widget container */
+      const wrapId = 'viewer-map-widget-' + mapId;
+      const content = document.createElement('div');
+      content.innerHTML = `
+        <div class="viewer-map-wrap">
+          <div class="viewer-section-title">🗺️ Bản đồ tương tác</div>
+          <div class="huyet-map-widget" id="${wrapId}"
+               data-map-id="${mapId}"
+               data-json="assets/js/map-data.json"></div>
+        </div>
+        <div class="viewer-section-title">📍 Danh sách huyệt vị</div>
+        <div class="viewer-badges" id="viewer-badges"></div>
+      `;
+      $('viewer-content').innerHTML = '';
+      $('viewer-content').appendChild(content);
+
+      /* Render widget manually since DOM was just created */
+      const widgetEl = document.getElementById(wrapId);
+      _hvmapRenderOne(widgetEl, map);
+
+      /* Badges */
+      const badgesEl = document.getElementById('viewer-badges');
+      if (pts.length === 0) {
+        badgesEl.innerHTML = '<p style="color:#999;font-size:.85rem;">Chưa có huyệt vị được đánh dấu.</p>';
+      } else {
+        pts.forEach(pt => {
+          const btn = document.createElement('button');
+          btn.className = 'viewer-badge';
+          btn.innerHTML = `<span class="badge-code">${pt.ma || ''}</span> ${pt.ten || ''}`;
+          btn.title = pt.duongKinh || '';
+          btn.addEventListener('click', () => {
+            /* Highlight point on map for 2s */
+            const svg = widgetEl.querySelector('svg.hvmap-svg');
+            if (svg) {
+              const g = svg.querySelector(`[data-id="${pt.id}"]`);
+              if (g) {
+                svg.querySelectorAll('.hv-highlight').forEach(el => el.classList.remove('hv-highlight'));
+                g.classList.add('hv-highlight');
+                g.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => g.classList.remove('hv-highlight'), 2000);
+              }
+            }
+          });
+          badgesEl.appendChild(btn);
+        });
+      }
+    })
+    .catch(err => showError('Không thể tải dữ liệu bản đồ. Hãy kiểm tra Admin đã tạo bản đồ chưa.'));
+
+  /* ── Map Render (bulletproof overlay version) ─────────────── */
+  function _hvmapRenderOne(container, map) {
+    container.innerHTML = '';
+
+    // Wrapper: position:relative, display:block — SVG overlay sẽ dựa vào đây
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:relative;display:block;width:100%;line-height:0;';
+
+    const img = document.createElement('img');
+    img.alt   = map.title || 'Bản đồ huyệt vị';
+    img.style.cssText = 'display:block;width:100%;height:auto;border-radius:8px;';
+    wrapper.appendChild(img);
+
+    // SVG: absolute, sẽ được resize sau khi img load bằng ResizeObserver
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.style.cssText = 'position:absolute;top:0;left:0;overflow:visible;pointer-events:none;';
+    wrapper.appendChild(svg);
+    container.appendChild(wrapper);
+
+    // Tooltip
+    let tt = document.getElementById('hvmap-tooltip');
+    if (!tt) {
+      tt = document.createElement('div');
+      tt.id = 'hvmap-tooltip';
+      tt.style.cssText = 'position:fixed;z-index:99999;background:rgba(15,37,32,.92);color:#f0dea0;'
+        + 'padding:7px 12px;border-radius:7px;font-size:13px;display:none;pointer-events:none;'
+        + 'white-space:nowrap;border:1px solid rgba(201,168,76,.3);line-height:1.5;'
+        + 'box-shadow:0 4px 20px rgba(0,0,0,.4);font-family:Segoe UI,system-ui,sans-serif;';
+      document.body.appendChild(tt);
+    }
+    document.addEventListener('mousemove', function(e) {
+      if (tt.style.display === 'block') {
+        tt.style.left = (e.clientX + 14) + 'px';
+        tt.style.top  = (e.clientY - 10) + 'px';
+      }
+    });
+
+    // Core render: called after img dimensions are known
+    function doRender() {
+      if (svg._rendered) return;
+      const nw = img.naturalWidth;
+      const nh = img.naturalHeight;
+      if (!nw || !nh) return;
+      svg._rendered = true;
+
+      // Match SVG pixel size to img rendered size
+      const rw = img.offsetWidth  || img.clientWidth  || nw;
+      const rh = img.offsetHeight || img.clientHeight || nh;
+      svg.setAttribute('width',   rw);
+      svg.setAttribute('height',  rh);
+      svg.setAttribute('viewBox', '0 0 ' + nw + ' ' + nh);
+      svg.setAttribute('preserveAspectRatio', 'none');
+
+      (map.points || []).forEach(function(pt) {
+        const cx = (parseFloat(pt.x) / 100) * nw;
+        const cy = (parseFloat(pt.y) / 100) * nh;
+
+        const g = document.createElementNS(svgNS, 'g');
+        g.style.cursor = 'pointer';
+        g.dataset.id = pt.id;
+
+        const pulse = document.createElementNS(svgNS, 'circle');
+        pulse.setAttribute('cx', cx); pulse.setAttribute('cy', cy); pulse.setAttribute('r', '10');
+        pulse.setAttribute('fill', 'none');
+        pulse.setAttribute('stroke', pt.color && pt.color !== '#1a1a1a' ? pt.color : '#1a1a1a');
+        pulse.setAttribute('stroke-width', '1.5');
+        pulse.style.animation = 'hvmap-pulse 2.5s ease-out infinite';
+        g.appendChild(pulse);
+
+        const dot = document.createElementNS(svgNS, 'circle');
+        dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.setAttribute('r', '8');
+        dot.setAttribute('fill',   pt.color && pt.color !== '#1a1a1a' ? pt.color : '#1a1a1a');
+        dot.setAttribute('stroke', 'white'); dot.setAttribute('stroke-width', '2');
+        dot.style.cursor = 'pointer';
+        g.appendChild(dot);
+
+        const label = document.createElementNS(svgNS, 'text');
+        label.setAttribute('x', cx); label.setAttribute('y', cy);
+        label.setAttribute('dy', '-14'); label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', '12'); label.setAttribute('font-weight', '700');
+        label.setAttribute('fill', '#1a1a1a');
+        label.setAttribute('paint-order', 'stroke');
+        label.setAttribute('stroke', 'white'); label.setAttribute('stroke-width', '3');
+        label.setAttribute('pointer-events', 'none');
+        label.style.fontFamily = 'Segoe UI,system-ui,sans-serif';
+        label.textContent = pt.ma || '';
+        g.appendChild(label);
+
+        // Hover
+        g.addEventListener('mouseenter', function(e) {
+          dot.setAttribute('r', '10');
+          dot.setAttribute('fill', '#c9a84c');
+          tt.innerHTML = '<strong>' + (pt.ma||'') + '</strong><br>' + (pt.ten||'')
+            + '<br><small style="opacity:.7">' + (pt.duongKinh||'') + '</small>';
+          tt.style.left = (e.clientX + 14) + 'px';
+          tt.style.top  = (e.clientY - 10) + 'px';
+          tt.style.display = 'block';
+          g.style.pointerEvents = 'all';
+          svg.style.pointerEvents = 'all';
+        });
+        g.addEventListener('mouseleave', function() {
+          dot.setAttribute('r', '8');
+          dot.setAttribute('fill', pt.color && pt.color !== '#1a1a1a' ? pt.color : '#1a1a1a');
+          tt.style.display = 'none';
+        });
+
+        // Click → navigate
+        g.addEventListener('click', function() {
+          var url = '';
+          if (pt.huyetId) url = 'detail.html?ma=' + encodeURIComponent(pt.huyetId);
+          else if (pt.url) url = pt.url;
+          else if (pt.ma)  url = 'detail.html?ma=' + encodeURIComponent(pt.ma);
+          if (url) window.location.href = url;
+        });
+
+        svg.appendChild(g);
+      });
+
+      // SVG needs pointer-events on for hover/click
+      svg.style.pointerEvents = 'all';
+    }
+
+    img.onload = function() {
+      doRender();
+      // Update SVG size when img resizes (e.g. window resize)
+      if (window.ResizeObserver) {
+        new ResizeObserver(function() {
+          if (!svg._rendered) return;
+          const rw = img.offsetWidth;
+          const rh = img.offsetHeight;
+          if (rw && rh) {
+            svg.setAttribute('width',  rw);
+            svg.setAttribute('height', rh);
+          }
+        }).observe(img);
+      }
+    };
+    img.src = map.imageData || '';
+    if (img.complete && img.naturalWidth) img.onload();
+  }
+})();
+</script>

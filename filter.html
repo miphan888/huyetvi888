@@ -3,9 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lọc Theo Chứng Bệnh — Huyệt Vị 888</title>
-  <meta name="description" content="Tìm huyệt vị phù hợp theo chứng bệnh và triệu chứng. Chọn một hoặc nhiều chứng bệnh để lọc danh sách huyệt vị.">
+  <title>Lọc Theo Hội Chứng — Huyệt Vị 888</title>
+  <meta name="description" content="Tìm huyệt vị phù hợp theo hội chứng và triệu chứng. Chọn một hoặc nhiều hội chứng để lọc danh sách huyệt vị.">
   <link rel="stylesheet" href="assets/css/style.css">
+
+<style>
+.map-nav-dropdown { position: relative; }
+.map-nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--cream, #f5f0e8); font: inherit; font-size: 0.88rem;
+  font-weight: 500; letter-spacing: 0.02em;
+  padding: 0.4rem 0.85rem; border-radius: 4px;
+  transition: color 0.2s, background 0.2s; white-space: nowrap;
+}
+.map-nav-btn:hover { background: rgba(201,168,76,0.1); color: var(--gold, #c9a84c); }
+.map-nav-panel {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  min-width: 280px; max-width: 340px;
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 500; padding: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.map-nav-dropdown.open .map-nav-panel {
+  opacity: 1; pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.mnd-card {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0.6rem; border-radius: 7px; cursor: pointer;
+  transition: background 0.15s; text-decoration: none; color: #1a3c34;
+}
+.mnd-card:hover { background: rgba(26,60,52,0.07); }
+.mnd-thumb {
+  width: 48px; height: 36px; border-radius: 5px;
+  background: #e8e2d6; overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+.mnd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.mnd-info .mnd-name { font-size: 0.85rem; font-weight: 700; color: #1a3c34; }
+.mnd-info .mnd-count { font-size: 0.72rem; color: #555; }
+.mnd-empty { padding: 0.75rem; font-size: 0.82rem; color: #aaa; text-align: center; }
+.mnd-empty a { color: #1a3c34; font-weight: 600; }
+</style>
 </head>
 <body>
 
@@ -24,12 +67,35 @@
     </a>
     <div class="nav-links">
       <a href="index.html">Trang Chủ</a>
-      <a href="search.html">Tìm Kiếm</a>
-      <a href="filter.html">Lọc Chứng Bệnh</a>
+      <a href="search.html">Tra Cứu</a>
+            <div class="map-nav-dropdown" id="map-nav-dd">
+        <button class="map-nav-btn" id="map-nav-btn">🗺️ Huyệt Theo Vùng ▾</button>
+        <div class="map-nav-panel" id="map-nav-panel">
+          <div class="mnd-loading" style="padding:.75rem;color:#aaa;font-size:.82rem;">Đang tải...</div>
+        </div>
+      </div>
+      <a href="benh.html">🔍 Hội Chứng</a>
       <a href="about.html">Giới Thiệu</a>
-      <a href="admin.html" class="nav-admin-link">⚙ Admin</a>
     </div>
-    <div class="theme-switcher" id="theme-switcher"><button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Đổi theme">🎨</button><div class="theme-dropdown" id="theme-dropdown"><div class="theme-dropdown-title">Giao Diện</div><button class="theme-opt" data-theme="jade"><span class="theme-swatch" style="background:#1a3c34"></span> Ngọc Bích</button><button class="theme-opt" data-theme="brown"><span class="theme-swatch" style="background:#5c2e0a"></span> Nâu Trầm</button><button class="theme-opt" data-theme="red"><span class="theme-swatch" style="background:#7a1515"></span> Đỏ Son</button><button class="theme-opt" data-theme="ink"><span class="theme-swatch" style="background:#1a1a2e"></span> Mực Tàu</button></div></div>
+    <!-- Theme switcher -->
+    <div class="theme-switcher" id="theme-switcher" title="Đổi giao diện">
+      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Đổi theme">🎨</button>
+      <div class="theme-dropdown" id="theme-dropdown">
+        <div class="theme-dropdown-title">Giao Diện</div>
+        <button class="theme-opt" data-theme="jade" title="Xanh ngọc (mặc định)">
+          <span class="theme-swatch" style="background:#1a3c34"></span> Ngọc Bích
+        </button>
+        <button class="theme-opt" data-theme="brown" title="Nâu trầm">
+          <span class="theme-swatch" style="background:#5c2e0a"></span> Nâu Trầm
+        </button>
+        <button class="theme-opt" data-theme="red" title="Đỏ son">
+          <span class="theme-swatch" style="background:#7a1515"></span> Đỏ Son
+        </button>
+        <button class="theme-opt" data-theme="ink" title="Đen mực Tàu">
+          <span class="theme-swatch" style="background:#1a1a2e"></span> Mực Tàu
+        </button>
+      </div>
+    </div>
     <button class="hamburger" id="hamburger" aria-label="Mở menu">
       <span></span><span></span><span></span>
     </button>
@@ -39,8 +105,8 @@
 <!-- MOBILE NAV -->
 <div id="mobile-nav" aria-label="Menu di động">
   <a href="index.html">🏠 Trang Chủ</a>
-  <a href="search.html">🔍 Tìm Kiếm</a>
-  <a href="filter.html">🌿 Lọc Chứng Bệnh</a>
+  <a href="search.html">🔍 Tra Cứu</a>
+  <a href="benh.html">🔍 Hội Chứng</a>
   <a href="about.html">ℹ️ Giới Thiệu</a>
 </div>
 
@@ -48,11 +114,20 @@
 
   <!-- BANNER -->
   <div class="page-banner">
-    <h1>🌿 Lọc Theo Chứng Bệnh</h1>
-    <p>Chọn một hoặc nhiều chứng bệnh • Xem huyệt vị phù hợp để châm cứu, bấm huyệt</p>
+    <h1>🌿 Lọc Theo Hội Chứng</h1>
+    <p>Chọn một hoặc nhiều hội chứng • Xem huyệt vị phù hợp để châm cứu, bấm huyệt</p>
   </div>
 
   <div class="filter-section">
+
+    <!-- Tab toggle: Huyệt Vị / Hội Chứng -->
+    <div class="filter-tabs" id="filter-tabs" style="max-width:640px;margin:0 auto 1.5rem;display:flex;gap:0.5rem;">
+      <button class="filter-tab-btn active" id="tab-huyet" onclick="switchFilterTab('huyet')">🌿 Huyệt Vị</button>
+      <button class="filter-tab-btn" id="tab-benh" onclick="switchFilterTab('benh')">🏥 Hội Chứng</button>
+    </div>
+
+    <!-- === TAB PANEL: HUYỆT VỊ === -->
+    <div id="panel-huyet">
 
     <!-- Search bar -->
     <div class="search-box-wrap" style="max-width:500px;margin:0 auto 1.5rem;" role="search">
@@ -85,7 +160,7 @@
 
     <!-- Filter chips by category -->
     <div class="filter-sidebar reveal">
-      <h3>🏷️ Chọn Chứng Bệnh / Triệu Chứng</h3>
+      <h3>🏷️ Chọn Hội Chứng / Triệu Chứng</h3>
       <div id="filter-chips-container">
         <!-- Filled by filter.js -->
       </div>
@@ -95,6 +170,36 @@
     <div class="results-grid" id="filter-results-grid" aria-live="polite" aria-label="Kết quả lọc">
       <!-- Filled by filter.js -->
     </div>
+
+    </div><!-- end panel-huyet -->
+
+    <!-- === TAB PANEL: CHỨNG BỆNH === -->
+    <div id="panel-benh" style="display:none;">
+
+    <!-- Search box benh -->
+    <div class="search-box-wrap" style="max-width:500px;margin:0 auto 1.5rem;" role="search">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input
+        type="text"
+        id="filter-benh-search"
+        class="search-input"
+        placeholder="Tìm hội chứng... (đau đầu, mất ngủ...)"
+        aria-label="Tìm kiếm hội chứng"
+        autocomplete="off"
+      >
+    </div>
+
+    <!-- Benh result count -->
+    <div style="margin-bottom:1.5rem;">
+      <span class="result-count" id="filter-benh-count">Đang tải...</span>
+    </div>
+
+    <!-- Benh grid -->
+    <div class="benh-list-grid" id="filter-benh-grid" aria-live="polite">
+      <!-- Filled by benh.js via filter tab -->
+    </div>
+
+    </div><!-- end panel-benh -->
 
   </div>
 
@@ -113,7 +218,138 @@
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="assets/js/data.js"></script>
+<script src="assets/js/benh-data.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/filter.js"></script>
+<script src="assets/js/benh.js"></script>
+
+
+
+<script>
+/* ── Filter tab switching ─────────────────────────── */
+function switchFilterTab(tab) {
+  const huyet = document.getElementById('panel-huyet');
+  const benh  = document.getElementById('panel-benh');
+  const btnH  = document.getElementById('tab-huyet');
+  const btnB  = document.getElementById('tab-benh');
+  if (tab === 'benh') {
+    huyet.style.display = 'none';
+    benh.style.display  = '';
+    btnH.classList.remove('active');
+    btnB.classList.add('active');
+    renderFilterBenh();
+  } else {
+    benh.style.display  = 'none';
+    huyet.style.display = '';
+    btnB.classList.remove('active');
+    btnH.classList.add('active');
+  }
+}
+window.switchFilterTab = switchFilterTab;
+
+/* ── Benh list trong filter tab ─────────────────────── */
+(function() {
+  var benhQuery = '';
+
+  function loadBenhForFilter() {
+    try {
+      var raw = localStorage.getItem('huyet888-benh-data');
+      if (raw) { var p = JSON.parse(raw); if (Array.isArray(p)) return p; }
+    } catch(e) {}
+    return (typeof BENH_DATA !== 'undefined' && Array.isArray(BENH_DATA)) ? BENH_DATA : [];
+  }
+
+  function toSlug(str) {
+    return (str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/đ/gi,'d').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
+  }
+
+  function escFB(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderFilterBenh() {
+    var grid  = document.getElementById('filter-benh-grid');
+    var count = document.getElementById('filter-benh-count');
+    if (!grid) return;
+    var data = loadBenhForFilter();
+    var q    = normalizeVietnamese(benhQuery);
+    var filtered = q ? data.filter(function(b) {
+      return normalizeVietnamese(b.ten||'').includes(q) ||
+             normalizeVietnamese(b.trieuChung||'').includes(q) ||
+             normalizeVietnamese(b.trongTam||'').includes(q);
+    }) : data;
+
+    if (count) count.innerHTML = 'Có <strong>' + filtered.length + '</strong> hội chứng';
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem 1rem;">' +
+        '<div style="font-size:2.5rem;opacity:.4;margin-bottom:.5rem;">🩺</div><h3>' +
+        (data.length === 0 ? 'Chưa có dữ liệu hội chứng' : 'Không tìm thấy kết quả') + '</h3><p style="font-size:.85rem;color:#888;">' +
+        (data.length === 0 ? 'Vào <a href="admin.html" style="color:var(--jade)">Admin → Hội Chứng</a> để thêm dữ liệu.' : 'Thử từ khoá khác.') +
+        '</p></div>';
+      return;
+    }
+    grid.innerHTML = filtered.map(function(b) {
+      var slug    = b.slug || toSlug(b.ten);
+      var preview = (b.trieuChung||'').split('\n')[0].substring(0, 120);
+      var soHuyet = (b.huyetLienQuan || []).length;
+      return '<a href="benh-detail.html?slug=' + encodeURIComponent(slug) + '" style="' +
+        'display:block;background:#fff;border-radius:10px;padding:1.25rem;' +
+        'box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);' +
+        'text-decoration:none;color:inherit;transition:box-shadow .2s;">' +
+        '<div style="font-size:1.25rem;margin-bottom:.4rem;">🩺</div>' +
+        '<div style="font-weight:700;color:var(--jade,#1a3c34);margin-bottom:.3rem;">' + escFB(b.ten) + '</div>' +
+        '<div style="font-size:.8rem;color:#888;margin-bottom:.5rem;overflow:hidden;' +
+        'display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">' + escFB(preview) + '</div>' +
+        '<div style="font-size:.75rem;color:var(--gold,#c9a84c);font-weight:600;">📍 ' + soHuyet + ' huyệt liên quan</div>' +
+        '</a>';
+    }).join('');
+  }
+  window.renderFilterBenh = renderFilterBenh;
+
+  var fbSearch = document.getElementById('filter-benh-search');
+  if (fbSearch) {
+    var db = (typeof debounce === 'function') ? debounce : function(fn) { return fn; };
+    fbSearch.addEventListener('input', db(function() {
+      benhQuery = fbSearch.value;
+      renderFilterBenh();
+    }, 250));
+  }
+})();
+</script>
+<script>
+(function() {
+  const btn   = document.getElementById('map-nav-btn');
+  const dd    = document.getElementById('map-nav-dd');
+  const panel = document.getElementById('map-nav-panel');
+  if (!btn || !dd || !panel) return;
+  function getMaps() {
+    try {
+      const raw = localStorage.getItem('huyet888-maps');
+      if (raw) { const data = JSON.parse(raw); if (data && Array.isArray(data.maps) && data.maps.length) return Promise.resolve(data.maps); }
+    } catch(e) {}
+    return fetch('assets/js/map-data.json').then(r => r.json()).then(data => (data && data.maps) ? data.maps : []).catch(() => []);
+  }
+  function renderMaps(maps) {
+    if (!maps.length) { panel.innerHTML = '<div class="mnd-empty">Chưa có bản đồ. <a href="admin.html">Vào Admin để tạo →</a></div>'; return; }
+    panel.innerHTML = maps.map(m => {
+      const thumb = m.imageData ? '<img src="' + m.imageData + '" alt="">' : '🗺️';
+      const count = (m.points || []).length;
+      return '<a class="mnd-card" href="map-viewer.html?id=' + encodeURIComponent(m.id) + '">' +
+        '<div class="mnd-thumb">' + thumb + '</div>' +
+        '<div class="mnd-info"><div class="mnd-name">' + (m.title || 'Bản đồ') + '</div>' +
+        '<div class="mnd-count">' + count + ' huyệt vị</div></div></a>';
+    }).join('');
+  }
+  function toggle(open) {
+    dd.classList.toggle('open', open);
+    if (open) { getMaps().then(renderMaps); }
+  }
+  btn.addEventListener('click', e => { e.stopPropagation(); toggle(!dd.classList.contains('open')); });
+  document.addEventListener('click', () => toggle(false));
+  panel.addEventListener('click', e => e.stopPropagation());
+})();
+</script>
 </body>
 </html>

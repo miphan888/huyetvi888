@@ -319,6 +319,310 @@
       .admin-sidebar { width: 100%; height: auto; max-height: 50vh; }
       .form-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── Admin Tabs ──────────────────────────────────────── */
+    .admin-tabs {
+      display: flex; gap: 0; border-bottom: 2px solid rgba(201,168,76,0.2);
+      background: var(--jd); padding: 0 1.5rem; flex-shrink: 0;
+    }
+    .admin-tab {
+      padding: 0.65rem 1.2rem; font-size: 0.85rem; font-weight: 600;
+      color: rgba(245,240,232,0.5); background: none; border: none;
+      cursor: pointer; transition: all 0.2s;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+    }
+    .admin-tab:hover { color: var(--goldp); }
+    .admin-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .admin-tab-panel { display: none; }
+    .admin-tab-panel.active { display: flex; flex: 1; min-height: 0; }
+    #tab-panel-huyet { flex: 1; display: none; }
+    #tab-panel-huyet.active { display: flex; }
+    #tab-panel-map { flex: 1; display: none; }
+    #tab-panel-map.active { display: flex; }
+    #tab-panel-benh { flex: 1; display: none; }
+    #tab-panel-benh.active { display: flex; flex-direction: column; overflow: hidden; }
+
+    .admin-tabs-wrap {
+      display: flex; flex-direction: column;
+      height: calc(100vh - 56px);
+    }
+    .tab-panels-wrap { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+    /* ── Map Tab Layout ────────────────────────────────── */
+    #map-tab-body {
+      display: flex; flex: 1; min-height: 0; overflow: hidden;
+    }
+
+    /* Left col */
+    .map-col-left {
+      width: 210px; flex-shrink: 0;
+      background: var(--white); border-right: 1px solid rgba(0,0,0,0.08);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .map-col-left-header {
+      background: var(--jd); padding: 0.75rem 0.9rem;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .map-col-left-header h3 {
+      font-size: 0.8rem; font-weight: 700;
+      color: var(--gold); margin-bottom: 0.5rem;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .btn-add-map {
+      width: 100%; padding: 0.45rem 0.7rem;
+      background: var(--gold); color: var(--jd); border: none;
+      border-radius: 6px; font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn-add-map:hover { background: #e0bc60; }
+
+    .map-list-wrap { flex: 1; overflow-y: auto; }
+    .map-list-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 0.9rem; border-bottom: 1px solid rgba(0,0,0,0.05);
+      cursor: pointer; transition: background 0.15s;
+    }
+    .map-list-item:hover { background: rgba(26,60,52,0.05); }
+    .map-list-item.selected { background: rgba(26,60,52,0.1); border-left: 3px solid var(--gold); }
+    .mli-info { min-width: 0; }
+    .mli-name { font-size: 0.82rem; font-weight: 600; color: var(--j); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mli-count { font-size: 0.7rem; color: var(--txl); }
+    .mli-actions { display: flex; gap: 0.25rem; flex-shrink: 0; }
+    .mli-btn { width: 24px; height: 24px; border-radius: 4px; border: none; font-size: 0.72rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; }
+    .mli-btn.edit { background: rgba(26,60,52,0.1); color: var(--j); }
+    .mli-btn.edit:hover { background: var(--j); color: var(--goldp); }
+    .mli-btn.del { background: rgba(192,57,43,0.1); color: var(--red); }
+    .mli-btn.del:hover { background: var(--red); color: #fff; }
+
+    .map-col-left-footer {
+      padding: 0.6rem 0.9rem; border-top: 1px solid rgba(0,0,0,0.07);
+      display: flex; gap: 0.4rem; flex-wrap: wrap;
+    }
+    .btn-io { flex: 1; padding: 0.35rem 0.4rem; border-radius: 5px; border: 1px solid rgba(0,0,0,0.12); background: var(--cr); color: var(--j); font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; }
+    .btn-io:hover { background: var(--j); color: var(--goldp); border-color: transparent; }
+
+    /* Middle col — Canvas */
+    .map-col-mid {
+      flex: 1; display: flex; flex-direction: column; overflow: hidden;
+      background: #f0ede6;
+    }
+    .map-toolbar {
+      background: var(--white); border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 0.5rem 0.75rem;
+      display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .map-toolbar .tool-sep { width: 1px; height: 22px; background: rgba(0,0,0,0.1); margin: 0 0.1rem; }
+    .tool-btn {
+      padding: 0.35rem 0.65rem; border-radius: 5px; border: 1.5px solid rgba(0,0,0,0.1);
+      background: var(--cr); color: var(--j); font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 0.3rem;
+    }
+    .tool-btn:hover { background: var(--j); color: var(--goldp); border-color: var(--j); }
+    .tool-btn.active { background: var(--j); color: var(--gold); border-color: var(--j); }
+    .tool-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .map-canvas-wrapper {
+      flex: 1; overflow: hidden; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      cursor: default; user-select: none;
+    }
+    .map-canvas-inner {
+      position: relative; transform-origin: center center;
+      line-height: 0;
+    }
+    #map-img {
+      display: block; max-width: none;
+      border-radius: 4px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    }
+    #map-svg-layer {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; overflow: visible;
+      pointer-events: none;
+    }
+    .map-svg-interactive { pointer-events: all; }
+
+    /* Point styles */
+    .mp-dot {
+      fill: #1a1a1a; stroke: white; stroke-width: 2; cursor: pointer;
+      transition: r 0.15s;
+    }
+    .map-point.selected .mp-dot { fill: #e74c3c; }
+    .mp-pulse {
+      fill: none; stroke: #1a1a1a; stroke-width: 1.5;
+      animation: mp-pulse-anim 2.5s ease-out infinite;
+    }
+    @keyframes mp-pulse-anim {
+      0%   { r: 8px; opacity: 0.7; }
+      100% { r: 22px; opacity: 0; }
+    }
+    .mp-label {
+      font-size: 11px; font-weight: 700; fill: #1a1a1a;
+      paint-order: stroke; stroke: white; stroke-width: 3px;
+      pointer-events: none; user-select: none;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    .map-point.preview { opacity: 0.5; }
+
+    /* Tooltip */
+    #map-tooltip {
+      position: fixed; z-index: 9999;
+      background: rgba(15,37,32,0.92); color: #f0dea0;
+      padding: 6px 10px; border-radius: 6px; font-size: 13px;
+      display: none; pointer-events: none; white-space: nowrap;
+      border: 1px solid rgba(201,168,76,0.3);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    /* Delete cursor on dots */
+    .mode-delete .map-point:hover .mp-dot { cursor: not-allowed; fill: #e74c3c; }
+    .mode-drag .map-point .mp-dot { cursor: grab; }
+
+    /* Map empty state */
+    .map-empty-canvas {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: rgba(0,0,0,0.3); font-size: 0.9rem;
+      pointer-events: none;
+    }
+    .map-empty-canvas .mec-icon { font-size: 3rem; margin-bottom: 0.5rem; opacity: 0.3; }
+
+    /* Right col */
+    .map-col-right {
+      width: 280px; flex-shrink: 0;
+      background: var(--white); border-left: 1px solid rgba(0,0,0,0.08);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .map-col-right-header {
+      background: var(--jd); padding: 0.65rem 0.9rem;
+      font-size: 0.78rem; font-weight: 700;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 0.04em;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .map-right-body { flex: 1; overflow-y: auto; padding: 0.75rem; }
+
+    .map-search-input {
+      width: 100%; padding: 0.45rem 0.65rem;
+      border: 1.5px solid rgba(0,0,0,0.12); border-radius: 6px;
+      font-size: 0.82rem; background: var(--cr); outline: none;
+      transition: border-color 0.2s;
+    }
+    .map-search-input:focus { border-color: var(--j); background: #fff; }
+
+    .map-dk-tabs {
+      display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.5rem 0;
+    }
+    .map-dk-tab {
+      padding: 0.2rem 0.5rem; border-radius: 20px; border: 1px solid rgba(0,0,0,0.1);
+      font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.15s;
+      background: var(--cr); color: var(--j);
+    }
+    .map-dk-tab.active { background: var(--j); color: var(--goldp); border-color: transparent; }
+
+    .map-huyet-list {
+      max-height: 200px; overflow-y: auto;
+      border: 1px solid rgba(0,0,0,0.08); border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+    .map-huyet-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 0.6rem; font-size: 0.8rem;
+      cursor: pointer; transition: background 0.12s;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .map-huyet-item:last-child { border-bottom: none; }
+    .map-huyet-item:hover { background: rgba(26,60,52,0.06); }
+    .map-huyet-item.selected { background: rgba(26,60,52,0.12); font-weight: 600; }
+    .mhi-code { font-size: 0.72rem; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+    .mhi-name { flex: 1; color: var(--j); }
+    mark { background: #fff3cd; border-radius: 2px; }
+
+    .map-selected-info {
+      background: rgba(26,60,52,0.05); border-radius: 6px;
+      padding: 0.6rem 0.75rem; margin-bottom: 0.75rem;
+      font-size: 0.8rem; color: var(--j); border: 1px solid rgba(26,60,52,0.1);
+    }
+    .map-selected-info .msi-name { font-weight: 700; margin-bottom: 0.2rem; }
+    .map-selected-info .msi-meta { color: var(--txl); font-size: 0.72rem; }
+
+    .map-color-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-bottom: 0.75rem; font-size: 0.8rem; color: var(--j); font-weight: 600;
+      flex-wrap: wrap;
+    }
+    .color-swatches {
+      display: flex; flex-wrap: wrap; gap: 5px;
+    }
+    .color-swatch {
+      width: 24px; height: 24px; border-radius: 50%;
+      cursor: pointer; border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.active { border-color: var(--j, #1a3c34); box-shadow: 0 0 0 2px white, 0 0 0 4px var(--j, #1a3c34); }
+    .color-swatch-custom {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 2px dashed #aaa; display: flex; align-items: center;
+      justify-content: center; font-size: 0.65rem; color: #888; cursor: default; flex-shrink: 0;
+    }
+
+    .map-action-btns {
+      display: flex; gap: 0.5rem;
+    }
+    .map-action-btns button {
+      flex: 1; padding: 0.5rem; border-radius: 6px; border: none;
+      font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-confirm-point { background: var(--j); color: var(--goldp); }
+    .btn-confirm-point:hover { background: var(--jm); }
+    .btn-cancel-point { background: rgba(0,0,0,0.07); color: var(--txt); }
+    .btn-cancel-point:hover { background: rgba(0,0,0,0.13); }
+
+    .map-no-selection {
+      text-align: center; padding: 2rem 0.5rem;
+      color: var(--txl); font-size: 0.82rem;
+    }
+    .map-no-selection .mns-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.3; }
+
+    /* Map modal */
+    .map-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      z-index: 8000; display: none; align-items: center; justify-content: center;
+    }
+    .map-modal-overlay.open { display: flex; }
+    .map-modal {
+      background: var(--white); border-radius: 12px;
+      padding: 1.75rem; max-width: 420px; width: 90%;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    }
+    .map-modal h3 { font-size: 1rem; color: var(--j); margin-bottom: 1rem; font-weight: 700; }
+    .map-modal label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--j); margin-bottom: 0.25rem; }
+    .map-modal input[type="text"],
+    .map-modal input[type="file"] {
+      width: 100%; padding: 0.5rem 0.75rem;
+      border: 1.5px solid rgba(0,0,0,0.12); border-radius: 6px;
+      font-size: 0.85rem; background: var(--cr); outline: none;
+      margin-bottom: 0.85rem; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .map-modal input:focus { border-color: var(--j); background: #fff; }
+    .map-modal-warn { font-size: 0.75rem; color: #e67e22; margin-top: -0.6rem; margin-bottom: 0.75rem; }
+    .map-modal-btns { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.5rem; }
+    .map-modal-btns button { padding: 0.5rem 1.1rem; border-radius: 6px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .mmbtn-ok { background: var(--j); color: var(--goldp); }
+    .mmbtn-ok:hover { background: var(--jm); }
+    .mmbtn-cancel { background: rgba(0,0,0,0.07); color: var(--txt); }
+    .mmbtn-cancel:hover { background: rgba(0,0,0,0.13); }
+
+    .map-export-row {
+      display: flex; gap: 0.4rem; flex-wrap: wrap; padding: 0.6rem 0.9rem;
+      border-top: 1px solid rgba(0,0,0,0.07); flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -335,6 +639,18 @@
   </div>
 </header>
 
+<!-- TAB NAVIGATION -->
+<div class="admin-tabs-wrap">
+<div class="admin-tabs">
+  <button class="admin-tab active" data-tab="huyet">📋 Quản Lý Huyệt Vị</button>
+  <button class="admin-tab" data-tab="map">🗺️ Bản Đồ Huyệt Vị</button>
+  <button class="admin-tab" data-tab="benh">🔍 Hội Chứng</button>
+</div>
+
+<div class="tab-panels-wrap">
+
+<!-- ══ TAB 1: HUYỆT VỊ ══════════════════════════════════ -->
+<div id="tab-panel-huyet" class="admin-tab-panel active">
 <div class="admin-body">
 
   <!-- ══ SIDEBAR ══════════════════════════════════════ -->
@@ -522,6 +838,196 @@
 
   </main>
 </div><!-- /admin-body -->
+</div><!-- /tab-panel-huyet -->
+
+<!-- ══ TAB 2: BẢN ĐỒ HUYỆT VỊ ══════════════════════════ -->
+<div id="tab-panel-map" class="admin-tab-panel">
+<div id="map-tab-body">
+
+  <!-- COL TRÁI: Danh sách bản đồ -->
+  <div class="map-col-left">
+    <div class="map-col-left-header">
+      <h3>🗺️ Bản Đồ</h3>
+      <button class="btn-add-map" id="btn-add-map">+ Thêm bản đồ mới</button>
+    </div>
+    <div class="map-list-wrap">
+      <div id="map-list-el">
+        <div style="padding:1.5rem;text-align:center;color:#aaa;font-size:.8rem;">Chưa có bản đồ</div>
+      </div>
+    </div>
+    <div class="map-col-left-footer">
+      <button class="btn-io" id="btn-map-export" title="Xuất map-data.json">📥 Xuất JSON</button>
+      <button class="btn-io" id="btn-map-import-trigger" title="Nhập map-data.json">📤 Nhập JSON</button>
+      <input type="file" id="btn-map-import" accept=".json" style="display:none">
+    </div>
+  </div>
+
+  <!-- COL GIỮA: Canvas -->
+  <div class="map-col-mid">
+    <div class="map-toolbar" id="map-toolbar">
+      <button class="tool-btn active" id="tool-add" title="Chế độ thêm điểm (A)">✚ Thêm</button>
+      <button class="tool-btn" id="tool-drag" title="Kéo thả (V)">✋ Kéo</button>
+      <button class="tool-btn" id="tool-delete" title="Xóa điểm (X)">🗑 Xóa</button>
+      <div class="tool-sep"></div>
+      <button class="tool-btn" id="tool-zoom-in" title="Phóng to (+)">🔍+</button>
+      <button class="tool-btn" id="tool-zoom-out" title="Thu nhỏ (-)">🔍−</button>
+      <button class="tool-btn" id="tool-fit" title="Vừa khung">⊡ Fit</button>
+      <button class="tool-btn" id="tool-reset" title="Đặt lại">↺ Reset</button>
+    </div>
+
+    <div class="map-canvas-wrapper" id="map-canvas-wrapper">
+      <div class="map-canvas-inner" id="map-canvas-inner">
+        <img id="map-img" alt="Ảnh bản đồ" style="display:none;">
+        <svg id="map-svg-layer" xmlns="http://www.w3.org/2000/svg"
+             style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible">
+        </svg>
+      </div>
+      <div class="map-empty-canvas" id="map-empty-canvas">
+        <div class="mec-icon">🗺️</div>
+        <div>Chọn hoặc tạo bản đồ từ cột trái để bắt đầu</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COL PHẢI: Properties -->
+  <div class="map-col-right">
+    <div class="map-col-right-header" id="map-right-header">GẮN HUYỆT VỊ</div>
+    <div class="map-right-body" id="map-right-body">
+      <div class="map-no-selection">
+        <div class="mns-icon">📍</div>
+        <div>Click lên ảnh để thêm điểm huyệt vị</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /map-tab-body -->
+</div><!-- /tab-panel-map -->
+
+
+<!-- ══ TAB 3: HỘI CHỨNG ════════════════════════════════ -->
+<div id="tab-panel-benh" class="admin-tab-panel">
+<div style="display:flex;flex:1;min-height:0;overflow:hidden;">
+
+  <!-- LEFT: List -->
+  <aside style="width:280px;flex-shrink:0;background:#fff;border-right:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;overflow:hidden;">
+    <div class="sidebar-top">
+      <div class="sidebar-actions">
+        <button class="btn btn-gold" id="benh-btn-add">➕ Thêm hội chứng</button>
+        <button class="btn btn-ghost" id="benh-btn-export" title="Xuất benh-data.js">💾 Xuất JS</button>
+      </div>
+      <input type="text" class="sidebar-search" id="benh-sidebar-search" placeholder="🔍 Tìm hội chứng..." autocomplete="off">
+    </div>
+    <div class="sidebar-list-info">
+      <span id="benh-list-info">Chưa có dữ liệu</span>
+      <button class="btn btn-ghost" id="benh-btn-import" style="font-size:.72rem;padding:.25rem .6rem;">📥 Nhập JS</button>
+      <input type="file" id="benh-import-file" accept=".js" style="display:none">
+    </div>
+    <div style="flex:1;overflow-y:auto;" id="benh-sidebar-list"></div>
+  </aside>
+
+  <!-- RIGHT: Form -->
+  <main style="flex:1;overflow-y:auto;padding:1.25rem;" id="benh-main">
+    <div id="benh-empty-state" style="text-align:center;padding:4rem 1rem;color:#aaa;">
+      <div style="font-size:3rem;opacity:.4;margin-bottom:.75rem;">🩺</div>
+      <h3 style="color:var(--j);">Chọn hoặc thêm hội chứng</h3>
+      <p style="font-size:.85rem;">Quản lý các hội chứng / triệu chứng phổ biến trong YHCT</p>
+    </div>
+    <div id="benh-form-area" style="display:none;" class="form-area">
+      <div class="form-header">
+        <div>
+          <div class="form-title" id="benh-form-title">➕ Thêm hội chứng mới</div>
+          <div class="form-subtitle">Điền đầy đủ thông tin bên dưới</div>
+        </div>
+        <button class="btn btn-ghost" id="benh-btn-cancel">✕ Hủy</button>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Tên Hội Chứng <span class="req">*</span></label>
+            <input type="text" id="bf-ten" placeholder="VD: Đau đầu, Mất ngủ, Đau lưng..." autocomplete="off">
+          </div>
+          <div class="form-group full">
+            <label>Triệu Chứng &amp; Nguyên Nhân</label>
+            <textarea id="bf-trieuchung" class="tall" placeholder="Mô tả các triệu chứng và nguyên nhân thường gặp..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Trọng Tâm Trị Liệu</label>
+            <textarea id="bf-trongtam" class="tall" placeholder="Hướng điều trị, nguyên tắc trị liệu..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Ảnh Minh Họa</label>
+            <div style="border:1.5px solid rgba(0,0,0,.12);border-radius:6px;background:var(--cr);padding:.75rem;">
+              <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+                <button type="button" class="btn btn-ghost" id="bf-img-btn" style="font-size:.8rem;">
+                  📷 Chọn ảnh...
+                </button>
+                <input type="file" id="bf-img-file" accept="image/*" style="display:none;">
+                <span id="bf-img-info" style="font-size:.75rem;color:var(--txl);">Chưa có ảnh</span>
+                <button type="button" id="bf-img-clear" style="display:none;background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--red);">✕ Xóa ảnh</button>
+              </div>
+              <div id="bf-img-preview" style="margin-top:.6rem;display:none;">
+                <img id="bf-img-preview-img" src="" alt="Ảnh minh họa"
+                  style="max-width:100%;max-height:200px;border-radius:6px;object-fit:contain;border:1px solid rgba(0,0,0,.08);">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full">
+            <label>Huyệt Vị Liên Quan</label>
+            <div style="border:1.5px solid rgba(0,0,0,.12);border-radius:6px;background:var(--cr);padding:.75rem;">
+              <div style="display:flex;gap:.5rem;margin-bottom:.6rem;flex-wrap:wrap;">
+                <input type="text" id="bf-huyet-search" placeholder="🔍 Tìm huyệt vị..."
+                  style="flex:1;padding:.4rem .65rem;border:1px solid rgba(0,0,0,.12);border-radius:5px;font-size:.82rem;outline:none;min-width:150px;"
+                  autocomplete="off">
+                <select id="bf-huyet-dk" style="padding:.4rem .65rem;border:1px solid rgba(0,0,0,.12);border-radius:5px;font-size:.82rem;outline:none;background:var(--cr);">
+                  <option value="">Tất cả kinh</option>
+                </select>
+              </div>
+              <div id="bf-huyet-list" style="max-height:160px;overflow-y:auto;border:1px solid rgba(0,0,0,.07);border-radius:5px;margin-bottom:.6rem;"></div>
+              <div style="font-size:.75rem;color:var(--txl);margin-bottom:.4rem;">Đã chọn:</div>
+              <div id="bf-huyet-selected" style="display:flex;flex-wrap:wrap;gap:.35rem;min-height:28px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-footer">
+        <div class="form-footer-left">
+          <button class="btn btn-danger" id="benh-btn-delete" style="display:none;">🗑️ Xóa hội chứng</button>
+        </div>
+        <div class="form-footer-right">
+          <button class="btn btn-ghost" id="benh-btn-cancel2">Hủy</button>
+          <button class="btn btn-primary" id="benh-btn-save">✔ Lưu hội chứng</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>
+</div><!-- /tab-panel-benh -->
+
+</div><!-- /tab-panels-wrap -->
+</div><!-- /admin-tabs-wrap -->
+
+<!-- TOOLTIP -->
+<div id="map-tooltip"></div>
+
+<!-- MAP: Modal thêm/sửa bản đồ -->
+<div class="map-modal-overlay" id="map-modal-overlay">
+  <div class="map-modal">
+    <h3 id="map-modal-title">➕ Thêm bản đồ mới</h3>
+    <label>Tên bản đồ <span style="color:var(--red)">*</span></label>
+    <input type="text" id="map-modal-name" placeholder="VD: Mặt trước cơ thể">
+    <label>Ảnh bản đồ</label>
+    <input type="file" id="map-modal-img" accept="image/*">
+    <div class="map-modal-warn" id="map-modal-img-warn" style="display:none">
+      ⚠️ Ảnh lớn hơn 2MB có thể làm chậm trang
+    </div>
+    <div class="map-modal-btns">
+      <button class="mmbtn-cancel" id="map-modal-cancel">✖ Hủy</button>
+      <button class="mmbtn-ok" id="map-modal-ok">✔ Tạo bản đồ</button>
+    </div>
+  </div>
+</div>
 
 <!-- CONFIRM MODAL -->
 <div class="confirm-overlay" id="confirm-overlay">
@@ -550,36 +1056,36 @@
 
 <div id="admin-toast"></div>
 
+<script src="assets/js/data.js"></script>
+<script src="assets/js/benh-data.js"></script>
 <script>
 /* =====================================================
-   ADMIN.JS — Huyệt Vị 888 Admin
+   ADMIN.JS — Huyệt Vị 888 Admin  (v4 — localStorage + FilePicker)
    ===================================================== */
 
+const LS_KEY = 'huyet888-data';
+
 // ── State ──────────────────────────────────────────
-let DATA         = [];        // Full dataset
-let fileHandle   = null;      // File System Access API handle
-let isDirty      = false;     // Unsaved changes?
-let editingIdx   = -1;        // Index in DATA (-1 = new)
-let currentPage  = 1;
-const PAGE_SIZE  = 20;
-let searchQ      = '';
-let savedAt      = null;
+let DATA        = [];     // Working dataset in RAM
+let isDirty     = false;  // Unsaved to file?
+let editingIdx  = -1;
+let currentPage = 1;
+const PAGE_SIZE = 20;
+let searchQ     = '';
 
 // ── DOM refs ───────────────────────────────────────
 const $ = id => document.getElementById(id);
-const sidebarList   = $('sidebar-list');
-const pagination    = $('pagination');
-const formArea      = $('form-area');
-const welcomePanel  = $('welcome-panel');
-const selectState   = $('select-state');
-const listInfoText  = $('list-info-text');
-const statusDot     = $('status-dot');
-const statusText    = $('status-text');
-const btnSave       = $('btn-save');
-const btnDownload   = $('btn-download');
+const sidebarList  = $('sidebar-list');
+const pagination   = $('pagination');
+const formArea     = $('form-area');
+const welcomePanel = $('welcome-panel');
+const selectState  = $('select-state');
+const listInfoText = $('list-info-text');
+const statusDot    = $('status-dot');
+const statusText   = $('status-text');
 
 // ── Toast ──────────────────────────────────────────
-function toast(msg, dur = 2500) {
+function toast(msg, dur = 2800) {
   const el = $('admin-toast');
   el.textContent = msg;
   el.classList.add('show');
@@ -590,23 +1096,33 @@ function toast(msg, dur = 2500) {
 // ── Status bar ─────────────────────────────────────
 function setStatus(state, msg) {
   statusDot.className = 'status-dot ' + state;
-  statusText.textContent = msg;
+  statusText.innerHTML = msg;
 }
 
-function markDirty() {
-  isDirty = true;
-  setStatus('unsaved', '⚠️ Có thay đổi chưa lưu');
+// ── File Handle (File System Access API) ────────────
+let _fileHandle = null; // persisted handle to data.js after first open/save
+
+// ── localStorage helpers ───────────────────────────
+function saveToLocalStorage() {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(DATA));
+  } catch(e) {
+    console.warn('localStorage write failed', e);
+  }
 }
-function markSaved() {
-  isDirty = false;
-  savedAt = new Date();
-  const t = savedAt.toLocaleTimeString('vi-VN');
-  setStatus('saved', `✅ Đã lưu lúc ${t}`);
+
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) {
+    return null;
+  }
 }
 
 // ── Parse data.js content ─────────────────────────
 function parseDataJs(content) {
-  // Strip 'const HUYET_DATA = ' prefix and trailing semicolon
   let json = content.trim();
   json = json.replace(/^const\s+HUYET_DATA\s*=\s*/, '').replace(/;\s*$/, '');
   try {
@@ -617,12 +1133,154 @@ function parseDataJs(content) {
   }
 }
 
-// ── Serialize data back to JS ─────────────────────
+// ── Serialize data back to JS (giữ Unicode tiếng Việt) ─
 function serializeDataJs(data) {
   return 'const HUYET_DATA = ' + JSON.stringify(data, null, 2) + ';\n';
 }
 
-// ── Open file via File System Access API ──────────
+// ── Init: load data on page open ──────────────────
+(function initLoad() {
+  const lsData = loadFromLocalStorage();
+  if (lsData && Array.isArray(lsData) && lsData.length > 0) {
+    DATA = lsData;
+    initAfterLoad(true);
+    return;
+  }
+  // Fallback: dùng HUYET_DATA từ data.js (đã load qua script tag)
+  if (typeof HUYET_DATA !== 'undefined' && Array.isArray(HUYET_DATA) && HUYET_DATA.length > 0) {
+    DATA = JSON.parse(JSON.stringify(HUYET_DATA)); // deep clone
+    initAfterLoad(false);
+    return;
+  }
+  // Không có gì — hiện welcome panel
+})();
+
+function initAfterLoad(fromLS) {
+  welcomePanel.style.display = 'none';
+  selectState.style.display  = 'block';
+  formArea.style.display     = 'none';
+
+  if (fromLS) {
+    setStatus('unsaved',
+      `⚠️ Có thay đổi chưa ghi file &nbsp;·&nbsp; ${DATA.length} huyệt vị (từ localStorage)`);
+    // Hiện badge cảnh báo
+    showUnsavedBadge();
+  } else {
+    setStatus('saved', `✅ Đã tải ${DATA.length} huyệt vị từ data.js`);
+  }
+  renderList();
+  updateWriteBtn();
+}
+
+// ── Badge "Có thay đổi chưa ghi file" ─────────────
+function showUnsavedBadge() {
+  isDirty = true;
+  if (!$('unsaved-badge')) {
+    const badge = document.createElement('div');
+    badge.id = 'unsaved-badge';
+    badge.style.cssText = 'display:inline-flex;align-items:center;gap:.4rem;background:#f39c12;color:#fff;padding:.35rem .8rem;border-radius:6px;font-size:.8rem;font-weight:600;';
+    badge.textContent = '⚠️ Có thay đổi chưa ghi file';
+    $('status-bar').appendChild(badge);
+  }
+}
+
+function hideUnsavedBadge() {
+  isDirty = false;
+  const b = $('unsaved-badge');
+  if (b) b.remove();
+}
+
+// ── Nút "💾 Ghi vào data.js" ──────────────────────
+function updateWriteBtn() {
+  // Remove old btn if exists
+  let btn = $('btn-write-file');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'btn-write-file';
+    btn.className = 'btn btn-gold';
+    btn.style.cssText = 'font-size:.82rem;';
+    btn.textContent = '💾 Ghi vào data.js';
+    btn.addEventListener('click', writeToDataJs); // direct click
+    $('status-bar').querySelector('.status-actions').appendChild(btn);
+  }
+}
+
+// ── Auto-save indicator ──────────────────────────────
+function updateAutoSaveIndicator() {
+  const bar = $('status-bar');
+  if (!bar) return;
+  let ind = document.getElementById('auto-save-indicator');
+  if (_fileHandle) {
+    if (!ind) {
+      ind = document.createElement('span');
+      ind.id = 'auto-save-indicator';
+      ind.style.cssText = 'background:rgba(39,174,96,.15);color:#27ae60;border:1px solid rgba(39,174,96,.3);'
+        + 'border-radius:4px;padding:.15rem .5rem;font-size:.72rem;font-weight:700;margin-left:.5rem;';
+      bar.appendChild(ind);
+    }
+    ind.textContent = '⚡ Auto-save BẬT';
+    ind.title = 'Mọi thay đổi sẽ được ghi thẳng vào data.js';
+  } else {
+    if (ind) ind.remove();
+  }
+}
+
+// ── Auto-save to file handle ──────────────────────────
+async function autoSaveToFile() {
+  if (!_fileHandle) return false; // no handle → skip
+  try {
+    const perm = await _fileHandle.queryPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      const req = await _fileHandle.requestPermission({ mode: 'readwrite' });
+      if (req !== 'granted') return false;
+    }
+    const text     = serializeDataJs(DATA);
+    const writable = await _fileHandle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    hideUnsavedBadge();
+    setStatus('saved', `✅ Đã ghi ${DATA.length} huyệt vị vào data.js`);
+    localStorage.removeItem(LS_KEY);
+    return true;
+  } catch(e) {
+    if (e.name !== 'AbortError') {
+      toast('⚠️ Auto-save thất bại, lưu tạm localStorage: ' + e.message, 3500);
+      _fileHandle = null;
+      updateAutoSaveIndicator();
+    }
+    return false;
+  }
+}
+
+// ── Manual save / Save As (showSaveFilePicker) ────────
+async function writeToDataJs() {
+  if (!window.showSaveFilePicker) {
+    downloadFile();
+    toast('⚠️ Trình duyệt chưa hỗ trợ Save File Picker — đã tải về data.js', 4000);
+    return;
+  }
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'data.js',
+      startIn: 'documents',
+      types: [{ description: 'JavaScript file', accept: { 'text/javascript': ['.js'] } }]
+    });
+    const text     = serializeDataJs(DATA);
+    const writable = await handle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    _fileHandle = handle; // ← Lưu handle cho auto-save
+    hideUnsavedBadge();
+    setStatus('saved', `✅ Đã ghi ${DATA.length} huyệt vị vào data.js — Auto-save BẬT ✓`);
+    toast('✅ Đã ghi vào data.js — Auto-save đã bật');
+    localStorage.removeItem(LS_KEY);
+    updateAutoSaveIndicator();
+  } catch(e) {
+    if (e.name !== 'AbortError') toast('❌ Lỗi ghi file: ' + e.message, 4000);
+  }
+}
+
+// Nút "📂 Mở file data.js" — showOpenFilePicker direct click
 async function openFileSystemFile() {
   if (!window.showOpenFilePicker) {
     toast('⚠️ Trình duyệt không hỗ trợ File System API. Dùng "Dán JSON".', 4000);
@@ -632,28 +1290,34 @@ async function openFileSystemFile() {
   try {
     const [handle] = await window.showOpenFilePicker({
       types: [{ description: 'JavaScript', accept: { 'text/javascript': ['.js'] } }],
+      startIn: 'documents',
     });
-    fileHandle = handle;
     const file    = await handle.getFile();
-    const content = await file.text();
-    const parsed  = parseDataJs(content);
+    const text    = await file.text();
+    const parsed  = parseDataJs(text);
     if (!parsed) return;
     DATA = parsed;
-    initAfterLoad();
-    toast(`✅ Đã tải ${DATA.length} huyệt vị từ ${file.name}`);
+    _fileHandle = handle; // ← Lưu handle để auto-save sau này
+    saveToLocalStorage();
+    hideUnsavedBadge();
+    initAfterLoad(false);
+    setStatus('saved', `✅ Đã tải ${DATA.length} huyệt vị từ ${file.name} — Auto-save BẬT ✓`);
+    toast(`✅ Đã tải ${DATA.length} huyệt vị. Sẽ tự lưu thẳng vào data.js khi chỉnh sửa`);
+    updateAutoSaveIndicator();
   } catch(e) {
-    if (e.name !== 'AbortError') toast('❌ Lỗi: ' + e.message, 4000);
+    if (e.name !== 'AbortError') toast('❌ Lỗi mở file: ' + e.message, 4000);
   }
 }
 
-function initAfterLoad() {
-  welcomePanel.style.display = 'none';
-  selectState.style.display  = 'block';
-  formArea.style.display     = 'none';
-  btnSave.style.display      = fileHandle ? 'inline-flex' : 'none';
-  btnDownload.style.display  = 'inline-flex';
-  setStatus('saved', `✅ Đã tải ${DATA.length} huyệt vị${fileHandle ? ' • Sẵn sàng lưu' : ' (chế độ download)'}`);
-  renderList();
+// Download fallback
+function downloadFile() {
+  const content = serializeDataJs(DATA);
+  const blob = new Blob([content], { type: 'text/javascript;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'data.js';
+  a.click(); URL.revokeObjectURL(url);
+  toast('📥 Đã tải xuống data.js');
 }
 
 // ── Paste modal ────────────────────────────────────
@@ -665,33 +1329,75 @@ $('paste-ok').addEventListener('click', () => {
   const parsed = parseDataJs(content);
   if (!parsed) return;
   DATA = parsed;
+  saveToLocalStorage();
   $('paste-overlay').classList.remove('open');
-  initAfterLoad();
-  toast(`✅ Đã tải ${DATA.length} huyệt vị từ clipboard`);
+  initAfterLoad(true);
+  toast(`✅ Đã tải ${DATA.length} huyệt vị`);
 });
 
-// ── Save ───────────────────────────────────────────
-async function saveFile() {
-  if (!fileHandle) { downloadFile(); return; }
-  try {
-    const writable = await fileHandle.createWritable();
-    await writable.write(serializeDataJs(DATA));
-    await writable.close();
-    markSaved();
-    toast('💾 Đã lưu vào file data.js');
-  } catch(e) {
-    toast('❌ Lỗi lưu file: ' + e.message, 4000);
+// ── Save item → RAM + localStorage ────────────────
+async function saveItem() {
+  const ma  = $('f-ma').value.trim();
+  const ten = $('f-ten').value.trim();
+  if (!ma || !ten) { toast('⚠️ Mã huyệt và Tên là bắt buộc'); return; }
+
+  const obj = {
+    tenViet:      ten,
+    maHuyet:      ma,
+    urlHinhAnh:   $('f-hinhanh').value.trim(),
+    viTri:        $('f-vitri').value.trim(),
+    CachXacDinh:  $('f-cachxacdinh').value.trim(),
+    cachCham:     $('f-cachcham').value.trim(),
+    duongKinh:    $('f-duong').value.trim(),
+    tacDung:      $('f-tacdung').value.trim(),
+    chuTri:       $('f-chutri').value.trim(),
+    videoURL:     $('f-video').value.trim(),
+    featured:     $('f-featured').checked,
+  };
+
+  if (editingIdx >= 0) {
+    DATA[editingIdx] = obj;
+  } else {
+    DATA.unshift(obj);
+    editingIdx = 0;
+  }
+
+  // Ghi vào localStorage
+  saveToLocalStorage();
+  showUnsavedBadge();
+  updateWriteBtn();
+
+  renderList();
+  $('form-title').textContent    = `✏️ Sửa: ${ten}`;
+  $('form-subtitle').textContent = `Mã: ${ma}`;
+  $('btn-delete-current').style.display = 'inline-flex';
+
+  // Hiện nút "💾 Ghi vào data.js" nổi bật (đã có qua updateWriteBtn)
+  // Hiện link xem trang
+  showDetailLink(ma);
+
+  if (_fileHandle) {
+    autoSaveToFile().then(ok => {
+      if (ok) toast(`✅ Đã lưu "${ten}" vào data.js`);
+    });
+  } else {
+    toast(`✅ Đã lưu "${ten}" vào bộ nhớ tạm`);
+    setStatus('unsaved', `⚠️ Có thay đổi chưa ghi file · "${ten}" đã lưu tạm`);
   }
 }
 
-function downloadFile() {
-  const blob = new Blob([serializeDataJs(DATA)], { type: 'text/javascript' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = 'data.js';
-  a.click(); URL.revokeObjectURL(url);
-  markSaved();
-  toast('📥 Đã tải xuống data.js');
+// ── Link xem trang vừa cập nhật ───────────────────
+function showDetailLink(ma) {
+  let bar = $('detail-link-bar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'detail-link-bar';
+    bar.style.cssText = 'margin-top:.75rem;padding:.5rem .9rem;background:rgba(26,60,52,.08);border-radius:6px;font-size:.82rem;display:flex;align-items:center;gap:.5rem;';
+    $('status-bar').after(bar);
+  }
+  bar.innerHTML = `🔗 <a href="detail.html?ma=${encodeURIComponent(ma)}" target="_blank"
+    style="color:var(--jade,#1a3c34);font-weight:600;text-decoration:underline;">
+    Xem trang vừa cập nhật → detail.html?ma=${escH(ma)}</a>`;
 }
 
 // ── Render sidebar list ────────────────────────────
@@ -699,9 +1405,9 @@ function getFiltered() {
   if (!searchQ) return DATA;
   const q = searchQ.toLowerCase();
   return DATA.filter(d =>
-    (d.tenViet  || '').toLowerCase().includes(q) ||
-    (d.maHuyet  || '').toLowerCase().includes(q) ||
-    (d.duongKinh|| '').toLowerCase().includes(q)
+    (d.tenViet   || '').toLowerCase().includes(q) ||
+    (d.maHuyet   || '').toLowerCase().includes(q) ||
+    (d.duongKinh || '').toLowerCase().includes(q)
   );
 }
 
@@ -710,15 +1416,15 @@ function renderList() {
   const total    = filtered.length;
   const pages    = Math.ceil(total / PAGE_SIZE);
   if (currentPage > pages) currentPage = Math.max(1, pages);
-  const start  = (currentPage - 1) * PAGE_SIZE;
-  const slice  = filtered.slice(start, start + PAGE_SIZE);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const slice = filtered.slice(start, start + PAGE_SIZE);
 
   listInfoText.textContent = searchQ
     ? `${total} kết quả (tổng: ${DATA.length})`
     : `${DATA.length} huyệt vị`;
 
   if (slice.length === 0) {
-    sidebarList.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#999;font-size:0.82rem;">Không có kết quả</div>';
+    sidebarList.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#999;font-size:.82rem;">Không có kết quả</div>';
   } else {
     sidebarList.innerHTML = slice.map(item => {
       const realIdx = DATA.indexOf(item);
@@ -735,10 +1441,8 @@ function renderList() {
     }).join('');
   }
 
-  // Pagination
   renderPagination(pages);
 
-  // Events on list items
   sidebarList.querySelectorAll('[data-edit]').forEach(btn => {
     btn.addEventListener('click', e => { e.stopPropagation(); editItem(+btn.dataset.edit); });
   });
@@ -758,7 +1462,7 @@ function renderPagination(pages) {
     if (i === 1 || i === pages || Math.abs(i - currentPage) <= delta) {
       html += `<button class="pg-btn ${i===currentPage?'active':''}" data-pg="${i}">${i}</button>`;
     } else if (Math.abs(i - currentPage) === delta + 1) {
-      html += `<span style="color:#999;font-size:0.8rem;padding:0 0.2rem;">…</span>`;
+      html += `<span style="color:#999;font-size:.8rem;padding:0 .2rem;">…</span>`;
     }
   }
   html += `<button class="pg-btn" ${currentPage===pages?'disabled':''} data-pg="${currentPage+1}">›</button>`;
@@ -774,21 +1478,21 @@ function editItem(idx) {
   const item = DATA[idx];
   selectState.style.display = 'none';
   formArea.style.display    = 'block';
-  $('form-title').textContent   = `✏️ Sửa: ${item.tenViet || ''}`;
+  $('form-title').textContent    = `✏️ Sửa: ${item.tenViet || ''}`;
   $('form-subtitle').textContent = `Mã: ${item.maHuyet || '—'} · ${item.duongKinh || '—'}`;
   $('btn-delete-current').style.display = 'inline-flex';
 
-  $('f-ma').value      = item.maHuyet  || '';
-  $('f-ten').value     = item.tenViet  || '';
-  $('f-duong').value   = item.duongKinh|| '';
-  $('f-vitri').value      = item.viTri       || '';
-  $('f-cachxacdinh').value = item.CachXacDinh || '';
-  $('f-cachcham').value    = item.cachCham    || '';
-  $('f-tacdung').value = item.tacDung  || '';
-  $('f-chutri').value  = item.chuTri   || '';
-  $('f-hinhanh').value = item.urlHinhAnh|| '';
-  $('f-video').value   = item.videoURL || '';
-  $('f-featured').checked = !!(item.featured);
+  $('f-ma').value          = item.maHuyet      || '';
+  $('f-ten').value         = item.tenViet       || '';
+  $('f-duong').value       = item.duongKinh     || '';
+  $('f-vitri').value       = item.viTri         || '';
+  $('f-cachxacdinh').value = item.CachXacDinh   || '';
+  $('f-cachcham').value    = item.cachCham      || '';
+  $('f-tacdung').value     = item.tacDung       || '';
+  $('f-chutri').value      = item.chuTri        || '';
+  $('f-hinhanh').value     = item.urlHinhAnh    || '';
+  $('f-video').value       = item.videoURL      || '';
+  $('f-featured').checked  = !!(item.featured);
   updateFeaturedLabel();
   updateMediaPreviews();
   renderList();
@@ -800,51 +1504,15 @@ function addNew() {
   editingIdx = -1;
   selectState.style.display = 'none';
   formArea.style.display    = 'block';
-  $('form-title').textContent   = '➕ Thêm huyệt vị mới';
+  $('form-title').textContent    = '➕ Thêm huyệt vị mới';
   $('form-subtitle').textContent = 'Điền đầy đủ thông tin bên dưới';
   $('btn-delete-current').style.display = 'none';
-  // Clear form
-  ['f-ma','f-ten','f-duong','f-vitri','f-cachxacdinh','f-cachcham','f-tacdung','f-chutri','f-hinhanh','f-video'].forEach(id => $(id).value = '');
+  ['f-ma','f-ten','f-duong','f-vitri','f-cachxacdinh','f-cachcham','f-tacdung','f-chutri','f-hinhanh','f-video']
+    .forEach(id => $(id).value = '');
   $('f-featured').checked = false;
   updateFeaturedLabel();
   updateMediaPreviews();
   $('admin-main').scrollTop = 0;
-}
-
-// ── Save item ──────────────────────────────────────
-async function saveItem() {
-  const ma  = $('f-ma').value.trim();
-  const ten = $('f-ten').value.trim();
-  if (!ma || !ten) { toast('⚠️ Mã huyệt và Tên là bắt buộc'); return; }
-
-  const obj = {
-    tenViet:   ten,
-    maHuyet:   ma,
-    urlHinhAnh:$('f-hinhanh').value.trim(),
-    viTri:      $('f-vitri').value.trim(),
-    CachXacDinh:     $('f-cachxacdinh').value.trim(),
-    cachCham:   $('f-cachcham').value.trim(),
-    duongKinh: $('f-duong').value.trim(),
-    tacDung:   $('f-tacdung').value.trim(),
-    chuTri:    $('f-chutri').value.trim(),
-    videoURL:  $('f-video').value.trim(),
-    featured:  $('f-featured').checked,
-  };
-
-  if (editingIdx >= 0) {
-    DATA[editingIdx] = obj;
-  } else {
-    DATA.unshift(obj);
-    editingIdx = 0;
-  }
-
-  renderList();
-  $('form-title').textContent   = `✏️ Sửa: ${ten}`;
-  $('form-subtitle').textContent = `Mã: ${ma}`;
-  $('btn-delete-current').style.display = 'inline-flex';
-
-  // Tự động lưu vào file (hoặc download nếu không có fileHandle)
-  await saveFile();
 }
 
 // ── Delete ─────────────────────────────────────────
@@ -863,43 +1531,38 @@ $('confirm-ok').addEventListener('click', () => {
   $('confirm-overlay').classList.remove('open');
   if (editingIdx === deleteTargetIdx) {
     editingIdx = -1;
-    formArea.style.display   = 'none';
+    formArea.style.display    = 'none';
     selectState.style.display = 'block';
   } else if (editingIdx > deleteTargetIdx) {
     editingIdx--;
   }
-  markDirty();
+  saveToLocalStorage();
+  showUnsavedBadge();
   renderList();
   toast(`🗑️ Đã xóa: ${name}`);
   deleteTargetIdx = -1;
 });
 
-// ── Media previews ──────────────────────────────────
+// ── Media previews ─────────────────────────────────
 function updateMediaPreviews() {
   const imgUrl   = $('f-hinhanh').value.trim();
   const videoUrl = $('f-video').value.trim();
   const prevImg  = $('preview-img');
   const prevVid  = $('preview-video');
-
-  if (imgUrl) {
-    prevImg.innerHTML = `<img src="${escH(imgUrl)}" alt="preview" onerror="this.parentNode.innerHTML='🖼️'">`;
-  } else {
-    prevImg.innerHTML = '🖼️';
-  }
-
+  prevImg.innerHTML = imgUrl
+    ? `<img src="${escH(imgUrl)}" alt="preview" onerror="this.parentNode.innerHTML='🖼️'">`
+    : '🖼️';
   if (videoUrl) {
     const m = videoUrl.match(/(?:youtu\.be\/|watch\?v=|embed\/)([A-Za-z0-9_-]{11})/);
-    if (m) {
-      prevVid.innerHTML = `<img src="https://img.youtube.com/vi/${m[1]}/mqdefault.jpg" alt="yt" onerror="this.parentNode.innerHTML='▶️'">`;
-    } else {
-      prevVid.innerHTML = '▶️';
-    }
+    prevVid.innerHTML = m
+      ? `<img src="https://img.youtube.com/vi/${m[1]}/mqdefault.jpg" alt="yt" onerror="this.parentNode.innerHTML='▶️'">`
+      : '▶️';
   } else {
     prevVid.innerHTML = '▶️';
   }
 }
 
-// ── Featured toggle label ───────────────────────────
+// ── Featured toggle label ──────────────────────────
 function updateFeaturedLabel() {
   $('featured-label').textContent = $('f-featured').checked ? 'Có' : 'Không';
 }
@@ -911,20 +1574,24 @@ function escH(s) {
 }
 
 // ── Event bindings ─────────────────────────────────
-$('btn-open-file').addEventListener('click',  openFileSystemFile);
+$('btn-open-file').addEventListener('click',   openFileSystemFile);
 $('btn-open-file-2').addEventListener('click', openFileSystemFile);
 $('btn-paste-data').addEventListener('click',  showPasteModal);
-$('btn-add-new').addEventListener('click',    () => { if (!DATA.length) { toast('⚠️ Vui lòng tải dữ liệu trước'); return; } addNew(); });
-$('btn-save').addEventListener('click',       saveFile);
-$('btn-download').addEventListener('click',   downloadFile);
-$('btn-save-item').addEventListener('click',  saveItem);
+$('btn-add-new').addEventListener('click',     () => { if (!DATA.length) { toast('⚠️ Chưa có dữ liệu'); return; } addNew(); });
+$('btn-save-item').addEventListener('click',   saveItem);
 $('btn-cancel-edit').addEventListener('click',  cancelEdit);
 $('btn-cancel-edit2').addEventListener('click', cancelEdit);
 $('btn-delete-current').addEventListener('click', () => { if (editingIdx >= 0) confirmDelete(editingIdx); });
 
+// Ẩn nút Lưu / Tải về cũ trong status bar (dùng btn-write-file thay thế)
+const _oldSave = $('btn-save');
+const _oldDl   = $('btn-download');
+if (_oldSave) _oldSave.style.display = 'none';
+if (_oldDl)   _oldDl.style.display   = 'none';
+
 function cancelEdit() {
   editingIdx = -1;
-  formArea.style.display   = 'none';
+  formArea.style.display    = 'none';
   selectState.style.display = DATA.length ? 'block' : 'none';
   renderList();
 }
@@ -935,24 +1602,1158 @@ $('sidebar-search').addEventListener('input', function() {
   renderList();
 });
 
-// Media preview on blur
 $('f-hinhanh').addEventListener('change', updateMediaPreviews);
 $('f-video').addEventListener('change', updateMediaPreviews);
 
-// Keyboard shortcuts
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
-    if (DATA.length) saveFile();
+    if (DATA.length) saveItem();
   }
 });
 
-// Warn on unload if dirty
 window.addEventListener('beforeunload', e => {
-  if (isDirty) {
-    e.preventDefault(); e.returnValue = '';
+  if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   TAB SWITCHING
+   ═══════════════════════════════════════════════════════════ */
+document.querySelectorAll('.admin-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $('tab-panel-' + tab.dataset.tab).classList.add('active');
+    // Re-fit map canvas when map tab becomes visible (panel was hidden, dimensions were 0)
+    if (tab.dataset.tab === 'map' && typeof fitToView === 'function' && typeof mapImg !== 'undefined' && mapImg && mapImg.src && mapImg.complete) {
+      setTimeout(fitToView, 50);
+    }
+  });
+});
+
+
+/* ═══════════════════════════════════════════════════════════
+   MAP EDITOR — Tab Bản Đồ Huyệt Vị
+   ═══════════════════════════════════════════════════════════ */
+(function MapEditor() {
+
+const MAP_LS_KEY = 'huyet888-maps';
+
+/* ── State ──────────────────────────────────────────────── */
+let DATA_MAPS   = { maps: [] };
+let currentMapId = null;
+let currentMode  = 'add'; // 'add' | 'drag' | 'delete'
+let scale = 1, panX = 0, panY = 0;
+let isSpaceDown = false, isPanning = false;
+let panStartX, panStartY, panOrigX, panOrigY;
+let pendingX = null, pendingY = null;  // % coords of pending add
+let pendingPointEl = null;             // preview <g> element
+let selectedPointId = null;            // currently selected point id
+let editingPointId  = null;            // point being edited in right panel
+let saveTimer = null;
+let currentDkFilter = '';
+
+/* ── DOM refs ───────────────────────────────────────────── */
+const mapListEl      = $('map-list-el');
+const mapImg         = $('map-img');
+const svgLayer       = $('map-svg-layer');
+const canvasWrapper  = $('map-canvas-wrapper');
+const canvasInner    = $('map-canvas-inner');
+const mapEmptyCanvas = $('map-empty-canvas');
+const mapTooltip     = $('map-tooltip');
+const mapRightBody   = $('map-right-body');
+const mapRightHeader = $('map-right-header');
+
+/* ── Load from localStorage ─────────────────────────────── */
+function loadMaps() {
+  try {
+    const raw = localStorage.getItem(MAP_LS_KEY);
+    DATA_MAPS = raw ? JSON.parse(raw) : { maps: [] };
+  } catch(e) { DATA_MAPS = { maps: [] }; }
+}
+
+function saveMaps(instant) {
+  clearTimeout(saveTimer);
+  const doSave = () => {
+    try { localStorage.setItem(MAP_LS_KEY, JSON.stringify(DATA_MAPS)); } catch(e) {}
+    toast('✅ Đã lưu tự động');
+  };
+  if (instant) doSave();
+  else saveTimer = setTimeout(doSave, 800);
+}
+
+/* ── Render map list (left col) ─────────────────────────── */
+function renderMapList() {
+  if (!DATA_MAPS.maps.length) {
+    mapListEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#aaa;font-size:.8rem;">Chưa có bản đồ</div>';
+    return;
+  }
+  mapListEl.innerHTML = DATA_MAPS.maps.map(m => `
+    <div class="map-list-item ${m.id === currentMapId ? 'selected' : ''}" data-mid="${m.id}">
+      <div class="mli-info">
+        <div class="mli-name">${escH(m.title)}</div>
+        <div class="mli-count">${(m.points||[]).length} huyệt</div>
+      </div>
+      <div class="mli-actions">
+        <button class="mli-btn edit" data-rename="${m.id}" title="Sửa tên">✏️</button>
+        <button class="mli-btn del"  data-dmap="${m.id}"   title="Xóa">🗑️</button>
+      </div>
+    </div>`).join('');
+
+  mapListEl.querySelectorAll('.map-list-item').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target.closest('button')) return;
+      loadMap(el.dataset.mid);
+    });
+  });
+  mapListEl.querySelectorAll('[data-rename]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); openRenameModal(btn.dataset.rename); });
+  });
+  mapListEl.querySelectorAll('[data-dmap]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); deleteMap(btn.dataset.dmap); });
+  });
+}
+
+/* ── Load map into canvas ───────────────────────────────── */
+function loadMap(id) {
+  const m = DATA_MAPS.maps.find(x => x.id === id);
+  if (!m) return;
+  currentMapId = id;
+  renderMapList();
+  mapImg.style.display = 'block';
+  mapEmptyCanvas.style.display = 'none';
+  mapImg.src = m.imageData || '';
+  svgLayer.innerHTML = '';
+  svgLayer.removeAttribute('viewBox');
+
+  const doRenderMapImg = function() {
+    const nw = mapImg.naturalWidth  || 800;
+    const nh = mapImg.naturalHeight || 600;
+    svgLayer.setAttribute('viewBox', `0 0 ${nw} ${nh}`);
+    svgLayer.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svgLayer.classList.add('map-svg-interactive');
+    // Render existing points
+    (m.points || []).forEach(pt => createPointEl(pt, nw, nh));
+    fitToView();
+  };
+  mapImg.onload = doRenderMapImg;
+  // Fallback for cached/base64 images that may not fire onload
+  if (mapImg.complete && mapImg.naturalWidth) doRenderMapImg();
+  clearRightPanel();
+}
+
+/* ── applyTransform ─────────────────────────────────────── */
+function applyTransform() {
+  canvasInner.style.transform = `scale(${scale}) translate(${panX}px,${panY}px)`;
+}
+
+function fitToView() {
+  const ww = canvasWrapper.clientWidth  || canvasWrapper.offsetWidth  || 600;
+  const wh = canvasWrapper.clientHeight || canvasWrapper.offsetHeight || 400;
+  const iw = mapImg.naturalWidth  || mapImg.clientWidth  || 800;
+  const ih = mapImg.naturalHeight || mapImg.clientHeight || 600;
+  if (!ww || !wh || !iw || !ih) return; // panel not visible yet
+  scale = Math.min(ww / iw, wh / ih) * 0.92;
+  panX = 0; panY = 0;
+  applyTransform();
+}
+
+/* ── Create SVG point element ───────────────────────────── */
+function createPointEl(pt, nw, nh) {
+  if (!nw) nw = mapImg.naturalWidth || 800;
+  if (!nh) nh = mapImg.naturalHeight || 600;
+  const cx = (parseFloat(pt.x) / 100) * nw;
+  const cy = (parseFloat(pt.y) / 100) * nh;
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  const g = document.createElementNS(svgNS, 'g');
+  g.classList.add('map-point');
+  g.dataset.id = pt.id;
+  g.dataset.x  = pt.x;
+  g.dataset.y  = pt.y;
+  if (pt.preview) g.classList.add('preview');
+
+  const pulse = document.createElementNS(svgNS, 'circle');
+  pulse.classList.add('mp-pulse');
+  pulse.setAttribute('cx', cx); pulse.setAttribute('cy', cy); pulse.setAttribute('r', '8');
+  if (pt.color && pt.color !== '#1a1a1a') pulse.style.stroke = pt.color;
+  g.appendChild(pulse);
+
+  const dot = document.createElementNS(svgNS, 'circle');
+  dot.classList.add('mp-dot');
+  dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.setAttribute('r', '7');
+  if (pt.color && pt.color !== '#1a1a1a') dot.style.fill = pt.color;
+  g.appendChild(dot);
+
+  const label = document.createElementNS(svgNS, 'text');
+  label.classList.add('mp-label');
+  label.setAttribute('x', cx); label.setAttribute('y', cy);
+  label.setAttribute('dy', '-12'); label.setAttribute('text-anchor', 'middle');
+  label.textContent = pt.ma || '';
+  g.appendChild(label);
+
+  /* Hover tooltip */
+  g.addEventListener('mouseenter', e => {
+    if (pt.preview) return;
+    mapTooltip.innerHTML = `<strong>${pt.ma||''}</strong><br>${pt.ten||''}<br><small style="opacity:.7">${pt.duongKinh||''}</small>`;
+    mapTooltip.style.display = 'block';
+  });
+  g.addEventListener('mouseleave', () => { mapTooltip.style.display = 'none'; });
+
+  /* Click actions by mode */
+  g.addEventListener('click', e => {
+    e.stopPropagation();
+    if (currentMode === 'delete') {
+      if (pt.preview) return;
+      if (!confirm('Xóa điểm huyệt "' + (pt.ma||pt.ten||'') + '"?')) return;
+      const map = currentMap();
+      if (map) map.points = (map.points||[]).filter(p => p.id !== pt.id);
+      g.remove();
+      if (selectedPointId === pt.id) { selectedPointId = null; clearRightPanel(); }
+      saveMaps();
+    } else if (currentMode === 'drag') {
+      /* click without drag → open properties */
+      selectedPointId = pt.id;
+      svgLayer.querySelectorAll('.map-point').forEach(el => el.classList.remove('selected'));
+      g.classList.add('selected');
+      openEditPoint(pt.id);
+    }
+  });
+
+  svgLayer.appendChild(g);
+  return g;
+}
+
+/* ── Update point position (drag) ───────────────────────── */
+function updatePointPosition(id, x, y) {
+  const g = svgLayer.querySelector(`[data-id="${id}"]`);
+  if (!g) return;
+  const nw = mapImg.naturalWidth || 800;
+  const nh = mapImg.naturalHeight || 600;
+  const cx = (x/100)*nw, cy = (y/100)*nh;
+  g.dataset.x = x; g.dataset.y = y;
+  g.querySelector('.mp-dot').setAttribute('cx', cx);
+  g.querySelector('.mp-dot').setAttribute('cy', cy);
+  g.querySelector('.mp-pulse').setAttribute('cx', cx);
+  g.querySelector('.mp-pulse').setAttribute('cy', cy);
+  const lbl = g.querySelector('.mp-label');
+  lbl.setAttribute('x', cx); lbl.setAttribute('y', cy);
+  // Update data
+  const map = currentMap();
+  if (map) {
+    const pt = (map.points||[]).find(p => p.id === id);
+    if (pt) { pt.x = x.toFixed(3); pt.y = y.toFixed(3); }
+  }
+}
+
+/* ── Drag logic ─────────────────────────────────────────── */
+let dragEl = null, dragStartMX, dragStartMY, dragOrigX, dragOrigY, dragMoved;
+
+svgLayer.addEventListener('mousedown', e => {
+  const g = e.target.closest('.map-point');
+  if (!g || currentMode !== 'drag' || g.classList.contains('preview')) return;
+  e.preventDefault();
+  dragEl = g;
+  dragStartMX = e.clientX; dragStartMY = e.clientY;
+  dragOrigX = parseFloat(g.dataset.x);
+  dragOrigY = parseFloat(g.dataset.y);
+  dragMoved = false;
+  document.body.style.cursor = 'grabbing';
+});
+
+window.addEventListener('mousemove', e => {
+  /* Tooltip follow */
+  if (mapTooltip.style.display === 'block') {
+    mapTooltip.style.left = (e.clientX + 14) + 'px';
+    mapTooltip.style.top  = (e.clientY - 10) + 'px';
+  }
+  /* Panning */
+  if (isPanning) {
+    panX = panOrigX + (e.clientX - panStartX);
+    panY = panOrigY + (e.clientY - panStartY);
+    applyTransform(); return;
+  }
+  /* Dragging point */
+  if (!dragEl) return;
+  const dx = Math.abs(e.clientX - dragStartMX);
+  const dy = Math.abs(e.clientY - dragStartMY);
+  if (dx > 3 || dy > 3) dragMoved = true;
+  if (!dragMoved) return;
+  const rect = mapImg.getBoundingClientRect();
+  const ddx = (e.clientX - dragStartMX) / rect.width  * 100;
+  const ddy = (e.clientY - dragStartMY) / rect.height * 100;
+  const nx = Math.max(0, Math.min(100, dragOrigX + ddx));
+  const ny = Math.max(0, Math.min(100, dragOrigY + ddy));
+  updatePointPosition(dragEl.dataset.id, nx, ny);
+});
+
+window.addEventListener('mouseup', () => {
+  if (isPanning) { isPanning = false; canvasWrapper.style.cursor = isSpaceDown ? 'grab' : ''; }
+  if (dragEl) {
+    if (dragMoved) saveMaps();
+    dragEl = null;
+    document.body.style.cursor = '';
   }
 });
+
+/* ── Zoom ───────────────────────────────────────────────── */
+canvasWrapper.addEventListener('wheel', e => {
+  if (!currentMapId) return;
+  e.preventDefault();
+  scale = Math.min(5, Math.max(0.2, scale * (e.deltaY < 0 ? 1.1 : 0.9)));
+  applyTransform();
+}, { passive: false });
+
+/* ── Pan (Space + drag) ─────────────────────────────────── */
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space' && !e.repeat && document.activeElement.tagName === 'BODY') {
+    isSpaceDown = true;
+    canvasWrapper.style.cursor = 'grab';
+    e.preventDefault();
+  }
+  /* Mode shortcuts (only when map tab active) */
+  if (!$('tab-panel-map').classList.contains('active')) return;
+  if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+  if (e.key === 'a' || e.key === 'A') setMode('add');
+  if (e.key === 'v' || e.key === 'V') setMode('drag');
+  if (e.key === 'x' || e.key === 'X') setMode('delete');
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); exportJSON(); }
+});
+window.addEventListener('keyup', e => {
+  if (e.code === 'Space') { isSpaceDown = false; canvasWrapper.style.cursor = ''; }
+});
+
+canvasWrapper.addEventListener('mousedown', e => {
+  if (isSpaceDown) {
+    isPanning = true;
+    panStartX = e.clientX; panStartY = e.clientY;
+    panOrigX = panX; panOrigY = panY;
+    canvasWrapper.style.cursor = 'grabbing';
+    return;
+  }
+});
+
+/* ── Click on canvas image → ADD mode ───────────────────── */
+mapImg.addEventListener('click', e => {
+  if (currentMode !== 'add' || isSpaceDown || !currentMapId) return;
+  const rect = mapImg.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width  * 100).toFixed(3);
+  const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(3);
+  pendingX = parseFloat(x);
+  pendingY = parseFloat(y);
+
+  /* Remove old preview */
+  if (pendingPointEl) pendingPointEl.remove();
+  pendingPointEl = createPointEl({
+    id: 'pending', x, y, ma: '?', ten: '', duongKinh: '', preview: true
+  });
+
+  openAddPanel();
+});
+
+/* ── Mode buttons ───────────────────────────────────────── */
+function setMode(mode) {
+  currentMode = mode;
+  ['add','drag','delete'].forEach(m => $('tool-' + m).classList.toggle('active', m === mode));
+  canvasInner.classList.remove('mode-add','mode-drag','mode-delete');
+  canvasInner.classList.add('mode-' + mode);
+  svgLayer.classList.toggle('map-svg-interactive', mode === 'drag' || mode === 'delete');
+  if (mode === 'add') mapImg.style.cursor = 'crosshair';
+  else mapImg.style.cursor = '';
+}
+
+$('tool-add').addEventListener('click',    () => setMode('add'));
+$('tool-drag').addEventListener('click',   () => setMode('drag'));
+$('tool-delete').addEventListener('click', () => setMode('delete'));
+$('tool-zoom-in').addEventListener('click',  () => { scale = Math.min(5, scale*1.2); applyTransform(); });
+$('tool-zoom-out').addEventListener('click', () => { scale = Math.max(0.2, scale*0.8); applyTransform(); });
+$('tool-reset').addEventListener('click',    () => { scale=1; panX=0; panY=0; applyTransform(); });
+$('tool-fit').addEventListener('click',      fitToView);
+
+/* ── Right panel: Add new point ──────────────────────────── */
+function openAddPanel() {
+  editingPointId = null;
+  mapRightHeader.textContent = 'GẮN HUYỆT VỊ';
+  renderRightPanel(null, true);
+}
+
+function openEditPoint(ptId) {
+  editingPointId = ptId;
+  const map = currentMap();
+  const pt  = map ? (map.points||[]).find(p => p.id === ptId) : null;
+  mapRightHeader.textContent = 'SỬA HUYỆT VỊ';
+  renderRightPanel(pt, false);
+}
+
+function clearRightPanel() {
+  editingPointId = null;
+  pendingX = null; pendingY = null;
+  if (pendingPointEl) { pendingPointEl.remove(); pendingPointEl = null; }
+  mapRightHeader.textContent = 'GẮN HUYỆT VỊ';
+  mapRightBody.innerHTML = `
+    <div class="map-no-selection">
+      <div class="mns-icon">📍</div>
+      <div>Click lên ảnh để thêm điểm huyệt vị, hoặc chọn điểm để sửa</div>
+    </div>`;
+}
+
+let selectedHuyetItem = null; // DATA item from data.js
+let panelColorPicker   = '#1a1a1a';
+
+function renderRightPanel(existingPt, isNew) {
+  selectedHuyetItem = null;
+  panelColorPicker  = (existingPt && existingPt.color) ? existingPt.color : '#1a1a1a';
+
+  /* Build DK filter tabs */
+  const dks = ['Tất cả', ...new Set((typeof HUYET_DATA !== 'undefined' ? HUYET_DATA : []).map(d => d.duongKinh).filter(Boolean))];
+
+  let searchVal = '';
+  if (existingPt) {
+    searchVal = existingPt.ten || '';
+    /* pre-select */
+    selectedHuyetItem = (typeof HUYET_DATA !== 'undefined' ? HUYET_DATA : []).find(d =>
+      d.maHuyet === existingPt.ma || d.tenViet === existingPt.ten) || null;
+  }
+
+  mapRightBody.innerHTML = `
+    <input type="text" class="map-search-input" id="mp-search" placeholder="🔍 Tìm tên hoặc mã huyệt..." autocomplete="off" value="${escH(searchVal)}">
+    <div class="map-dk-tabs" id="mp-dk-tabs">
+      ${dks.map(dk => `<button class="map-dk-tab ${dk==='Tất cả'?'active':''}" data-dk="${escH(dk)}">${escH(dk)}</button>`).join('')}
+    </div>
+    <div class="map-huyet-list" id="mp-huyet-list"></div>
+    <div class="map-selected-info" id="mp-selected-info" style="display:none"></div>
+    <div class="map-color-row">
+      <span>Màu điểm:</span>
+      <label title="Chọn màu tùy chỉnh" style="cursor:pointer;display:inline-flex;align-items:center;">
+        <input type="color" id="mp-color" value="${escH(panelColorPicker)}"
+               style="width:28px;height:28px;border:none;padding:0;cursor:pointer;border-radius:4px;margin-right:.35rem;">
+        <span style="font-size:.75rem;color:#666;">Tuỳ chỉnh</span>
+      </label>
+      <div class="color-swatches" id="mp-color-swatches">
+        ${[
+          {c:'#1a1a1a',n:'Đen'},
+          {c:'#e74c3c',n:'Đỏ'},
+          {c:'#c0392b',n:'Đỏ đậm'},
+          {c:'#c9a84c',n:'Vàng vàng'},
+          {c:'#f39c12',n:'Cam vàng'},
+          {c:'#27ae60',n:'Xanh lá'},
+          {c:'#1a3c34',n:'Xanh ngọc'},
+          {c:'#2980b9',n:'Xanh dương'},
+          {c:'#8e44ad',n:'Tím'},
+          {c:'#e91e8c',n:'Hồng'},
+          {c:'#795548',n:'Nâu'},
+          {c:'#607d8b',n:'Xám xanh'},
+        ].map(({c,n}) =>
+          `<div class="color-swatch ${panelColorPicker===c?'active':''}" data-color="${c}" title="${n}" style="background:${c}"></div>`
+        ).join('')}
+        ${![
+          '#1a1a1a','#e74c3c','#c0392b','#c9a84c','#f39c12',
+          '#27ae60','#1a3c34','#2980b9','#8e44ad','#e91e8c','#795548','#607d8b'
+        ].includes(panelColorPicker) ? `<div class="color-swatch-custom active" style="background:${panelColorPicker}" title="Màu hiện tại">●</div>` : ''}
+      </div>
+    </div>
+    <div class="map-action-btns">
+      <button class="btn-confirm-point" id="mp-btn-confirm">${isNew ? '✔ Xác nhận' : '✔ Cập nhật'}</button>
+      <button class="btn-cancel-point"  id="mp-btn-cancel">✖ Hủy</button>
+    </div>`;
+
+  /* Events */
+  const searchEl = $('mp-search');
+  const huyetList = $('mp-huyet-list');
+  let activeDk = 'Tất cả';
+
+  function renderList() {
+    const q   = searchEl.value.trim();
+    const dk  = activeDk === 'Tất cả' ? '' : activeDk;
+    const res = searchHuyet(q, dk);
+    if (!res.length) {
+      huyetList.innerHTML = '<div style="padding:.75rem;color:#aaa;font-size:.8rem;text-align:center;">Không có kết quả</div>';
+      return;
+    }
+    huyetList.innerHTML = res.map(item => {
+      const isSel = selectedHuyetItem && selectedHuyetItem.maHuyet === item.maHuyet;
+      return `<div class="map-huyet-item ${isSel?'selected':''}" data-ma="${escH(item.maHuyet)}">
+        <span class="mhi-code">${escH(item.maHuyet)}</span>
+        <span class="mhi-name">${highlight(escH(item.tenViet||''), escH(searchEl.value.trim()))}</span>
+      </div>`;
+    }).join('');
+    huyetList.querySelectorAll('.map-huyet-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const found = (typeof HUYET_DATA !== 'undefined' ? HUYET_DATA : []).find(d => d.maHuyet === el.dataset.ma);
+        if (!found) return;
+        selectedHuyetItem = found;
+        renderList();
+        showSelectedInfo(found);
+      });
+    });
+  }
+
+  function showSelectedInfo(item) {
+    const el = $('mp-selected-info');
+    if (!el || !item) return;
+    el.style.display = 'block';
+    el.innerHTML = `
+      <div class="msi-name">${escH(item.tenViet||'')}</div>
+      <div class="msi-meta">Mã: <strong>${escH(item.maHuyet||'')}</strong></div>
+      <div class="msi-meta">Kinh: ${escH(item.duongKinh||'—')}</div>
+      <div class="msi-meta">Link: detail.html?ma=${escH(encodeURIComponent(item.maHuyet))}</div>`;
+  }
+
+  if (existingPt && selectedHuyetItem) showSelectedInfo(selectedHuyetItem);
+
+  searchEl.addEventListener('input', renderList);
+
+  document.querySelectorAll('#mp-dk-tabs .map-dk-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#mp-dk-tabs .map-dk-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeDk = btn.dataset.dk;
+      renderList();
+    });
+  });
+
+  // ── Native color picker ──
+  var mpColorInput = $('mp-color');
+  if (mpColorInput) {
+    mpColorInput.addEventListener('input', function(e) {
+      panelColorPicker = e.target.value;
+      // deactivate all swatches
+      document.querySelectorAll('#mp-color-swatches .color-swatch, #mp-color-swatches .color-swatch-custom')
+        .forEach(function(s) { s.classList.remove('active'); });
+      // update pending point preview
+      if (pendingPointEl) {
+        var dot   = pendingPointEl.querySelector('.mp-dot');
+        var pulse = pendingPointEl.querySelector('.mp-pulse');
+        if (dot)   dot.style.fill     = panelColorPicker;
+        if (pulse) pulse.style.stroke = panelColorPicker;
+      }
+    });
+  }
+
+  $('mp-btn-confirm').addEventListener('click', () => {
+    if (!selectedHuyetItem) { toast('⚠️ Vui lòng chọn một huyệt vị'); return; }
+    const color = panelColorPicker;
+    if (isNew) confirmAddPoint(selectedHuyetItem, color);
+    else confirmEditPoint(selectedHuyetItem, color);
+  });
+
+  $('mp-btn-cancel').addEventListener('click', () => {
+    if (isNew && pendingPointEl) { pendingPointEl.remove(); pendingPointEl = null; }
+    if (!isNew) {
+      svgLayer.querySelectorAll('.map-point').forEach(el => el.classList.remove('selected'));
+      selectedPointId = null;
+    }
+    clearRightPanel();
+  });
+
+  // ── Color swatch click ──
+  document.querySelectorAll('#mp-color-swatches .color-swatch, #mp-color-swatches .color-swatch-custom').forEach(function(sw) {
+    sw.addEventListener('click', function() {
+      if (sw.dataset.color) panelColorPicker = sw.dataset.color;
+      document.querySelectorAll('#mp-color-swatches .color-swatch, #mp-color-swatches .color-swatch-custom')
+        .forEach(function(s) { s.classList.remove('active'); });
+      sw.classList.add('active');
+      // Sync native picker
+      var mpci = $('mp-color');
+      if (mpci) mpci.value = panelColorPicker;
+      // Update pending preview
+      if (pendingPointEl) {
+        var dot   = pendingPointEl.querySelector('.mp-dot');
+        var pulse = pendingPointEl.querySelector('.mp-pulse');
+        if (dot)   dot.style.fill     = panelColorPicker;
+        if (pulse) pulse.style.stroke = panelColorPicker;
+      }
+    });
+  });
+
+  renderList();
+}
+
+/* ── Confirm add ────────────────────────────────────────── */
+function confirmAddPoint(huyetItem, color) {
+  if (pendingX === null) return;
+  const map = currentMap();
+  if (!map) return;
+
+  const pt = {
+    id:        'pt-' + Date.now(),
+    huyetId:   huyetItem.maHuyet,
+    ma:        huyetItem.maHuyet,
+    ten:       huyetItem.tenViet,
+    duongKinh: huyetItem.duongKinh,
+    url:       'detail.html?ma=' + encodeURIComponent(huyetItem.maHuyet),
+    color:     color,
+    x:         pendingX.toFixed(3),
+    y:         pendingY.toFixed(3)
+  };
+
+  if (!map.points) map.points = [];
+  map.points.push(pt);
+
+  /* Remove preview, create real point */
+  if (pendingPointEl) { pendingPointEl.remove(); pendingPointEl = null; }
+  createPointEl(pt);
+  pendingX = null; pendingY = null;
+  saveMaps();
+  clearRightPanel();
+  renderMapList();
+  toast('✅ Đã thêm huyệt ' + pt.ma);
+}
+
+/* ── Confirm edit ───────────────────────────────────────── */
+function confirmEditPoint(huyetItem, color) {
+  const map = currentMap();
+  if (!map) return;
+  const pt = (map.points||[]).find(p => p.id === editingPointId);
+  if (!pt) return;
+
+  pt.huyetId   = huyetItem.maHuyet;
+  pt.ma        = huyetItem.maHuyet;
+  pt.ten       = huyetItem.tenViet;
+  pt.duongKinh = huyetItem.duongKinh;
+  pt.url       = 'detail.html?ma=' + encodeURIComponent(huyetItem.maHuyet);
+  pt.color     = color;
+
+  /* Update SVG element */
+  const g = svgLayer.querySelector(`[data-id="${pt.id}"]`);
+  if (g) {
+    const dot   = g.querySelector('.mp-dot');
+    const pulse = g.querySelector('.mp-pulse');
+    const label = g.querySelector('.mp-label');
+    dot.style.fill     = color !== '#1a1a1a' ? color : '';
+    pulse.style.stroke = color !== '#1a1a1a' ? color : '';
+    label.textContent  = pt.ma;
+  }
+
+  svgLayer.querySelectorAll('.map-point').forEach(el => el.classList.remove('selected'));
+  saveMaps();
+  clearRightPanel();
+  renderMapList();
+  toast('✅ Đã cập nhật huyệt ' + pt.ma);
+}
+
+/* ── Helpers ─────────────────────────────────────────────── */
+function currentMap() {
+  return DATA_MAPS.maps.find(m => m.id === currentMapId) || null;
+}
+
+function toSlug(str) {
+  return (str||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/đ/gi,'d').replace(/[^a-z0-9\s]/g,'')
+    .trim().replace(/\s+/g,'-');
+}
+
+function searchHuyet(query, filterDk) {
+  const src = (typeof HUYET_DATA !== 'undefined' ? HUYET_DATA : []);
+  let result = src;
+  if (filterDk) result = result.filter(d => d.duongKinh === filterDk);
+  if (!query.trim()) return result.slice(0, 50);
+  const q = query.toLowerCase().normalize('NFC');
+  return result.filter(d => {
+    const ten = (d.tenViet   || '').toLowerCase().normalize('NFC');
+    const ma  = (d.maHuyet   || '').toLowerCase().normalize('NFC');
+    const dk  = (d.duongKinh || '').toLowerCase().normalize('NFC');
+    return ten.includes(q) || ma.includes(q) || dk.includes(q);
+  }).slice(0, 50);
+}
+
+function highlight(text, q) {
+  if (!q) return text;
+  try {
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    return text.replace(re, '<mark>$1</mark>');
+  } catch(e) { return text; }
+}
+
+/* ── Add Map Modal ──────────────────────────────────────── */
+let modalMode = 'add'; // 'add' | 'rename'
+let renameMapId = null;
+let pendingImageData = null;
+
+$('btn-add-map').addEventListener('click', () => {
+  modalMode = 'add'; renameMapId = null; pendingImageData = null;
+  $('map-modal-title').textContent = '➕ Thêm bản đồ mới';
+  $('map-modal-name').value = '';
+  $('map-modal-img').value  = '';
+  $('map-modal-img-warn').style.display = 'none';
+  $('map-modal-ok').textContent = '✔ Tạo bản đồ';
+  $('map-modal-overlay').classList.add('open');
+  setTimeout(() => $('map-modal-name').focus(), 50);
+});
+
+function openRenameModal(id) {
+  const m = DATA_MAPS.maps.find(x => x.id === id);
+  if (!m) return;
+  modalMode = 'rename'; renameMapId = id;
+  $('map-modal-title').textContent = '✏️ Sửa tên bản đồ';
+  $('map-modal-name').value = m.title || '';
+  $('map-modal-img').value  = '';
+  $('map-modal-img-warn').style.display = 'none';
+  $('map-modal-ok').textContent = '✔ Lưu';
+  $('map-modal-overlay').classList.add('open');
+  setTimeout(() => $('map-modal-name').focus(), 50);
+}
+
+$('map-modal-img').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const warn = $('map-modal-img-warn');
+  warn.style.display = file.size > 2 * 1024 * 1024 ? 'block' : 'none';
+  const reader = new FileReader();
+  reader.onload = e => { pendingImageData = e.target.result; };
+  reader.readAsDataURL(file);
+});
+
+$('map-modal-cancel').addEventListener('click', () => $('map-modal-overlay').classList.remove('open'));
+
+$('map-modal-ok').addEventListener('click', () => {
+  const name = $('map-modal-name').value.trim();
+  if (!name) { toast('⚠️ Nhập tên bản đồ'); return; }
+
+  if (modalMode === 'rename') {
+    const m = DATA_MAPS.maps.find(x => x.id === renameMapId);
+    if (m) m.title = name;
+    if (pendingImageData) m.imageData = pendingImageData;
+    saveMaps(true);
+    renderMapList();
+    if (currentMapId === renameMapId) loadMap(renameMapId);
+  } else {
+    const newMap = {
+      id:        'map-' + Date.now(),
+      title:     name,
+      imageData: pendingImageData || '',
+      points:    []
+    };
+    DATA_MAPS.maps.push(newMap);
+    saveMaps(true);
+    renderMapList();
+    loadMap(newMap.id);
+  }
+  pendingImageData = null;
+  $('map-modal-overlay').classList.remove('open');
+  toast('✅ Đã lưu bản đồ "' + name + '"');
+});
+
+/* ── Delete map ─────────────────────────────────────────── */
+function deleteMap(id) {
+  const m = DATA_MAPS.maps.find(x => x.id === id);
+  if (!m) return;
+  if (!confirm(`Xóa bản đồ "${m.title}"? Tất cả điểm huyệt sẽ bị mất.`)) return;
+  DATA_MAPS.maps = DATA_MAPS.maps.filter(x => x.id !== id);
+  if (currentMapId === id) {
+    currentMapId = null;
+    mapImg.style.display = 'none';
+    svgLayer.innerHTML = '';
+    mapEmptyCanvas.style.display = '';
+    clearRightPanel();
+  }
+  saveMaps(true);
+  renderMapList();
+  toast('🗑️ Đã xóa bản đồ "' + m.title + '"');
+}
+
+/* ── Export JSON ─────────────────────────────────────────── */
+function exportJSON() {
+  const blob = new Blob([JSON.stringify({ maps: DATA_MAPS.maps }, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'map-data.json'; a.click();
+  URL.revokeObjectURL(url);
+  toast('📥 Đã xuất map-data.json');
+}
+
+$('btn-map-export').addEventListener('click', exportJSON);
+
+$('btn-map-import-trigger').addEventListener('click', () => $('btn-map-import').click());
+$('btn-map-import').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.maps) { toast('❌ File không hợp lệ (thiếu trường maps)'); return; }
+      data.maps.forEach(incoming => {
+        const existing = DATA_MAPS.maps.find(m => m.id === incoming.id);
+        if (existing) {
+          existing.title  = incoming.title;
+          existing.points = incoming.points;
+          // imageData: keep existing if not in import
+          if (incoming.imageData) existing.imageData = incoming.imageData;
+        } else {
+          DATA_MAPS.maps.push(incoming);
+        }
+      });
+      saveMaps(true);
+      renderMapList();
+      toast(`✅ Đã nhập ${data.maps.length} bản đồ`);
+    } catch(err) { toast('❌ Lỗi đọc JSON: ' + err.message); }
+  };
+  reader.readAsText(file);
+  this.value = '';
+});
+
+/* ── Init ────────────────────────────────────────────────── */
+loadMaps();
+renderMapList();
+setMode('add');
+if (DATA_MAPS.maps.length > 0) loadMap(DATA_MAPS.maps[0].id);
+
+})(); // end MapEditor IIFE
+
+
+/* ═══════════════════════════════════════════════════════════
+   HỘI CHỨNG ADMIN — Tab Quản Lý Hội Chứng
+   ═══════════════════════════════════════════════════════════ */
+(function BenhAdmin() {
+
+const BENH_LS_KEY = 'huyet888-benh-data';
+let BENH_DATA_ARR = [];
+let benhEditingIdx = -1;
+let benhSearchQ = '';
+let benhSelectedHuyet = []; // array of maHuyet strings
+
+/* ── Load ── */
+function loadBenh() {
+  try {
+    const raw = localStorage.getItem(BENH_LS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        BENH_DATA_ARR = parsed;
+        return;
+      }
+    }
+  } catch(e) {}
+  // Seed from script tag
+  if (typeof BENH_DATA !== 'undefined' && Array.isArray(BENH_DATA)) {
+    BENH_DATA_ARR = JSON.parse(JSON.stringify(BENH_DATA));
+  } else {
+    BENH_DATA_ARR = [];
+  }
+  saveBenh();
+}
+
+function saveBenh() {
+  try { localStorage.setItem(BENH_LS_KEY, JSON.stringify(BENH_DATA_ARR)); } catch(e) {}
+  toast('✅ Đã lưu tự động');
+}
+
+function toSlug(str) {
+  return (str||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/đ/gi,'d').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
+}
+
+/* ── Render sidebar list ── */
+function renderBenhList() {
+  const q = benhSearchQ.toLowerCase().normalize('NFC');
+  const filtered = q
+    ? BENH_DATA_ARR.filter(b => (b.ten||'').toLowerCase().includes(q))
+    : BENH_DATA_ARR;
+
+  $('benh-list-info').textContent = benhSearchQ
+    ? filtered.length + ' kết quả (tổng: ' + BENH_DATA_ARR.length + ')'
+    : BENH_DATA_ARR.length + ' hội chứng';
+
+  if (!filtered.length) {
+    $('benh-sidebar-list').innerHTML = '<div style="padding:1.5rem;text-align:center;color:#999;font-size:.82rem;">Không có kết quả</div>';
+    return;
+  }
+  $('benh-sidebar-list').innerHTML = filtered.map(item => {
+    const realIdx = BENH_DATA_ARR.indexOf(item);
+    return '<div class="sidebar-item ' + (realIdx === benhEditingIdx ? 'active' : '') + '" data-idx="' + realIdx + '">' +
+      '<div class="sitem-info">' +
+        '<div class="sitem-name">' + escH(item.ten) + '</div>' +
+        '<div class="sitem-code">' + (item.huyetLienQuan||[]).length + ' huyệt</div>' +
+      '</div>' +
+      '<div class="sitem-actions">' +
+        '<button class="sitem-btn edit" data-edit="' + realIdx + '">✏️</button>' +
+        '<button class="sitem-btn del" data-del="' + realIdx + '">🗑️</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  $('benh-sidebar-list').querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); benhEditItem(+btn.dataset.edit); });
+  });
+  $('benh-sidebar-list').querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); benhConfirmDelete(+btn.dataset.del); });
+  });
+  $('benh-sidebar-list').querySelectorAll('.sidebar-item').forEach(row => {
+    row.addEventListener('click', () => benhEditItem(+row.dataset.idx));
+  });
+}
+
+/* ── Image upload helpers ── */
+let benhCurrentImg = null; // base64 string or null
+
+function benhSetImg(base64) {
+  benhCurrentImg = base64;
+  if (base64) {
+    $('bf-img-preview-img').src = base64;
+    $('bf-img-preview').style.display = 'block';
+    $('bf-img-info').textContent = 'Ảnh đã chọn';
+    $('bf-img-clear').style.display = 'inline';
+  } else {
+    $('bf-img-preview').style.display = 'none';
+    $('bf-img-preview-img').src = '';
+    $('bf-img-info').textContent = 'Chưa có ảnh';
+    $('bf-img-clear').style.display = 'none';
+  }
+}
+
+/* ── Open form ── */
+function benhOpenForm(isNew) {
+  $('benh-empty-state').style.display = 'none';
+  $('benh-form-area').style.display = 'block';
+  $('benh-btn-delete').style.display = isNew ? 'none' : 'inline-flex';
+  benhRenderHuyetSelector();
+}
+
+function benhEditItem(idx) {
+  benhEditingIdx = idx;
+  const item = BENH_DATA_ARR[idx];
+  $('benh-form-title').textContent = '✏️ Sửa: ' + (item.ten || '');
+  $('bf-ten').value = item.ten || '';
+  $('bf-trieuchung').value = item.trieuChung || '';
+  $('bf-trongtam').value = item.trongTam || '';
+  benhSelectedHuyet = [...(item.huyetLienQuan || [])];
+  benhSetImg(item.hinhMinhHoa || null);
+  benhOpenForm(false);
+  renderBenhList();
+  $('benh-main').scrollTop = 0;
+}
+
+function benhAddNew() {
+  benhEditingIdx = -1;
+  $('benh-form-title').textContent = '➕ Thêm hội chứng mới';
+  $('bf-ten').value = '';
+  $('bf-trieuchung').value = '';
+  $('bf-trongtam').value = '';
+  benhSelectedHuyet = [];
+  benhSetImg(null);
+  benhOpenForm(true);
+  $('benh-main').scrollTop = 0;
+}
+
+function benhCancelEdit() {
+  benhEditingIdx = -1;
+  $('benh-form-area').style.display = 'none';
+  $('benh-empty-state').style.display = 'block';
+  renderBenhList();
+}
+
+/* ── Save ── */
+function benhSaveItem() {
+  const ten = $('bf-ten').value.trim();
+  if (!ten) { toast('⚠️ Tên hội chứng là bắt buộc'); return; }
+  const obj = {
+    id:            benhEditingIdx >= 0 ? BENH_DATA_ARR[benhEditingIdx].id : ('benh-' + Date.now()),
+    ten:           ten,
+    slug:          toSlug(ten),
+    trieuChung:    $('bf-trieuchung').value.trim(),
+    trongTam:      $('bf-trongtam').value.trim(),
+    huyetLienQuan: [...benhSelectedHuyet],
+    hinhMinhHoa:   benhCurrentImg || null,
+  };
+  if (benhEditingIdx >= 0) {
+    BENH_DATA_ARR[benhEditingIdx] = obj;
+  } else {
+    BENH_DATA_ARR.unshift(obj);
+    benhEditingIdx = 0;
+  }
+  saveBenh();
+  $('benh-form-title').textContent = '✏️ Sửa: ' + ten;
+  $('benh-btn-delete').style.display = 'inline-flex';
+  renderBenhList();
+}
+
+/* ── Delete ── */
+let benhDeleteIdx = -1;
+function benhConfirmDelete(idx) {
+  benhDeleteIdx = idx;
+  $('confirm-title').textContent = 'Xác nhận xóa';
+  $('confirm-msg').textContent = 'Xóa hội chứng "' + (BENH_DATA_ARR[idx].ten||'') + '"?';
+  $('confirm-overlay').classList.add('open');
+  // Override confirm ok
+  $('confirm-ok').onclick = function() {
+    if (benhDeleteIdx < 0) return;
+    const name = BENH_DATA_ARR[benhDeleteIdx].ten;
+    BENH_DATA_ARR.splice(benhDeleteIdx, 1);
+    $('confirm-overlay').classList.remove('open');
+    if (benhEditingIdx === benhDeleteIdx) {
+      benhCancelEdit();
+    } else if (benhEditingIdx > benhDeleteIdx) {
+      benhEditingIdx--;
+    }
+    saveBenh();
+    renderBenhList();
+    toast('🗑️ Đã xóa: ' + name);
+    benhDeleteIdx = -1;
+  };
+}
+
+/* ── Huyệt selector ── */
+function benhRenderHuyetSelector() {
+  const src = (typeof HUYET_DATA !== 'undefined') ? HUYET_DATA : [];
+  // Populate DK select
+  const dkSel = $('bf-huyet-dk');
+  if (dkSel.options.length <= 1) {
+    const dks = [...new Set(src.map(d => d.duongKinh).filter(Boolean))].sort();
+    dks.forEach(dk => {
+      const opt = document.createElement('option');
+      opt.value = dk; opt.textContent = dk;
+      dkSel.appendChild(opt);
+    });
+  }
+  renderHuyetList();
+  renderSelectedTags();
+}
+
+function renderHuyetList() {
+  const src = (typeof HUYET_DATA !== 'undefined') ? HUYET_DATA : [];
+  const q  = ($('bf-huyet-search') ? $('bf-huyet-search').value.trim() : '').toLowerCase().normalize('NFC');
+  const dk = $('bf-huyet-dk') ? $('bf-huyet-dk').value : '';
+  let res  = src;
+  if (dk) res = res.filter(d => d.duongKinh === dk);
+  if (q)  res = res.filter(d =>
+    (d.tenViet||'').toLowerCase().includes(q) || (d.maHuyet||'').toLowerCase().includes(q));
+  res = res.slice(0, 60);
+
+  const listEl = $('bf-huyet-list');
+  if (!listEl) return;
+  if (!res.length) {
+    listEl.innerHTML = '<div style="padding:.6rem;color:#aaa;font-size:.8rem;text-align:center;">Không có kết quả</div>';
+    return;
+  }
+  listEl.innerHTML = res.map(item => {
+    const isSel = benhSelectedHuyet.includes(item.maHuyet);
+    return '<div class="map-huyet-item ' + (isSel ? 'selected' : '') + '" data-ma="' + escH(item.maHuyet) + '">' +
+      '<span class="mhi-code">' + escH(item.maHuyet) + '</span>' +
+      '<span class="mhi-name">' + escH(item.tenViet||'') + '</span>' +
+      (isSel ? '<span style="margin-left:auto;color:var(--grn);font-size:.75rem;">✓</span>' : '') +
+    '</div>';
+  }).join('');
+  listEl.querySelectorAll('.map-huyet-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const ma = el.dataset.ma;
+      if (benhSelectedHuyet.includes(ma)) {
+        benhSelectedHuyet = benhSelectedHuyet.filter(x => x !== ma);
+      } else {
+        benhSelectedHuyet.push(ma);
+      }
+      renderHuyetList();
+      renderSelectedTags();
+    });
+  });
+}
+
+function renderSelectedTags() {
+  const el = $('bf-huyet-selected');
+  if (!el) return;
+  if (!benhSelectedHuyet.length) {
+    el.innerHTML = '<span style="color:#aaa;font-size:.78rem;">Chưa chọn huyệt nào</span>';
+    return;
+  }
+  el.innerHTML = benhSelectedHuyet.map(ma =>
+    '<span style="display:inline-flex;align-items:center;gap:.3rem;background:rgba(26,60,52,.1);' +
+    'border-radius:20px;padding:.2rem .6rem;font-size:.75rem;font-weight:700;color:var(--j);">' +
+    escH(ma) +
+    '<button onclick="benhRemoveHuyet(&#39;' + escH(ma) + '&#39;)" style="background:none;border:none;cursor:pointer;' +
+    'font-size:.7rem;color:#999;padding:0;line-height:1;">✕</button></span>'
+  ).join('');
+}
+
+window.benhRemoveHuyet = function(ma) {
+  benhSelectedHuyet = benhSelectedHuyet.filter(x => x !== ma);
+  renderHuyetList();
+  renderSelectedTags();
+};
+
+/* ── Export benh-data.js ── */
+function exportBenhJs() {
+  const content = 'const BENH_DATA = ' + JSON.stringify(BENH_DATA_ARR, null, 2) + ';\n';
+  const blob = new Blob([content], { type: 'text/javascript;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'benh-data.js'; a.click();
+  URL.revokeObjectURL(url);
+  toast('✅ Đã xuất benh-data.js');
+}
+
+/* ── Import benh-data.js (MERGE) ── */
+function importBenhJs(content) {
+  let json = content.trim().replace(/^const\s+BENH_DATA\s*=\s*/, '').replace(/;\s*$/, '');
+  let incoming;
+  try { incoming = JSON.parse(json); } catch(e) { toast('❌ Lỗi parse: ' + e.message, 4000); return; }
+  if (!Array.isArray(incoming)) { toast('❌ Dữ liệu không hợp lệ'); return; }
+  let added = 0, updated = 0;
+  incoming.forEach(item => {
+    const existIdx = BENH_DATA_ARR.findIndex(b => b.id === item.id || toSlug(b.ten) === toSlug(item.ten));
+    if (existIdx >= 0) {
+      if (confirm('Hội chứng "' + item.ten + '" đã tồn tại. Cập nhật?')) {
+        BENH_DATA_ARR[existIdx] = item; updated++;
+      }
+    } else {
+      BENH_DATA_ARR.push(item); added++;
+    }
+  });
+  saveBenh();
+  renderBenhList();
+  toast('✅ Nhập xong: +' + added + ' mới, ' + updated + ' cập nhật');
+}
+
+/* ── Event bindings ── */
+$('benh-btn-add').addEventListener('click', benhAddNew);
+$('benh-btn-cancel').addEventListener('click', benhCancelEdit);
+$('benh-btn-cancel2').addEventListener('click', benhCancelEdit);
+$('benh-btn-save').addEventListener('click', benhSaveItem);
+$('benh-btn-delete').addEventListener('click', () => { if (benhEditingIdx >= 0) benhConfirmDelete(benhEditingIdx); });
+$('benh-btn-export').addEventListener('click', exportBenhJs);
+$('benh-btn-import').addEventListener('click', () => $('benh-import-file').click());
+$('benh-import-file').addEventListener('change', function() {
+  const file = this.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => importBenhJs(e.target.result);
+  reader.readAsText(file);
+  this.value = '';
+});
+$('benh-sidebar-search').addEventListener('input', function() {
+  benhSearchQ = this.value.trim();
+  renderBenhList();
+});
+
+// Huyet selector events (delegated since rendered dynamically)
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'bf-huyet-search' || e.target.id === 'bf-huyet-dk') {
+    renderHuyetList();
+  }
+});
+
+/* ── Image upload events ── */
+$('bf-img-btn').addEventListener('click', () => $('bf-img-file').click());
+$('bf-img-clear').addEventListener('click', () => { benhSetImg(null); $('bf-img-file').value = ''; });
+$('bf-img-file').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    toast('⚠️ Ảnh quá lớn! Vui lòng chọn ảnh dưới 2MB.', 4000);
+    this.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => benhSetImg(e.target.result);
+  reader.readAsDataURL(file);
+  this.value = '';
+});
+
+/* ── Init ── */
+loadBenh();
+renderBenhList();
+
+})(); // end BenhAdmin IIFE
 
 </script>
 </body>
