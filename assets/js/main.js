@@ -708,7 +708,7 @@ function applyTheme(themeKey) {
 }
 
 function initTheme() {
-  const saved = localStorage.getItem('hv888-theme') || 'jade';
+  const saved = localStorage.getItem('hv888-theme') || 'brown';
   applyTheme(saved);
 }
 

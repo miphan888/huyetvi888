@@ -2368,3 +2368,192 @@ body[data-theme="ink"] {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+
+/* =====================================================
+   1. BROWN THEME MẶC ĐỊNH
+   ===================================================== */
+:root {
+  --jade:      #5c2e0a;
+  --jade-dark: #3a1c06;
+  --jade-mid:  #7a3e10;
+  --jade-light:#9a5020;
+  --gold:      #d4a853;
+  --gold-light:#e8c470;
+  --gold-pale: #f2dba8;
+  --cream:     #faf3e8;
+  --cream-dark:#f0e6d0;
+}
+
+/* =====================================================
+   2. NAVBAR ĐỔI MÀU THEO THEME
+   ===================================================== */
+
+/* Mặc định (brown) */
+#navbar {
+  background: rgba(58, 28, 6, 0.98) !important;
+  border-bottom-color: rgba(212,168,83,0.25) !important;
+}
+#navbar.scrolled {
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5) !important;
+  border-bottom-color: rgba(212,168,83,0.4) !important;
+}
+#mobile-nav {
+  background: var(--jade-dark) !important;
+  border-bottom-color: rgba(212,168,83,0.2) !important;
+}
+
+/* Theme Jade */
+body[data-theme="jade"] #navbar {
+  background: rgba(15, 37, 32, 0.98) !important;
+  border-bottom-color: rgba(201,168,76,0.25) !important;
+}
+body[data-theme="jade"] #navbar.scrolled {
+  border-bottom-color: rgba(201,168,76,0.4) !important;
+}
+body[data-theme="jade"] #mobile-nav {
+  background: #0f2520 !important;
+}
+
+/* Theme Brown */
+body[data-theme="brown"] #navbar {
+  background: rgba(58, 28, 6, 0.98) !important;
+  border-bottom-color: rgba(212,168,83,0.25) !important;
+}
+body[data-theme="brown"] #navbar.scrolled {
+  border-bottom-color: rgba(212,168,83,0.4) !important;
+}
+body[data-theme="brown"] #mobile-nav {
+  background: #3a1c06 !important;
+}
+
+/* Theme Red */
+body[data-theme="red"] #navbar {
+  background: rgba(77, 13, 13, 0.98) !important;
+  border-bottom-color: rgba(224,176,80,0.25) !important;
+}
+body[data-theme="red"] #navbar.scrolled {
+  border-bottom-color: rgba(224,176,80,0.4) !important;
+}
+body[data-theme="red"] #mobile-nav {
+  background: #4d0d0d !important;
+}
+
+/* Theme Ink */
+body[data-theme="ink"] #navbar {
+  background: rgba(13, 13, 26, 0.98) !important;
+  border-bottom-color: rgba(184,150,12,0.25) !important;
+}
+body[data-theme="ink"] #navbar.scrolled {
+  border-bottom-color: rgba(184,150,12,0.4) !important;
+}
+body[data-theme="ink"] #mobile-nav {
+  background: #0d0d1a !important;
+}
+
+/* =====================================================
+   3. TẤT CẢ TRANG CHI TIẾT — max-width 1200px
+   ===================================================== */
+.detail-section,
+.benh-detail-wrap,
+#benh-detail-container .bd-detail-wrap,
+.about-section,
+.search-section,
+.filter-section,
+.benh-page-wrap,
+.filter-page-wrap,
+.viewer-body {
+  max-width: 1200px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+#results-grid,
+#benh-grid,
+#filter-results-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1.25rem !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#benh-detail-container .featured-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1.25rem !important;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 1100px) {
+  #results-grid,
+  #benh-grid,
+  #filter-results-grid,
+  #benh-detail-container .featured-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-section,
+  .benh-detail-wrap,
+  #benh-detail-container .bd-detail-wrap,
+  .about-section,
+  .search-section,
+  .filter-section,
+  .benh-page-wrap,
+  .viewer-body {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  #results-grid,
+  #benh-grid,
+  #filter-results-grid,
+  #benh-detail-container .featured-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .detail-split-row {
+    grid-template-columns: 1fr !important;
+  }
+  .detail-split-col:last-child {
+    border-left: none !important;
+    padding-left: 0 !important;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding-top: 1rem;
+  }
+  .bd-2col-auto {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-section,
+  .benh-detail-wrap,
+  #benh-detail-container .bd-detail-wrap,
+  .about-section,
+  .search-section,
+  .filter-section,
+  .benh-page-wrap,
+  .viewer-body {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  #results-grid,
+  #benh-grid,
+  #filter-results-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  #benh-detail-container .featured-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
