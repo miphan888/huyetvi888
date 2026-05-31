@@ -642,7 +642,7 @@
 <!-- TAB NAVIGATION -->
 <div class="admin-tabs-wrap">
 <div class="admin-tabs">
-  <button class="admin-tab active" data-tab="huyet">📋 Quản Lý Huyệt Vị</button>
+  <button class="admin-tab" data-tab="huyet">📋 Quản Lý Huyệt Vị</button>
   <button class="admin-tab" data-tab="map">🗺️ Bản Đồ Huyệt Vị</button>
   <button class="admin-tab" data-tab="benh">🔍 Hội Chứng</button>
 </div>
@@ -855,9 +855,11 @@
         <div style="padding:1.5rem;text-align:center;color:#aaa;font-size:.8rem;">Chưa có bản đồ</div>
       </div>
     </div>
-    <div class="map-col-left-footer">
-      <button class="btn-io" id="btn-map-export" title="Xuất map-data.json">📥 Xuất JSON</button>
-      <button class="btn-io" id="btn-map-import-trigger" title="Nhập map-data.json">📤 Nhập JSON</button>
+    <div class="map-col-left-footer" id="map-col-left-footer-bar">
+      <button class="btn-io" id="btn-map-open-file" title="Mở map-data.json và bật auto-save">📂 Mở File</button>
+      <button class="btn-io" id="btn-map-save-as" title="Lưu vào map-data.json">💾 Lưu File</button>
+      <button class="btn-io" id="btn-map-export" title="Xuất map-data.json (tải xuống)">📥 Xuất</button>
+      <button class="btn-io" id="btn-map-import-trigger" title="Nhập map-data.json">📤 Nhập</button>
       <input type="file" id="btn-map-import" accept=".json" style="display:none">
     </div>
   </div>
@@ -866,7 +868,7 @@
   <div class="map-col-mid">
     <div class="map-toolbar" id="map-toolbar">
       <button class="tool-btn active" id="tool-add" title="Chế độ thêm điểm (A)">✚ Thêm</button>
-      <button class="tool-btn" id="tool-drag" title="Kéo thả (V)">✋ Kéo</button>
+      <button class="tool-btn" id="tool-drag" title="Kéo thả / Chỉnh sửa điểm (V) — Click để sửa, kéo để di chuyển, Double-click để sửa bất kỳ chế độ nào">✋ Kéo/Sửa</button>
       <button class="tool-btn" id="tool-delete" title="Xóa điểm (X)">🗑 Xóa</button>
       <div class="tool-sep"></div>
       <button class="tool-btn" id="tool-zoom-in" title="Phóng to (+)">🔍+</button>
@@ -891,11 +893,13 @@
 
   <!-- COL PHẢI: Properties -->
   <div class="map-col-right">
-    <div class="map-col-right-header" id="map-right-header">GẮN HUYỆT VỊ</div>
+    <div class="map-col-right-header" id="map-right-header">GẮN HUYỆT VỊ
+      <button id="btn-show-points-list" title="Xem danh sách điểm đã lưu" style="float:right;background:rgba(26,60,52,0.1);border:1px solid rgba(26,60,52,0.2);border-radius:5px;padding:2px 8px;font-size:0.7rem;cursor:pointer;color:var(--j);">📋 Danh sách</button>
+    </div>
     <div class="map-right-body" id="map-right-body">
       <div class="map-no-selection">
         <div class="mns-icon">📍</div>
-        <div>Click lên ảnh để thêm điểm huyệt vị</div>
+        <div>Click lên ảnh để thêm điểm huyệt vị, hoặc nhấn "Danh sách" để xem và chỉnh sửa điểm đã lưu</div>
       </div>
     </div>
   </div>
@@ -913,7 +917,10 @@
     <div class="sidebar-top">
       <div class="sidebar-actions">
         <button class="btn btn-gold" id="benh-btn-add">➕ Thêm hội chứng</button>
-        <button class="btn btn-ghost" id="benh-btn-export" title="Xuất benh-data.js">💾 Xuất JS</button>
+        <button class="btn btn-ghost" id="benh-btn-open-file" title="Mở benh-data.js (bật auto-save)" style="font-size:.78rem;">📂 Mở File</button>
+        <button class="btn btn-ghost" id="benh-btn-save-as" title="Lưu vào benh-data.js" style="font-size:.78rem;">💾 Lưu File</button>
+        <button class="btn btn-ghost" id="benh-btn-export" title="Xuất benh-data.js">📥 Xuất JS</button>
+        <button class="btn btn-ghost" id="benh-btn-reset-file" title="Tải lại từ benh-data.js" onclick="resetBenhFromFile()">🔄 Tải từ File</button>
       </div>
       <input type="text" class="sidebar-search" id="benh-sidebar-search" placeholder="🔍 Tìm hội chứng..." autocomplete="off">
     </div>
@@ -1619,18 +1626,35 @@ window.addEventListener('beforeunload', e => {
 /* ═══════════════════════════════════════════════════════════
    TAB SWITCHING
    ═══════════════════════════════════════════════════════════ */
+/* ── Tab persistence via URL hash ── */
+function switchToTab(tabId) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
+  const tabBtn = document.querySelector('.admin-tab[data-tab="' + tabId + '"]');
+  const tabPanel = $('tab-panel-' + tabId);
+  if (tabBtn) tabBtn.classList.add('active');
+  if (tabPanel) tabPanel.classList.add('active');
+  // Update URL hash without scroll
+  history.replaceState(null, '', '#' + tabId);
+  // Re-fit map canvas when map tab becomes visible
+  if (tabId === 'map' && typeof fitToView === 'function' && typeof mapImg !== 'undefined' && mapImg && mapImg.src && mapImg.complete) {
+    setTimeout(fitToView, 50);
+  }
+}
+
 document.querySelectorAll('.admin-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    $('tab-panel-' + tab.dataset.tab).classList.add('active');
-    // Re-fit map canvas when map tab becomes visible (panel was hidden, dimensions were 0)
-    if (tab.dataset.tab === 'map' && typeof fitToView === 'function' && typeof mapImg !== 'undefined' && mapImg && mapImg.src && mapImg.complete) {
-      setTimeout(fitToView, 50);
-    }
-  });
+  tab.addEventListener('click', () => switchToTab(tab.dataset.tab));
 });
+
+// Restore tab from hash on load / hash change
+function restoreTabFromHash() {
+  const hash = location.hash.replace('#', '') || 'huyet';
+  const valid = ['huyet', 'map', 'benh'];
+  switchToTab(valid.includes(hash) ? hash : 'huyet');
+}
+window.addEventListener('hashchange', restoreTabFromHash);
+// Will be called after DOM ready (end of script)
+
 
 
 /* ═══════════════════════════════════════════════════════════
@@ -1677,10 +1701,101 @@ function saveMaps(instant) {
   clearTimeout(saveTimer);
   const doSave = () => {
     try { localStorage.setItem(MAP_LS_KEY, JSON.stringify(DATA_MAPS)); } catch(e) {}
-    toast('✅ Đã lưu tự động');
+    toast('✅ Đã lưu bản đồ');
+    // Auto-write to map-data.json if file handle exists
+    if (_mapFileHandle) autoSaveMapToFile();
+    updateMapSaveIndicator();
   };
   if (instant) doSave();
   else saveTimer = setTimeout(doSave, 800);
+}
+
+let _mapFileHandle = null;
+
+function updateMapSaveIndicator() {
+  const bar = $('map-col-left-footer-bar');
+  if (!bar) return;
+  let ind = bar.querySelector('.map-auto-save-ind');
+  if (_mapFileHandle) {
+    if (!ind) {
+      ind = document.createElement('div');
+      ind.className = 'map-auto-save-ind';
+      ind.style.cssText = 'font-size:.68rem;color:#27ae60;font-weight:700;text-align:center;padding:.2rem;';
+      bar.appendChild(ind);
+    }
+    ind.textContent = '⚡ Auto-save BẬT → map-data.json';
+  } else {
+    if (ind) ind.remove();
+  }
+}
+
+async function autoSaveMapToFile() {
+  if (!_mapFileHandle) return;
+  try {
+    const perm = await _mapFileHandle.queryPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      const req = await _mapFileHandle.requestPermission({ mode: 'readwrite' });
+      if (req !== 'granted') { _mapFileHandle = null; updateMapSaveIndicator(); return; }
+    }
+    const text = JSON.stringify({ maps: DATA_MAPS.maps }, null, 2);
+    const writable = await _mapFileHandle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    toast('💾 Đã ghi map-data.json tự động');
+  } catch(e) {
+    if (e.name !== 'AbortError') { _mapFileHandle = null; updateMapSaveIndicator(); }
+  }
+}
+
+async function openMapFile() {
+  if (!window.showOpenFilePicker) { toast('⚠️ Trình duyệt không hỗ trợ File System API'); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+      startIn: 'documents',
+    });
+    const file = await handle.getFile();
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!data.maps) { toast('❌ File không hợp lệ'); return; }
+    data.maps.forEach(incoming => {
+      const existing = DATA_MAPS.maps.find(m => m.id === incoming.id);
+      if (existing) {
+        existing.title = incoming.title;
+        existing.points = incoming.points;
+        if (incoming.imageData) existing.imageData = incoming.imageData;
+      } else {
+        DATA_MAPS.maps.push(incoming);
+      }
+    });
+    _mapFileHandle = handle;
+    saveMaps(true);
+    renderMapList();
+    updateMapSaveIndicator();
+    toast('✅ Đã mở map-data.json — Auto-save BẬT');
+  } catch(e) {
+    if (e.name !== 'AbortError') toast('❌ Lỗi: ' + e.message);
+  }
+}
+
+async function saveMapFileAs() {
+  if (!window.showSaveFilePicker) { exportJSON(); return; }
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'map-data.json',
+      startIn: 'documents',
+      types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+    });
+    const text = JSON.stringify({ maps: DATA_MAPS.maps }, null, 2);
+    const writable = await handle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    _mapFileHandle = handle;
+    updateMapSaveIndicator();
+    toast('✅ Đã lưu map-data.json — Auto-save BẬT');
+  } catch(e) {
+    if (e.name !== 'AbortError') toast('❌ Lỗi: ' + e.message);
+  }
 }
 
 /* ── Render map list (left col) ─────────────────────────── */
@@ -1796,7 +1911,9 @@ function createPointEl(pt, nw, nh) {
   /* Hover tooltip */
   g.addEventListener('mouseenter', e => {
     if (pt.preview) return;
-    mapTooltip.innerHTML = `<strong>${pt.ma||''}</strong><br>${pt.ten||''}<br><small style="opacity:.7">${pt.duongKinh||''}</small>`;
+    const editHint = currentMode === 'drag' ? '<br><small style="opacity:.5;font-style:italic;">Click để chỉnh sửa</small>' : '';
+    const deleteHint = currentMode === 'delete' ? '<br><small style="color:#e74c3c;">Click để xóa</small>' : '';
+    mapTooltip.innerHTML = `<strong>${pt.ma||''}</strong><br>${pt.ten||''}<br><small style="opacity:.7">${pt.duongKinh||''}</small>${editHint}${deleteHint}`;
     mapTooltip.style.display = 'block';
   });
   g.addEventListener('mouseleave', () => { mapTooltip.style.display = 'none'; });
@@ -1804,8 +1921,8 @@ function createPointEl(pt, nw, nh) {
   /* Click actions by mode */
   g.addEventListener('click', e => {
     e.stopPropagation();
+    if (pt.preview) return;
     if (currentMode === 'delete') {
-      if (pt.preview) return;
       if (!confirm('Xóa điểm huyệt "' + (pt.ma||pt.ten||'') + '"?')) return;
       const map = currentMap();
       if (map) map.points = (map.points||[]).filter(p => p.id !== pt.id);
@@ -1813,12 +1930,27 @@ function createPointEl(pt, nw, nh) {
       if (selectedPointId === pt.id) { selectedPointId = null; clearRightPanel(); }
       saveMaps();
     } else if (currentMode === 'drag') {
-      /* click without drag → open properties */
+      /* click or click-after-drag → select and open properties if not mid-drag */
+      if (dragMoved) return; // was a real drag, skip
       selectedPointId = pt.id;
       svgLayer.querySelectorAll('.map-point').forEach(el => el.classList.remove('selected'));
       g.classList.add('selected');
       openEditPoint(pt.id);
+    } else if (currentMode === 'add') {
+      /* In add mode, clicking existing point selects it for viewing */
+      selectedPointId = pt.id;
+      svgLayer.querySelectorAll('.map-point').forEach(el => el.classList.remove('selected'));
+      g.classList.add('selected');
     }
+  });
+  /* Double-click always opens edit (any mode) */
+  g.addEventListener('dblclick', e => {
+    e.stopPropagation();
+    if (pt.preview) return;
+    selectedPointId = pt.id;
+    svgLayer.querySelectorAll('.map-point').forEach(el => el.classList.remove('selected'));
+    g.classList.add('selected');
+    openEditPoint(pt.id);
   });
 
   svgLayer.appendChild(g);
@@ -2365,6 +2497,8 @@ function exportJSON() {
 }
 
 $('btn-map-export').addEventListener('click', exportJSON);
+$('btn-map-open-file').addEventListener('click', openMapFile);
+$('btn-map-save-as').addEventListener('click', saveMapFileAs);
 
 $('btn-map-import-trigger').addEventListener('click', () => $('btn-map-import').click());
 $('btn-map-import').addEventListener('change', function() {
@@ -2401,7 +2535,82 @@ renderMapList();
 setMode('add');
 if (DATA_MAPS.maps.length > 0) loadMap(DATA_MAPS.maps[0].id);
 
-})(); // end MapEditor IIFE
+/* ── Show Points List (view/edit/delete saved points) ────── */
+function showPointsList() {
+  const map = currentMap();
+  if (!map) { toast('⚠️ Chưa chọn bản đồ nào'); return; }
+  const pts = map.points || [];
+  mapRightHeader.innerHTML = `📋 Điểm đã lưu (${pts.length})
+    <button id="btn-show-points-list" title="Xem danh sách điểm đã lưu" style="float:right;background:rgba(26,60,52,0.1);border:1px solid rgba(26,60,52,0.2);border-radius:5px;padding:2px 8px;font-size:0.7rem;cursor:pointer;color:var(--j);" onclick="showPointsList()">🔄 Cập nhật</button>`;
+  if (!pts.length) {
+    mapRightBody.innerHTML = `<div style="padding:2rem;text-align:center;color:#aaa;">
+      <div style="font-size:2rem;margin-bottom:.5rem;">📍</div>
+      <div>Chưa có điểm huyệt nào trên bản đồ này</div>
+    </div>`;
+    return;
+  }
+  mapRightBody.innerHTML = `
+    <div style="padding:.5rem 0 .25rem;font-size:.7rem;color:#999;letter-spacing:.05em;border-bottom:1px solid rgba(0,0,0,.07);margin-bottom:.4rem;">
+      TÊN HUYỆT / MÃ — XÓA / SỬA
+    </div>
+    ${pts.map(pt => `
+    <div class="map-pt-row" data-pid="${escH(pt.id)}" style="display:flex;align-items:center;gap:.5rem;padding:.4rem .3rem;border-bottom:1px solid rgba(0,0,0,.05);font-size:.8rem;">
+      <span class="map-pt-dot" style="width:10px;height:10px;border-radius:50%;background:${escH(pt.color||'#1a1a1a')};flex-shrink:0;display:inline-block;border:1.5px solid rgba(0,0,0,.2);"></span>
+      <span style="flex:1;font-weight:600;color:var(--j);">${escH(pt.ten||pt.ma||'—')}</span>
+      <span style="font-size:.7rem;color:#888;font-weight:500;">${escH(pt.ma||'')}</span>
+      <button class="map-pt-edit-btn" data-pid="${escH(pt.id)}" title="Sửa điểm này" style="background:rgba(26,60,52,0.08);border:1px solid rgba(26,60,52,0.15);border-radius:4px;padding:2px 7px;font-size:.7rem;cursor:pointer;color:var(--j);transition:all .15s;">✏️</button>
+      <button class="map-pt-del-btn"  data-pid="${escH(pt.id)}" title="Xóa điểm này" style="background:rgba(200,0,0,0.06);border:1px solid rgba(200,0,0,0.15);border-radius:4px;padding:2px 7px;font-size:.7rem;cursor:pointer;color:#c0392b;transition:all .15s;">🗑</button>
+    </div>`).join('')}
+    <div style="margin-top:.75rem;padding:.5rem;background:rgba(26,60,52,.04);border-radius:5px;font-size:.72rem;color:#888;text-align:center;">
+      💡 Nhấn ✏️ để sửa hoặc 🗑 để xóa từng điểm
+    </div>`;
+
+  // Bind edit buttons
+  mapRightBody.querySelectorAll('.map-pt-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.pid;
+      const ptEl = svgLayer.querySelector(`[data-id="${CSS.escape(pid)}"]`);
+      // Highlight in SVG
+      svgLayer.querySelectorAll('.map-point').forEach(el => el.classList.remove('selected'));
+      if (ptEl) { ptEl.classList.add('selected'); selectedPointId = pid; }
+      setMode('drag');
+      openEditPoint(pid);
+      toast('✏️ Đang sửa điểm — nhấn "Cập nhật" để lưu');
+    });
+  });
+
+  // Bind delete buttons
+  mapRightBody.querySelectorAll('.map-pt-del-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.pid;
+      const map2 = currentMap();
+      const pt = map2 ? (map2.points||[]).find(p => p.id === pid) : null;
+      if (!pt) return;
+      if (!confirm(`Xóa điểm huyệt "${pt.ten||pt.ma||'này'}"?`)) return;
+      map2.points = (map2.points||[]).filter(p => p.id !== pid);
+      const el = svgLayer.querySelector(`[data-id="${CSS.escape(pid)}"]`);
+      if (el) el.remove();
+      if (selectedPointId === pid) { selectedPointId = null; }
+      saveMaps();
+      toast(`🗑️ Đã xóa điểm "${pt.ten||pt.ma||''}"`);
+      showPointsList(); // refresh list
+    });
+  });
+}
+
+// Bind the "Danh sách" button
+const btnShowList = $('btn-show-points-list');
+if (btnShowList) btnShowList.addEventListener('click', showPointsList);
+
+// Also re-bind after loadMap (inject button back)
+const _origLoadMap = loadMap;
+// Override clearRightPanel to also restore the list button
+const _origClear = clearRightPanel;
+
+})(); // end MapEditor
+
+/* Restore tab on page load */
+restoreTabFromHash();
 
 
 /* ═══════════════════════════════════════════════════════════
@@ -2417,28 +2626,129 @@ let benhSelectedHuyet = []; // array of maHuyet strings
 
 /* ── Load ── */
 function loadBenh() {
+  const fileData = (typeof BENH_DATA !== 'undefined' && Array.isArray(BENH_DATA)) ? BENH_DATA : [];
   try {
     const raw = localStorage.getItem(BENH_LS_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        // If file has more data than localStorage, prefer file (user updated benh-data.js)
+        if (fileData.length > parsed.length) {
+          BENH_DATA_ARR = JSON.parse(JSON.stringify(fileData));
+          saveBenh();
+          toast('🔄 Đã tải dữ liệu mới từ benh-data.js (' + fileData.length + ' hội chứng)');
+          return;
+        }
         BENH_DATA_ARR = parsed;
         return;
       }
     }
   } catch(e) {}
   // Seed from script tag
-  if (typeof BENH_DATA !== 'undefined' && Array.isArray(BENH_DATA)) {
-    BENH_DATA_ARR = JSON.parse(JSON.stringify(BENH_DATA));
+  if (fileData.length > 0) {
+    BENH_DATA_ARR = JSON.parse(JSON.stringify(fileData));
   } else {
     BENH_DATA_ARR = [];
   }
   saveBenh();
 }
 
+/* ── Reset from file (force reload from benh-data.js) ── */
+function resetBenhFromFile() {
+  const fileData = (typeof BENH_DATA !== 'undefined' && Array.isArray(BENH_DATA)) ? BENH_DATA : [];
+  if (!fileData.length) { toast('⚠️ Không tìm thấy dữ liệu trong benh-data.js'); return; }
+  if (!confirm('Tải lại dữ liệu từ benh-data.js? Mọi thay đổi chưa xuất sẽ bị mất.')) return;
+  BENH_DATA_ARR = JSON.parse(JSON.stringify(fileData));
+  saveBenh();
+  renderBenhList();
+  toast('✅ Đã tải ' + fileData.length + ' hội chứng từ benh-data.js');
+}
+
+let _benhFileHandle = null;
+
+function updateBenhSaveIndicator() {
+  const bar = document.querySelector('.sidebar-actions');
+  if (!bar) return;
+  let ind = document.getElementById('benh-auto-save-ind');
+  if (_benhFileHandle) {
+    if (!ind) {
+      ind = document.createElement('div');
+      ind.id = 'benh-auto-save-ind';
+      ind.style.cssText = 'font-size:.68rem;color:#27ae60;font-weight:700;padding:.2rem .4rem;background:rgba(39,174,96,.08);border-radius:4px;';
+      bar.appendChild(ind);
+    }
+    ind.textContent = '⚡ Auto-save BẬT';
+    ind.title = 'Mọi thay đổi sẽ ghi thẳng vào benh-data.js';
+  } else {
+    if (ind) ind.remove();
+  }
+}
+
+async function autoSaveBenhToFile() {
+  if (!_benhFileHandle) return;
+  try {
+    const perm = await _benhFileHandle.queryPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      const req = await _benhFileHandle.requestPermission({ mode: 'readwrite' });
+      if (req !== 'granted') { _benhFileHandle = null; updateBenhSaveIndicator(); return; }
+    }
+    const content = 'const BENH_DATA = ' + JSON.stringify(BENH_DATA_ARR, null, 2) + ';\n';
+    const writable = await _benhFileHandle.createWritable();
+    await writable.write(content);
+    await writable.close();
+    toast('💾 Đã ghi benh-data.js tự động');
+  } catch(e) {
+    if (e.name !== 'AbortError') { _benhFileHandle = null; updateBenhSaveIndicator(); }
+  }
+}
+
+async function openBenhFile() {
+  if (!window.showOpenFilePicker) { toast('⚠️ Trình duyệt không hỗ trợ File System API'); return; }
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: 'JavaScript', accept: { 'text/javascript': ['.js'] } }],
+      startIn: 'documents',
+    });
+    const file = await handle.getFile();
+    const text = await file.text();
+    let json = text.trim().replace(/^const\s+BENH_DATA\s*=\s*/, '').replace(/;\s*$/, '');
+    const parsed = JSON.parse(json);
+    if (!Array.isArray(parsed)) { toast('❌ Dữ liệu không hợp lệ'); return; }
+    BENH_DATA_ARR = parsed;
+    _benhFileHandle = handle;
+    saveBenh();
+    renderBenhList();
+    updateBenhSaveIndicator();
+    toast('✅ Đã mở benh-data.js — Auto-save BẬT');
+  } catch(e) {
+    if (e.name !== 'AbortError') toast('❌ Lỗi: ' + e.message);
+  }
+}
+
+async function saveBenhFileAs() {
+  if (!window.showSaveFilePicker) { exportBenhJs(); return; }
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'benh-data.js',
+      startIn: 'documents',
+      types: [{ description: 'JavaScript', accept: { 'text/javascript': ['.js'] } }]
+    });
+    const content = 'const BENH_DATA = ' + JSON.stringify(BENH_DATA_ARR, null, 2) + ';\n';
+    const writable = await handle.createWritable();
+    await writable.write(content);
+    await writable.close();
+    _benhFileHandle = handle;
+    updateBenhSaveIndicator();
+    toast('✅ Đã lưu benh-data.js — Auto-save BẬT');
+  } catch(e) {
+    if (e.name !== 'AbortError') toast('❌ Lỗi: ' + e.message);
+  }
+}
+
 function saveBenh() {
   try { localStorage.setItem(BENH_LS_KEY, JSON.stringify(BENH_DATA_ARR)); } catch(e) {}
-  toast('✅ Đã lưu tự động');
+  toast('✅ Đã lưu hội chứng');
+  if (_benhFileHandle) autoSaveBenhToFile();
 }
 
 function toSlug(str) {
@@ -2712,6 +3022,8 @@ $('benh-btn-cancel2').addEventListener('click', benhCancelEdit);
 $('benh-btn-save').addEventListener('click', benhSaveItem);
 $('benh-btn-delete').addEventListener('click', () => { if (benhEditingIdx >= 0) benhConfirmDelete(benhEditingIdx); });
 $('benh-btn-export').addEventListener('click', exportBenhJs);
+$('benh-btn-open-file').addEventListener('click', openBenhFile);
+$('benh-btn-save-as').addEventListener('click', saveBenhFileAs);
 $('benh-btn-import').addEventListener('click', () => $('benh-import-file').click());
 $('benh-import-file').addEventListener('change', function() {
   const file = this.files[0]; if (!file) return;

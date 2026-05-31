@@ -62,8 +62,11 @@
 <nav id="navbar" role="navigation" aria-label="Điều hướng chính">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <span class="logo-icon">☯</span>
-      Huyệt Vị 888
+      <div class="logo-circle">☯</div>
+      <div class="logo-text-wrap">
+        <span class="logo-main">Huyệt Vị 888</span>
+        <span class="logo-sub">Đông Y Cổ Truyền</span>
+      </div>
     </a>
     <div class="nav-links">
       <a href="index.html">Trang Chủ</a>
@@ -106,7 +109,13 @@
 <div id="mobile-nav" aria-label="Menu di động">
   <a href="index.html">🏠 Trang Chủ</a>
   <a href="search.html">🔍 Tra Cứu</a>
-  <a href="benh.html">🔍 Hội Chứng</a>
+  <details class="mobile-map-details">
+    <summary>🗺️ Huyệt Theo Vùng</summary>
+    <div id="mobile-map-links" class="mobile-map-links">
+      <a href="map-viewer.html">🗺️ Xem bản đồ huyệt vị →</a>
+    </div>
+  </details>
+  <a href="benh.html">🩺 Hội Chứng</a>
   <a href="about.html">ℹ️ Giới Thiệu</a>
 </div>
 
@@ -121,18 +130,19 @@
   <!-- SEARCH SECTION -->
   <section class="search-section">
     <!-- Search box -->
-    <div class="search-box-wrap" role="search">
-      <span class="search-icon" aria-hidden="true">🔍</span>
+    <div class="search-hero-wrap" role="search">
+      <span class="search-hero-icon" aria-hidden="true">🔍</span>
       <input
         type="text"
         id="search-input"
-        class="search-input"
+        class="search-hero-input"
         placeholder="Nhập tên huyệt, mã huyệt, hoặc triệu chứng... (ví dụ: ST36, hop coc, đau lưng)"
         aria-label="Tìm kiếm huyệt vị"
         autocomplete="off"
         autofocus
       >
-      <button class="search-clear" id="search-clear" aria-label="Xóa tìm kiếm">✕</button>
+      <button class="search-hero-clear" id="search-clear" aria-label="Xóa tìm kiếm">✕</button>
+      <button class="search-hero-btn" id="search-btn" onclick="document.getElementById('search-input').dispatchEvent(new Event('input'))">🔍 Tìm</button>
     </div>
 
     <!-- Meta bar -->
@@ -304,5 +314,23 @@
 })();
 </script>
 
+
+<script>
+(function(){
+  var inp = document.getElementById('search-input');
+  var clr = document.getElementById('search-clear');
+  if(inp && clr){
+    inp.addEventListener('input', function(){
+      clr.classList.toggle('visible', inp.value.length > 0);
+    });
+    clr.addEventListener('click', function(){
+      inp.value = '';
+      clr.classList.remove('visible');
+      inp.dispatchEvent(new Event('input'));
+      inp.focus();
+    });
+  }
+})();
+</script>
 </body>
 </html>

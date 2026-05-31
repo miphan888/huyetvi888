@@ -48,6 +48,11 @@
 .mnd-empty { padding: 0.75rem; font-size: 0.82rem; color: #aaa; text-align: center; }
 .mnd-empty a { color: #1a3c34; font-weight: 600; }
 </style>
+
+<style>
+.search-section { max-width: 1000px; margin: 0 auto; padding: 2.5rem 2rem; }
+#benh-grid { max-width: 1000px; margin: 0 auto; }
+</style>
 </head>
 <body>
 
@@ -61,8 +66,11 @@
 <nav id="navbar" role="navigation" aria-label="Điều hướng chính">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <span class="logo-icon">☯</span>
-      Huyệt Vị 888
+      <div class="logo-circle">☯</div>
+      <div class="logo-text-wrap">
+        <span class="logo-main">Huyệt Vị 888</span>
+        <span class="logo-sub">Đông Y Cổ Truyền</span>
+      </div>
     </a>
     <div class="nav-links">
       <a href="index.html">Trang Chủ</a>
@@ -105,7 +113,13 @@
 <div id="mobile-nav" aria-label="Menu di động">
   <a href="index.html">🏠 Trang Chủ</a>
   <a href="search.html">🔍 Tra Cứu</a>
-  <a href="benh.html">🔍 Hội Chứng</a>
+  <details class="mobile-map-details">
+    <summary>🗺️ Huyệt Theo Vùng</summary>
+    <div id="mobile-map-links" class="mobile-map-links">
+      <a href="map-viewer.html">🗺️ Xem bản đồ huyệt vị →</a>
+    </div>
+  </details>
+  <a href="benh.html">🩺 Hội Chứng</a>
   <a href="about.html">ℹ️ Giới Thiệu</a>
 </div>
 
@@ -120,17 +134,19 @@
   <section class="search-section">
 
     <!-- Search box -->
-    <div class="search-box-wrap" style="max-width:500px;margin:0 auto 1.5rem;" role="search">
-      <span class="search-icon" aria-hidden="true">🔍</span>
+    <div class="search-hero-wrap" role="search">
+      <span class="search-hero-icon" aria-hidden="true">🔍</span>
       <input
         type="text"
         id="benh-search"
-        class="search-input"
+        class="search-hero-input"
         placeholder="Tìm hội chứng... (đau đầu, mất ngủ, đau lưng...)"
         aria-label="Tìm kiếm hội chứng"
         autocomplete="off"
         autofocus
       >
+      <button class="search-hero-clear" id="benh-clear" aria-label="Xóa">✕</button>
+      <button class="search-hero-btn">🔍 Tìm</button>
     </div>
 
     <!-- Result count -->
@@ -197,6 +213,24 @@
   btn.addEventListener('click', e => { e.stopPropagation(); toggle(!dd.classList.contains('open')); });
   document.addEventListener('click', () => toggle(false));
   panel.addEventListener('click', e => e.stopPropagation());
+})();
+</script>
+
+<script>
+(function(){
+  var inp = document.getElementById('benh-search');
+  var clr = document.getElementById('benh-clear');
+  if(inp && clr){
+    inp.addEventListener('input', function(){
+      clr.classList.toggle('visible', inp.value.length > 0);
+    });
+    clr.addEventListener('click', function(){
+      inp.value = '';
+      clr.classList.remove('visible');
+      inp.dispatchEvent(new Event('input'));
+      inp.focus();
+    });
+  }
 })();
 </script>
 </body>
