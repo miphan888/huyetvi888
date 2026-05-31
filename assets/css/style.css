@@ -1906,7 +1906,7 @@ body[data-theme="ink"] {
 
 /* ─── ABOUT SECTION MAX-WIDTH ─── */
 .about-section {
-  max-width: 860px !important;
+  max-width: 1200px !important;
   margin: 0 auto !important;
   padding: 3rem 2rem !important;
 }
@@ -2326,4 +2326,45 @@ body[data-theme="ink"] {
   .hv-title-main { font-size: 2.2rem; }
   .hv-title-888 { font-size: 3.5rem; }
   .hv-stats { gap: 1.25rem; }
+}
+
+/* ── benh-detail: layout giống about.html ── */
+#benh-detail-container .bd-detail-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+#benh-detail-container .featured-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1.25rem !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  #benh-detail-container .featured-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+@media (max-width: 768px) {
+  #benh-detail-container .bd-detail-wrap {
+    padding: 2rem 1.25rem 3rem;
+  }
+  #benh-detail-container .featured-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  #benh-detail-container .bd-2col-auto {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (max-width: 480px) {
+  #benh-detail-container .bd-detail-wrap {
+    padding: 1.5rem 1rem 3rem;
+  }
+  #benh-detail-container .featured-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
