@@ -636,7 +636,10 @@
   <div class="admin-nav-links">
     <a href="index.html">🏠 Trang chủ</a>
     <a href="search.html">🔍 Tìm kiếm</a>
-  </div>
+    <button class="btn btn-ghost" id="btn-github-config" style="font-size:.78rem;" title="Cấu hình GitHub">⚙️ GitHub</button>
+    <button class="btn btn-success" id="btn-push-github" style="display:none;font-size:.78rem;" title="Push lên GitHub">🚀 Push GitHub</button>
+    <span id="github-status" style="font-size:.72rem;color:rgba(245,240,232,0.5);"></span>
+</div>
 </header>
 
 <!-- TAB NAVIGATION -->
@@ -1060,7 +1063,108 @@
     </div>
   </div>
 </div>
+<!-- GITHUB CONFIG MODAL -->
+<div class="confirm-overlay" id="github-overlay">
+    <div class="confirm-modal" style="max-width:500px;text-align:left;">
+        <h3>⚙️ Cấu hình GitHub</h3>
+        <p style="margin-bottom:1rem;font-size:.82rem;color:#777;line-height:1.6;">
+            Kết nối GitHub để push data.js trực tiếp lên repo.<br>
+            Netlify sẽ tự deploy sau khi push.
+        </p>
 
+        <label style="font-size:.78rem;font-weight:600;color:var(--j);display:block;margin-bottom:.25rem;">
+            GitHub Personal Access Token <span style="color:var(--red)">*</span>
+        </label>
+        <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx"
+            style="width:100%;padding:.5rem .75rem;border:1.5px solid rgba(0,0,0,.12);border-radius:6px;font-size:.85rem;margin-bottom:.75rem;font-family:inherit;">
+        <div style="font-size:.72rem;color:#888;margin-top:-.5rem;margin-bottom:.75rem;">
+            Tạo tại: <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--gold);">
+            GitHub Settings → Tokens</a> (chọn quyền <b>repo</b>)
+        </div>
+
+        <label style="font-size:.78rem;font-weight:600;color:var(--j);display:block;margin-bottom:.25rem;">
+            Repository <span style="color:var(--red)">*</span>
+        </label>
+        <input type="text" id="gh-repo" placeholder="username/repo-name"
+            style="width:100%;padding:.5rem .75rem;border:1.5px solid rgba(0,0,0,.12);border-radius:6px;font-size:.85rem;margin-bottom:.75rem;font-family:inherit;">
+
+        <label style="font-size:.78rem;font-weight:600;color:var(--j);display:block;margin-bottom:.25rem;">
+            Đường dẫn file data.js
+        </label>
+        <input type="text" id="gh-datajs-path" value="assets/js/data.js"
+            style="width:100%;padding:.5rem .75rem;border:1.5px solid rgba(0,0,0,.12);border-radius:6px;font-size:.85rem;margin-bottom:.5rem;font-family:inherit;">
+
+        <label style="font-size:.78rem;font-weight:600;color:var(--j);display:block;margin-bottom:.25rem;">
+            Đường dẫn file benh-data.js
+        </label>
+        <input type="text" id="gh-benhjs-path" value="assets/js/benh-data.js"
+            style="width:100%;padding:.5rem .75rem;border:1.5px solid rgba(0,0,0,.12);border-radius:6px;font-size:.85rem;margin-bottom:.5rem;font-family:inherit;">
+
+        <label style="font-size:.78rem;font-weight:600;color:var(--j);display:block;margin-bottom:.25rem;">
+            Đường dẫn file map-data.json
+        </label>
+        <input type="text" id="gh-mapjs-path" value="assets/js/map-data.json"
+            style="width:100%;padding:.5rem .75rem;border:1.5px solid rgba(0,0,0,.12);border-radius:6px;font-size:.85rem;margin-bottom:.75rem;font-family:inherit;">
+
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;">
+            <label style="font-size:.78rem;font-weight:600;color:var(--j);">
+                <input type="checkbox" id="gh-remember" checked> Nhớ cấu hình (localStorage)
+            </label>
+        </div>
+
+        <div class="confirm-btns" style="justify-content:flex-end;">
+            <button class="btn btn-ghost" id="gh-cancel">Hủy</button>
+            <button class="btn btn-primary" id="gh-test">🔍 Test kết nối</button>
+            <button class="btn btn-success" id="gh-save-config">✔ Lưu cấu hình</button>
+        </div>
+
+        <div id="gh-test-result" style="margin-top:.75rem;font-size:.82rem;display:none;padding:.5rem;border-radius:6px;"></div>
+    </div>
+</div>
+
+<!-- GITHUB PUSH MODAL -->
+<div class="confirm-overlay" id="github-push-overlay">
+    <div class="confirm-modal" style="max-width:480px;text-align:left;">
+        <h3>🚀 Push lên GitHub</h3>
+        <p style="font-size:.85rem;color:#777;margin-bottom:1rem;">Chọn dữ liệu cần push:</p>
+
+        <div style="display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem;">
+            <label style="display:flex;align-items:center;gap:.5rem;padding:.6rem;background:var(--cr);border-radius:6px;cursor:pointer;">
+                <input type="checkbox" id="push-datajs" checked>
+                <span style="font-weight:600;color:var(--j);">📋 data.js</span>
+                <span style="font-size:.75rem;color:#888;margin-left:auto;" id="push-datajs-info"></span>
+            </label>
+            <label style="display:flex;align-items:center;gap:.5rem;padding:.6rem;background:var(--cr);border-radius:6px;cursor:pointer;">
+                <input type="checkbox" id="push-benhjs">
+                <span style="font-weight:600;color:var(--j);">🩺 benh-data.js</span>
+                <span style="font-size:.75rem;color:#888;margin-left:auto;" id="push-benhjs-info"></span>
+            </label>
+            <label style="display:flex;align-items:center;gap:.5rem;padding:.6rem;background:var(--cr);border-radius:6px;cursor:pointer;">
+                <input type="checkbox" id="push-mapjs">
+                <span style="font-weight:600;color:var(--j);">🗺️ map-data.json</span>
+                <span style="font-size:.75rem;color:#888;margin-left:auto;" id="push-mapjs-info"></span>
+            </label>
+        </div>
+
+        <label style="font-size:.78rem;font-weight:600;color:var(--j);display:block;margin-bottom:.25rem;">
+            Commit message:
+        </label>
+        <input type="text" id="push-message" placeholder="Cập nhật dữ liệu"
+            style="width:100%;padding:.5rem .75rem;border:1.5px solid rgba(0,0,0,.12);border-radius:6px;font-size:.85rem;margin-bottom:1rem;font-family:inherit;">
+
+        <div id="push-progress" style="display:none;margin-bottom:1rem;">
+            <div style="background:#e0e0e0;border-radius:4px;height:8px;overflow:hidden;">
+                <div id="push-bar" style="background:var(--grn);height:100%;width:0%;transition:width .3s;"></div>
+            </div>
+            <div id="push-status" style="font-size:.78rem;color:#888;margin-top:.3rem;"></div>
+        </div>
+
+        <div class="confirm-btns" style="justify-content:flex-end;">
+            <button class="btn btn-ghost" id="push-cancel">Hủy</button>
+            <button class="btn btn-success" id="push-confirm">🚀 Push ngay</button>
+        </div>
+    </div>
+</div>
 <div id="admin-toast"></div>
 
 <script src="assets/js/data.js"></script>
@@ -3067,6 +3171,200 @@ renderBenhList();
 
 })(); // end BenhAdmin IIFE
 
+/* ═══════════════════════════════════════════════════════════
+   GITHUB INTEGRATION
+   ═══════════════════════════════════════════════════════════ */
+(function GitHubIntegration() {
+
+const GH_LS_KEY = 'huyet888-github-config';
+let ghConfig = { token:'', repo:'', datajsPath:'assets/js/data.js', benhjsPath:'assets/js/benh-data.js', mapjsPath:'assets/js/map-data.json' };
+
+function loadGHConfig() {
+    try {
+        var raw = localStorage.getItem(GH_LS_KEY);
+        if (raw) {
+            var saved = JSON.parse(raw);
+            ghConfig = Object.assign(ghConfig, saved);
+            $('gh-token').value = ghConfig.token || '';
+            $('gh-repo').value = ghConfig.repo || '';
+            $('gh-datajs-path').value = ghConfig.datajsPath;
+            $('gh-benhjs-path').value = ghConfig.benhjsPath;
+            $('gh-mapjs-path').value = ghConfig.mapjsPath;
+            if (ghConfig.token && ghConfig.repo) showGHConnected();
+        }
+    } catch(e) {}
+}
+
+function saveGHConfig() {
+    ghConfig.token = $('gh-token').value.trim();
+    ghConfig.repo = $('gh-repo').value.trim();
+    ghConfig.datajsPath = $('gh-datajs-path').value.trim();
+    ghConfig.benhjsPath = $('gh-benhjs-path').value.trim();
+    ghConfig.mapjsPath = $('gh-mapjs-path').value.trim();
+    if ($('gh-remember').checked) {
+        try { localStorage.setItem(GH_LS_KEY, JSON.stringify(ghConfig)); } catch(e) {}
+    }
+}
+
+function showGHConnected() {
+    var btn = $('btn-push-github');
+    if (btn) btn.style.display = 'inline-flex';
+    var st = $('github-status');
+    if (st) st.textContent = '✅ ' + ghConfig.repo;
+}
+
+function encodeUTF8Base64(str) {
+    var encoder = new TextEncoder();
+    var uint8 = encoder.encode(str);
+    var binary = '';
+    for (var i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
+    return btoa(binary);
+}
+
+async function getFileSHA(filePath) {
+    try {
+        var resp = await fetch('https://api.github.com/repos/' + ghConfig.repo + '/contents/' + filePath, {
+            headers: { 'Authorization': 'token ' + ghConfig.token }
+        });
+        if (resp.ok) { var d = await resp.json(); return d.sha; }
+    } catch(e) {}
+    return null;
+}
+
+async function pushFile(filePath, content, message) {
+    var sha = await getFileSHA(filePath);
+    var body = { message: message, content: encodeUTF8Base64(content) };
+    if (sha) body.sha = sha;
+    var resp = await fetch('https://api.github.com/repos/' + ghConfig.repo + '/contents/' + filePath, {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + ghConfig.token, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    });
+    if (!resp.ok) { var err = await resp.json(); throw new Error(err.message || 'Lỗi push'); }
+    return await resp.json();
+}
+
+async function testConnection() {
+    var r = $('gh-test-result');
+    r.style.display = 'block';
+    r.style.background = '#fff3cd'; r.style.color = '#856404';
+    r.textContent = '⏳ Đang kiểm tra...';
+    try {
+        var resp = await fetch('https://api.github.com/repos/' + $('gh-repo').value.trim(), {
+            headers: { 'Authorization': 'token ' + $('gh-token').value.trim() }
+        });
+        if (!resp.ok) throw new Error((await resp.json()).message);
+        var repo = await resp.json();
+        r.style.background = '#d4edda'; r.style.color = '#155724';
+        r.innerHTML = '✅ Kết nối OK!<br>📂 ' + repo.full_name + '<br>🔒 Push: ' + (repo.permissions.push ? 'Có' : 'Không');
+    } catch(e) {
+        r.style.background = '#f8d7da'; r.style.color = '#721c24';
+        r.textContent = '❌ ' + e.message;
+    }
+}
+
+async function doPush() {
+    var msg = $('push-message').value.trim() || ('Cập nhật ' + new Date().toLocaleString('vi-VN'));
+    var bar = $('push-bar');
+    var status = $('push-status');
+    $('push-progress').style.display = 'block';
+    $('push-confirm').disabled = true;
+    var steps = [];
+    var total = 0;
+
+    if ($('push-datajs').checked && typeof DATA !== 'undefined' && DATA.length) {
+        steps.push({ path: ghConfig.datajsPath, content: 'const HUYET_DATA = ' + JSON.stringify(DATA, null, 2) + ';\n', label: 'data.js' });
+    }
+    if ($('push-benhjs').checked) {
+        var benhArr = [];
+        try { var raw = localStorage.getItem('huyet888-benh-data'); if (raw) benhArr = JSON.parse(raw); } catch(e) {}
+        if (!benhArr.length && typeof BENH_DATA !== 'undefined') benhArr = BENH_DATA;
+        if (benhArr.length) {
+            steps.push({ path: ghConfig.benhjsPath, content: 'const BENH_DATA = ' + JSON.stringify(benhArr, null, 2) + ';\n', label: 'benh-data.js' });
+        }
+    }
+    if ($('push-mapjs').checked) {
+        var mapData = { maps: [] };
+        try { var raw2 = localStorage.getItem('huyet888-maps'); if (raw2) mapData = JSON.parse(raw2); } catch(e) {}
+        if (mapData.maps && mapData.maps.length) {
+            steps.push({ path: ghConfig.mapjsPath, content: JSON.stringify(mapData, null, 2), label: 'map-data.json' });
+        }
+    }
+
+    if (!steps.length) { toast('⚠️ Không có dữ liệu nào để push'); $('push-confirm').disabled = false; return; }
+
+    total = steps.length;
+    var success = 0;
+    var errors = [];
+
+    for (var i = 0; i < steps.length; i++) {
+        var step = steps[i];
+        status.textContent = '📤 Đang push ' + step.label + '...';
+        bar.style.width = ((i / total) * 100) + '%';
+        try {
+            await pushFile(step.path, step.content, msg + ' [' + step.label + ']');
+            success++;
+        } catch(e) {
+            errors.push(step.label + ': ' + e.message);
+        }
+    }
+
+    bar.style.width = '100%';
+    $('push-confirm').disabled = false;
+
+    if (errors.length) {
+        status.textContent = '⚠️ ' + success + '/' + total + ' thành công. Lỗi: ' + errors.join(', ');
+        toast('⚠️ Push có lỗi: ' + errors.join(', '), 4000);
+    } else {
+        status.textContent = '✅ Push thành công ' + success + ' file!';
+        toast('✅ Đã push ' + success + ' file lên GitHub!');
+        hideUnsavedBadge();
+        setTimeout(function() { $('github-push-overlay').classList.remove('open'); }, 1500);
+    }
+}
+
+// ── Event bindings ──
+$('btn-github-config').addEventListener('click', function() {
+    $('github-overlay').classList.add('open');
+    $('gh-test-result').style.display = 'none';
+});
+$$('gh-cancel').addEventListener('click', function() { $$('github-overlay').classList.remove('open'); });
+$('gh-test').addEventListener('click', testConnection);
+$('gh-save-config').addEventListener('click', function() {
+    if (!$$('gh-token').value.trim() || !$$('gh-repo').value.trim()) { toast('⚠️ Nhập Token và Repo'); return; }
+    saveGHConfig();
+    showGHConnected();
+    $('github-overlay').classList.remove('open');
+    toast('✅ Đã lưu cấu hình GitHub');
+});
+$('btn-push-github').addEventListener('click', function() {
+    $('push-progress').style.display = 'none';
+    $('push-bar').style.width = '0%';
+    $('push-message').value = '';
+    $('push-confirm').disabled = false;
+    var di = $('push-datajs-info');
+    if (di) di.textContent = (typeof DATA !== 'undefined' ? DATA.length : 0) + ' huyệt';
+    var bi = $('push-benhjs-info');
+    if (bi) {
+        var bc = 0;
+        try { var r = localStorage.getItem('huyet888-benh-data'); if (r) bc = JSON.parse(r).length; } catch(e) {}
+        if (!bc && typeof BENH_DATA !== 'undefined') bc = BENH_DATA.length;
+        bi.textContent = bc + ' hội chứng';
+    }
+    var mi = $('push-mapjs-info');
+    if (mi) {
+        var mc = 0;
+        try { var r2 = localStorage.getItem('huyet888-maps'); if (r2) mc = JSON.parse(r2).maps.length; } catch(e) {}
+        mi.textContent = mc + ' bản đồ';
+    }
+    $('github-push-overlay').classList.add('open');
+});
+$$('push-cancel').addEventListener('click', function() { $$('github-push-overlay').classList.remove('open'); });
+$('push-confirm').addEventListener('click', doPush);
+
+loadGHConfig();
+
+})();
 </script>
 </body>
 </html>
