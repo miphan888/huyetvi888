@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huyệt Vị Theo Vùng Cơ Thể — Huyệt Vị 888</title>
+  <meta name="description" content="Hệ thống 408 huyệt vị theo 6 vùng cơ thể: Đầu Mặt Cổ, Ngực, Bụng, Lưng, Chi Trên, Chi Dưới — phân loại theo 14 kinh mạch và kỳ huyệt.">
+  <meta name="keywords" content="huyệt vị, huyệt đạo, kinh mạch, đông y, châm cứu, huyệt theo vùng">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    "name": "Huyệt Vị Theo Vùng Cơ Thể",
+    "description": "Hệ thống 408 huyệt vị phân theo 6 vùng cơ thể trong Đông Y cổ truyền",
+    "url": "https://huyetvi.netlify.app/huyet-theo-vung.html",
+    "inLanguage": "vi"
+  }
+  </script>
+
+<style>
+/* ─── NAV DROPDOWN (giống style hiện tại) ─── */
+.map-nav-dropdown { position: relative; }
+.map-nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--cream, #f5f0e8); font: inherit; font-size: 0.88rem;
+  font-weight: 500; letter-spacing: 0.02em;
+  padding: 0.4rem 0.85rem; border-radius: 4px;
+  transition: color 0.2s, background 0.2s; white-space: nowrap;
+}
+.map-nav-btn:hover { background: rgba(201,168,76,0.1); color: var(--gold, #c9a84c); }
+.map-nav-panel {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  min-width: 300px;
+  background: #fff; border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 500; padding: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.map-nav-dropdown.open .map-nav-panel {
+  opacity: 1; pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.mnd-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0.5rem 0.65rem; border-radius: 7px; cursor: pointer;
+  transition: background 0.15s; text-decoration: none; color: #1a3c34;
+  font-size: 0.85rem; font-weight: 500;
+}
+.mnd-item:hover { background: rgba(26,60,52,0.07); }
+.mnd-item .mnd-icon { font-size: 1.1rem; width: 1.5rem; text-align: center; flex-shrink: 0; }
+.mnd-item .mnd-name { flex: 1; }
+.mnd-item .mnd-badge {
+  background: rgba(201,168,76,0.15); color: #a88630;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+  padding: 0.1rem 0.5rem; white-space: nowrap;
+}
+.mnd-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 0.3rem 0.5rem; }
+.mnd-header {
+  padding: 0.45rem 0.65rem 0.2rem;
+  font-size: 0.72rem; font-weight: 700; color: #999;
+  letter-spacing: 0.07em; text-transform: uppercase;
+}
+
+/* ─── BREADCRUMB ─── */
+.breadcrumb {
+  font-size: 0.78rem; color: var(--text-light);
+  display: flex; align-items: center; gap: 0.4rem;
+  flex-wrap: wrap; margin-bottom: 1.5rem;
+}
+.breadcrumb a { color: var(--jade); font-weight: 500; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb-sep { color: var(--text-light); opacity: 0.5; }
+
+/* ─── HERO SECTION ─── */
+.hvv-hero {
+  background: linear-gradient(135deg, var(--jade-dark) 0%, var(--jade) 60%, var(--jade-mid) 100%);
+  color: #fff; padding: 3rem 2rem 2.5rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.hvv-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hvv-hero-inner { position: relative; max-width: 800px; margin: 0 auto; }
+.hvv-hero h1 {
+  font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 700; color: var(--gold-pale); margin-bottom: 0.75rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.hvv-hero-desc { font-size: 0.95rem; opacity: 0.85; line-height: 1.7; margin-bottom: 2rem; }
+
+/* ─── STATS DASHBOARD ─── */
+.hvv-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem; max-width: 700px; margin: 0 auto;
+}
+.hvv-stat-card {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 10px; padding: 1rem 0.75rem; text-align: center;
+  backdrop-filter: blur(4px);
+}
+.hvv-stat-num {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+  color: var(--gold-light); line-height: 1; display: block; margin-bottom: 0.3rem;
+}
+.hvv-stat-label { font-size: 0.72rem; opacity: 0.8; line-height: 1.3; }
+
+/* ─── FILTER BAR ─── */
+.hvv-filter-bar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem; position: sticky; top: 60px; z-index: 200;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.hvv-filter-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center;
+}
+.hvv-filter-bar select, .hvv-filter-bar input {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.45rem 0.75rem; font-size: 0.82rem; color: var(--text-dark);
+  background: var(--parchment); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hvv-filter-bar select:focus, .hvv-filter-bar input:focus {
+  border-color: var(--jade-light); box-shadow: 0 0 0 3px rgba(26,60,52,0.1);
+}
+.hvv-search-wrap { position: relative; flex: 1; min-width: 160px; max-width: 280px; }
+.hvv-search-wrap input { width: 100%; padding-left: 2rem; }
+.hvv-search-icon { position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%); font-size: 0.85rem; opacity: 0.5; }
+.hvv-toggle-label {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.8rem; color: var(--text-light); cursor: pointer; white-space: nowrap;
+}
+.hvv-toggle {
+  width: 36px; height: 20px; background: #ccc; border-radius: 20px;
+  position: relative; transition: background 0.2s; flex-shrink: 0;
+}
+.hvv-toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.hvv-toggle.on { background: var(--jade); }
+.hvv-toggle.on::after { left: 18px; }
+.hvv-filter-count {
+  font-size: 0.78rem; color: var(--jade); font-weight: 600;
+  white-space: nowrap;
+}
+.hvv-btn-reset {
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.45rem 0.75rem; font-size: 0.78rem; color: var(--text-light);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.hvv-btn-reset:hover { border-color: var(--jade); color: var(--jade); }
+
+/* ─── MAIN CONTENT ─── */
+.hvv-content { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* ─── VUNG SECTION ─── */
+.hvv-vung-section {
+  margin-bottom: 3.5rem; scroll-margin-top: 120px;
+}
+.hvv-vung-header {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.25rem 1.5rem; border-radius: 12px 12px 0 0;
+  background: linear-gradient(135deg, var(--jade-dark), var(--jade-mid));
+  color: #fff; margin-bottom: 0;
+}
+.hvv-vung-icon { font-size: 1.8rem; flex-shrink: 0; }
+.hvv-vung-title {
+  font-family: var(--font-display); font-size: 1.25rem;
+  font-weight: 700; color: var(--gold-pale); flex: 1;
+}
+.hvv-vung-mini-stats {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+}
+.hvv-vung-mini-stat {
+  font-size: 0.75rem; opacity: 0.85;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+
+/* ─── SUB TABS (kinh mạch trong vùng) ─── */
+.hvv-kinh-tabs {
+  background: var(--cream-dark);
+  border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+  padding: 0.6rem 1rem;
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.hvv-kinh-tab {
+  background: none; border: 1px solid var(--border); border-radius: 20px;
+  padding: 0.25rem 0.7rem; font-size: 0.74rem; cursor: pointer;
+  color: var(--text-light); transition: all 0.2s; font-weight: 500;
+}
+.hvv-kinh-tab:hover { border-color: var(--jade); color: var(--jade); background: rgba(26,60,52,0.05); }
+.hvv-kinh-tab.active { background: var(--jade); color: var(--gold-pale); border-color: var(--jade); }
+.hvv-kinh-tab[style*="border-color"] { border-width: 2px; }
+
+/* ─── GRID ─── */
+.hvv-grid-wrap {
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 12px 12px;
+  background: var(--parchment);
+  padding: 1.25rem;
+}
+.hvv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+  gap: 1.25rem;
+}
+.hvv-grid.hidden { display: none; }
+
+/* ─── HUYET CARD (đồng bộ acupoint-card) ─── */
+.hvv-card {
+  background: var(--white); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  cursor: pointer; display: flex; flex-direction: column; position: relative;
+}
+.hvv-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-color, var(--jade));
+  opacity: 0.85;
+}
+.hvv-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--card-border-color, rgba(201,168,76,0.4));
+}
+.hvv-card.no-data {
+  opacity: 0.72;
+}
+.hvv-card.no-data:hover { transform: translateY(-2px); }
+.hvv-card-image-wrap { display: flex; justify-content: center; padding: 1.25rem 1.25rem 0; }
+.hvv-card-circle {
+  width: 72px; height: 72px; border-radius: 50%;
+  overflow: hidden; border: 2px solid var(--card-border-color, var(--gold-pale));
+  background: var(--cream-dark);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.hvv-card-circle img { width: 100%; height: 100%; object-fit: cover; }
+.hvv-card-circle .hvv-card-placeholder { font-size: 1.8rem; color: var(--jade-light); }
+.hvv-card-body { padding: 0.85rem 1.1rem 1.1rem; flex: 1; display: flex; flex-direction: column; }
+.hvv-card-code {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--card-badge-bg, rgba(201,168,76,0.1));
+  color: var(--card-color, var(--gold-dim));
+  border: 1px solid var(--card-border-color, rgba(201,168,76,0.25));
+  display: inline-block; padding: 0.12rem 0.45rem; margin-bottom: 0.4rem;
+}
+.hvv-card-name {
+  font-family: var(--font-serif); font-size: 0.95rem; font-weight: 600;
+  color: var(--jade); margin-bottom: 0.3rem; line-height: 1.35;
+}
+.hvv-card-kinh {
+  font-size: 0.73rem; color: var(--card-color, var(--jade-mid));
+  font-weight: 600; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.3rem;
+}
+.hvv-card-kinh-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--card-color, var(--jade-mid)); flex-shrink: 0;
+}
+.hvv-card-vitri {
+  font-size: 0.76rem; color: var(--text-light); line-height: 1.5;
+  flex: 1; margin-bottom: 0.6rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.hvv-card-footer { display: flex; align-items: center; gap: 0.5rem; margin-top: auto; }
+.hvv-card-btn {
+  flex: 1; text-align: center; padding: 0.35rem 0.6rem;
+  background: var(--jade); color: var(--gold-pale);
+  border-radius: 4px; font-size: 0.74rem; font-weight: 600;
+  transition: background 0.2s; text-decoration: none;
+  display: block;
+}
+.hvv-card-btn:hover { background: var(--jade-mid); }
+.hvv-card-no-data-badge {
+  display: flex; align-items: center; gap: 0.3rem;
+  background: rgba(0,0,0,0.05); border-radius: 4px;
+  padding: 0.35rem 0.6rem; font-size: 0.73rem; color: var(--text-light);
+  width: 100%;
+}
+.hvv-vung-tag {
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  font-size: 0.65rem; background: rgba(0,0,0,0.06);
+  color: var(--text-light); border-radius: 3px; padding: 0.1rem 0.35rem;
+}
+
+/* ─── EXPAND BTN ─── */
+.hvv-expand-wrap { text-align: center; padding: 1rem 0 0; }
+.hvv-expand-btn {
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  padding: 0.5rem 1.5rem; font-size: 0.8rem; color: var(--jade); cursor: pointer;
+  transition: all 0.2s; font-weight: 500;
+}
+.hvv-expand-btn:hover { background: var(--jade); color: #fff; border-color: var(--jade); }
+
+/* ─── EMPTY STATE ─── */
+.hvv-empty {
+  text-align: center; padding: 3rem 1rem; grid-column: 1/-1;
+  color: var(--text-light);
+}
+.hvv-empty-icon { font-size: 2.5rem; opacity: 0.4; margin-bottom: 0.75rem; }
+
+/* ─── VUNG EXPLORE CARDS (footer) ─── */
+.hvv-explore-section {
+  background: var(--cream-dark); border-top: 1px solid var(--border);
+  padding: 3rem 1.5rem; margin-top: 2rem;
+}
+.hvv-explore-inner { max-width: 1200px; margin: 0 auto; }
+.hvv-explore-title {
+  font-family: var(--font-display); font-size: 1.5rem;
+  color: var(--jade); text-align: center; margin-bottom: 0.5rem;
+}
+.hvv-explore-sub { text-align: center; color: var(--text-light); font-size: 0.88rem; margin-bottom: 2rem; }
+.hvv-explore-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem;
+}
+.hvv-explore-card {
+  background: var(--white); border-radius: 12px;
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  padding: 1.5rem; transition: all 0.3s; cursor: pointer;
+  text-decoration: none; color: inherit; display: block;
+  position: relative; overflow: hidden;
+}
+.hvv-explore-card::before {
+  content: ''; position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(135deg, rgba(26,60,52,0.04), rgba(201,168,76,0.06));
+  transition: opacity 0.3s;
+}
+.hvv-explore-card:hover::before { opacity: 1; }
+.hvv-explore-card:hover {
+  transform: translateY(-4px); box-shadow: var(--shadow-md);
+  border-color: rgba(201,168,76,0.3);
+}
+.hvv-explore-card-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.hvv-explore-card-icon {
+  font-size: 2rem; width: 52px; height: 52px;
+  background: linear-gradient(135deg, var(--jade-dark), var(--jade-mid));
+  border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.hvv-explore-card-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--jade); }
+.hvv-explore-card-count { font-size: 0.78rem; color: var(--text-light); margin-top: 0.15rem; }
+.hvv-explore-notable { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.hvv-explore-notable-tag {
+  background: rgba(26,60,52,0.07); color: var(--jade-mid);
+  border-radius: 20px; padding: 0.2rem 0.6rem; font-size: 0.72rem; font-weight: 500;
+}
+.hvv-explore-link {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  color: var(--jade); font-weight: 600; font-size: 0.82rem;
+}
+
+/* ─── PRINT ─── */
+.hvv-print-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: 6px; padding: 0.4rem 0.85rem;
+  font-size: 0.78rem; color: var(--text-light); cursor: pointer;
+  transition: all 0.2s;
+}
+.hvv-print-btn:hover { border-color: var(--jade); color: var(--jade); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hvv-card.animating { animation: fadeInUp 0.3s ease forwards; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .hvv-hero { padding: 2rem 1rem 1.5rem; }
+  .hvv-stats { grid-template-columns: repeat(3, 1fr); }
+  .hvv-filter-inner { gap: 0.5rem; }
+  .hvv-search-wrap { min-width: 120px; }
+  .hvv-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+  .hvv-vung-header { flex-wrap: wrap; }
+  .hvv-vung-mini-stats { display: none; }
+  .hvv-filter-bar { top: 55px; }
+}
+@media (max-width: 480px) {
+  .hvv-stats { grid-template-columns: repeat(2, 1fr); }
+  .hvv-grid { grid-template-columns: 1fr; }
+  .hvv-explore-grid { grid-template-columns: 1fr; }
+}
+
+@media print {
+  .hvv-filter-bar, nav, footer, #back-to-top, .hvv-explore-section { display: none !important; }
+  .hvv-vung-section { break-inside: avoid; }
+  .hvv-card.no-data { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-symbol">☯</div>
+  <div class="loader-text">Đang tải...</div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-circle">☯</div>
+      <div class="logo-text-wrap">
+        <span class="logo-main">Huyệt Vị 888</span>
+        <span class="logo-sub">Đông Y Cổ Truyền</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Trang Chủ</a>
+      <a href="search.html">Tra Cứu</a>
+      <!-- DROPDOWN HUYỆT THEO VÙNG MỚI -->
+      <div class="map-nav-dropdown" id="map-nav-dd">
+        <button class="map-nav-btn" id="map-nav-btn">📍 Huyệt Theo Vùng ▾</button>
+        <div class="map-nav-panel" id="map-nav-panel">
+          <div class="mnd-header">Chọn Vùng Cơ Thể</div>
+          <a class="mnd-item" href="huyet-theo-vung.html">
+            <span class="mnd-icon">🗂️</span>
+            <span class="mnd-name">Tất cả vùng</span>
+            <span class="mnd-badge">408</span>
+          </a>
+          <div class="mnd-divider"></div>
+          <a class="mnd-item" href="huyet-theo-vung.html#dau-mat-co">
+            <span class="mnd-icon">🧠</span>
+            <span class="mnd-name">Đầu – Mặt – Cổ</span>
+            <span class="mnd-badge">88</span>
+          </a>
+          <a class="mnd-item" href="huyet-theo-vung.html#nguc">
+            <span class="mnd-icon">🫁</span>
+            <span class="mnd-name">Ngực</span>
+            <span class="mnd-badge">31</span>
+          </a>
+          <a class="mnd-item" href="huyet-theo-vung.html#bung">
+            <span class="mnd-icon">🫃</span>
+            <span class="mnd-name">Bụng</span>
+            <span class="mnd-badge">48</span>
+          </a>
+          <a class="mnd-item" href="huyet-theo-vung.html#lung">
+            <span class="mnd-icon">🦴</span>
+            <span class="mnd-name">Lưng – Thắt lưng – Xương cùng</span>
+            <span class="mnd-badge">64</span>
+          </a>
+          <a class="mnd-item" href="huyet-theo-vung.html#chi-tren">
+            <span class="mnd-icon">💪</span>
+            <span class="mnd-name">Chi Trên</span>
+            <span class="mnd-badge">85</span>
+          </a>
+          <a class="mnd-item" href="huyet-theo-vung.html#chi-duoi">
+            <span class="mnd-icon">🦵</span>
+            <span class="mnd-name">Chi Dưới</span>
+            <span class="mnd-badge">92</span>
+          </a>
+        </div>
+      </div>
+      <a href="benh.html">🔍 Hội Chứng</a>
+      <a href="about.html">Giới Thiệu</a>
+    </div>
+    <!-- Theme switcher -->
+    <div class="theme-switcher" id="theme-switcher" title="Đổi giao diện">
+      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Đổi theme">🎨</button>
+      <div class="theme-dropdown" id="theme-dropdown">
+        <div class="theme-dropdown-title">Giao Diện</div>
+        <button class="theme-opt" data-theme="jade"><span class="theme-swatch" style="background:#1a3c34"></span> Ngọc Bích</button>
+        <button class="theme-opt" data-theme="brown"><span class="theme-swatch" style="background:#5c2e0a"></span> Nâu Trầm</button>
+        <button class="theme-opt" data-theme="red"><span class="theme-swatch" style="background:#7a1515"></span> Đỏ Son</button>
+        <button class="theme-opt" data-theme="ink"><span class="theme-swatch" style="background:#1a1a2e"></span> Mực Tàu</button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Mở menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" aria-label="Menu di động">
+  <a href="index.html">🏠 Trang Chủ</a>
+  <a href="search.html">🔍 Tra Cứu</a>
+  <details class="mobile-map-details">
+    <summary>📍 Huyệt Theo Vùng</summary>
+    <div class="mobile-map-links">
+      <a href="huyet-theo-vung.html">🗂️ Tất cả vùng (408 huyệt)</a>
+      <a href="huyet-theo-vung.html#dau-mat-co">🧠 Đầu – Mặt – Cổ (88)</a>
+      <a href="huyet-theo-vung.html#nguc">🫁 Ngực (31)</a>
+      <a href="huyet-theo-vung.html#bung">🫃 Bụng (48)</a>
+      <a href="huyet-theo-vung.html#lung">🦴 Lưng – Thắt lưng (64)</a>
+      <a href="huyet-theo-vung.html#chi-tren">💪 Chi Trên (85)</a>
+      <a href="huyet-theo-vung.html#chi-duoi">🦵 Chi Dưới (92)</a>
+    </div>
+  </details>
+  <a href="benh.html">🩺 Hội Chứng</a>
+  <a href="about.html">ℹ️ Giới Thiệu</a>
+</div>
+
+<!-- HERO -->
+<section class="hvv-hero">
+  <div class="hvv-hero-inner">
+    <div class="breadcrumb" style="justify-content:center; margin-bottom:1rem;">
+      <a href="index.html">Trang Chủ</a>
+      <span class="breadcrumb-sep">›</span>
+      <span style="color:var(--gold-pale);">Huyệt Vị Theo Vùng</span>
+    </div>
+    <h1>Hệ Thống Huyệt Vị Theo Vùng Cơ Thể</h1>
+    <p class="hvv-hero-desc">
+      Tra cứu và khám phá 408 huyệt đạo phân theo 6 vùng cơ thể,
+      thuộc 14 kinh mạch chính và kỳ huyệt trong Đông Y cổ truyền.
+    </p>
+    <div class="hvv-stats">
+      <div class="hvv-stat-card">
+        <span class="hvv-stat-num" data-target="408" id="stat-total">0</span>
+        <span class="hvv-stat-label">Tổng số huyệt</span>
+      </div>
+      <div class="hvv-stat-card">
+        <span class="hvv-stat-num" data-target="353" id="stat-data">0</span>
+        <span class="hvv-stat-label">Có dữ liệu chi tiết</span>
+      </div>
+      <div class="hvv-stat-card">
+        <span class="hvv-stat-num" data-target="55" id="stat-no-data">0</span>
+        <span class="hvv-stat-label">Đang cập nhật</span>
+      </div>
+      <div class="hvv-stat-card">
+        <span class="hvv-stat-num" data-target="15" id="stat-kinh">0</span>
+        <span class="hvv-stat-label">Kinh mạch</span>
+      </div>
+      <div class="hvv-stat-card">
+        <span class="hvv-stat-num" data-target="6" id="stat-vung">0</span>
+        <span class="hvv-stat-label">Vùng cơ thể</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="hvv-filter-bar" id="hvv-filter-bar">
+  <div class="hvv-filter-inner">
+    <div class="hvv-search-wrap">
+      <span class="hvv-search-icon">🔍</span>
+      <input type="text" id="hvv-search" placeholder="Tìm tên hoặc mã huyệt..." autocomplete="off">
+    </div>
+    <select id="hvv-filter-vung">
+      <option value="">Tất cả vùng</option>
+      <option value="Đầu Mặt Cổ">Đầu – Mặt – Cổ</option>
+      <option value="Ngực">Ngực</option>
+      <option value="Bụng">Bụng</option>
+      <option value="Lưng Thắt lưng Xương cùng">Lưng – Thắt lưng</option>
+      <option value="Chi Trên">Chi Trên</option>
+      <option value="Chi Dưới">Chi Dưới</option>
+    </select>
+    <select id="hvv-filter-kinh">
+      <option value="">Tất cả kinh mạch</option>
+    </select>
+    <label class="hvv-toggle-label" for="hvv-toggle-data">
+      <span id="hvv-toggle-el" class="hvv-toggle"></span>
+      Chỉ có dữ liệu
+    </label>
+    <span class="hvv-filter-count" id="hvv-filter-count">Đang tải...</span>
+    <button class="hvv-btn-reset" id="hvv-reset">✕ Đặt lại</button>
+    <button class="hvv-print-btn" onclick="window.print()" title="In danh sách">🖨️ In</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="hvv-content page-content" id="hvv-main-content">
+  <p style="text-align:center; padding:3rem 0; color:var(--text-light);">
+    <span style="font-size:2rem; display:block; animation:spin 2s linear infinite;">☯</span>
+    Đang tải dữ liệu huyệt vị...
+  </p>
+</main>
+
+<!-- EXPLORE SECTION -->
+<section class="hvv-explore-section" id="hvv-explore-section">
+  <div class="hvv-explore-inner">
+    <h2 class="hvv-explore-title">Khám Phá Huyệt Vị Theo Vùng</h2>
+    <p class="hvv-explore-sub">Chọn một vùng cơ thể để xem danh sách huyệt vị chi tiết</p>
+    <div class="hvv-explore-grid" id="hvv-explore-grid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">☯ Huyệt Vị 888</div>
+  <div class="footer-divider"></div>
+  <p class="footer-disclaimer">
+    © 2025 Huyệt Vị 888 — Thông tin mang tính tham khảo, không thay thế chẩn đoán y khoa.
+  </p>
+</footer>
+
+<button id="back-to-top" title="Lên đầu trang" aria-label="Lên đầu trang">▲</button>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- DATA & SCRIPTS -->
+<script src="assets/js/data.js"></script>
+<script src="huyet-vung-data.js"></script>
+<script src="assets/js/main.js"></script>
+
+<script>
+/* =====================================================
+   HUYỆT THEO VÙNG — huyet-theo-vung.js (inline)
+   ===================================================== */
+(function () {
+  'use strict';
+
+  /* ── Cấu hình vùng ── */
+  const VUNG_CONFIG = [
+    {
+      id: 'dau-mat-co',
+      ten: 'Đầu – Mặt – Cổ',
+      csvKey: 'Đầu Mặt Cổ',
+      icon: '🧠',
+      color: '#E74C3C',
+      border: 'rgba(231,76,60,0.3)',
+      badge: 'rgba(231,76,60,0.1)',
+      notable: ['Bách Hội', 'Phong Trì', 'Thái Dương', 'Nhân Trung', 'Ấn Đường']
+    },
+    {
+      id: 'nguc',
+      ten: 'Ngực',
+      csvKey: 'Ngực',
+      icon: '🫁',
+      color: '#3498DB',
+      border: 'rgba(52,152,219,0.3)',
+      badge: 'rgba(52,152,219,0.1)',
+      notable: ['Trung Phủ', 'Chiên Trung', 'Đản Trung', 'Vân Môn', 'Kỳ Hộ']
+    },
+    {
+      id: 'bung',
+      ten: 'Bụng',
+      csvKey: 'Bụng',
+      icon: '🫃',
+      color: '#F39C12',
+      border: 'rgba(243,156,18,0.3)',
+      badge: 'rgba(243,156,18,0.1)',
+      notable: ['Khí Hải', 'Quan Nguyên', 'Trung Quản', 'Thần Khuyết', 'Thiên Khu']
+    },
+    {
+      id: 'lung',
+      ten: 'Lưng – Thắt lưng – Xương cùng',
+      csvKey: 'Lưng Thắt lưng Xương cùng',
+      icon: '🦴',
+      color: '#9B59B6',
+      border: 'rgba(155,89,182,0.3)',
+      badge: 'rgba(155,89,182,0.1)',
+      notable: ['Mệnh Môn', 'Đại Chùy', 'Phế Du', 'Thận Du', 'Đại Trường Du']
+    },
+    {
+      id: 'chi-tren',
+      ten: 'Chi Trên',
+      csvKey: 'Chi Trên',
+      icon: '💪',
+      color: '#1ABC9C',
+      border: 'rgba(26,188,156,0.3)',
+      badge: 'rgba(26,188,156,0.1)',
+      notable: ['Hợp Cốc', 'Nội Quan', 'Liệt Khuyết', 'Ngoại Quan', 'Khúc Trì']
+    },
+    {
+      id: 'chi-duoi',
+      ten: 'Chi Dưới',
+      csvKey: 'Chi Dưới',
+      icon: '🦵',
+      color: '#27AE60',
+      border: 'rgba(39,174,96,0.3)',
+      badge: 'rgba(39,174,96,0.1)',
+      notable: ['Túc Tam Lý', 'Tam Âm Giao', 'Ủy Trung', 'Thái Xung', 'Dũng Tuyền']
+    }
+  ];
+
+  /* ── Màu kinh mạch ── */
+  const KINH_COLOR = {
+    'Đốc Mạch':    { color: '#E74C3C', border: 'rgba(231,76,60,0.3)',   badge: 'rgba(231,76,60,0.1)' },
+    'Nhâm Mạch':   { color: '#3498DB', border: 'rgba(52,152,219,0.3)',  badge: 'rgba(52,152,219,0.1)' },
+    'Bàng Quang':  { color: '#8E44AD', border: 'rgba(142,68,173,0.3)',  badge: 'rgba(142,68,173,0.1)' },
+    'Đởm':         { color: '#2ECC71', border: 'rgba(46,204,113,0.3)',  badge: 'rgba(46,204,113,0.1)' },
+    'Tam Tiêu':    { color: '#E67E22', border: 'rgba(230,126,34,0.3)',  badge: 'rgba(230,126,34,0.1)' },
+    'Vị':          { color: '#D4AC0D', border: 'rgba(212,172,13,0.3)',  badge: 'rgba(212,172,13,0.1)' },
+    'Tiểu Trường': { color: '#1ABC9C', border: 'rgba(26,188,156,0.3)', badge: 'rgba(26,188,156,0.1)' },
+    'Đại Trường':  { color: '#CA6F1E', border: 'rgba(202,111,30,0.3)', badge: 'rgba(202,111,30,0.1)' },
+    'Phế':         { color: '#5DADE2', border: 'rgba(93,173,226,0.3)',  badge: 'rgba(93,173,226,0.1)' },
+    'Tâm':         { color: '#EC7063', border: 'rgba(236,112,99,0.3)',  badge: 'rgba(236,112,99,0.1)' },
+    'Tâm Bào':     { color: '#C0392B', border: 'rgba(192,57,43,0.3)',   badge: 'rgba(192,57,43,0.1)' },
+    'Thận':        { color: '#1A5276', border: 'rgba(26,82,118,0.3)',   badge: 'rgba(26,82,118,0.1)' },
+    'Tỳ':          { color: '#B7950B', border: 'rgba(183,149,11,0.3)',  badge: 'rgba(183,149,11,0.1)' },
+    'Can':         { color: '#1E8449', border: 'rgba(30,132,73,0.3)',   badge: 'rgba(30,132,73,0.1)' },
+    'Kỳ Huyệt':   { color: '#7F8C8D', border: 'rgba(127,140,141,0.3)', badge: 'rgba(127,140,141,0.1)' }
+  };
+
+  function getKinhColor(kinh) {
+    return KINH_COLOR[kinh] || KINH_COLOR['Kỳ Huyệt'];
+  }
+
+  /* ── Normalize text ── */
+  function norm(s) {
+    return (s||'').toLowerCase().normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'').replace(/đ/gi,'d');
+  }
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── Build JS data lookup map ── */
+  const JS_MAP = {};
+  if (typeof HUYET_DATA !== 'undefined' && Array.isArray(HUYET_DATA)) {
+    HUYET_DATA.forEach(h => {
+      if (h.maHuyet) JS_MAP[h.maHuyet.trim().toUpperCase()] = h;
+    });
+  }
+
+  /* ── State ── */
+  let filterVung   = '';
+  let filterKinh   = '';
+  let filterSearch = '';
+  let filterDataOnly = false;
+
+  /* ── Elements ── */
+  const mainEl    = document.getElementById('hvv-main-content');
+  const searchEl  = document.getElementById('hvv-search');
+  const vungEl    = document.getElementById('hvv-filter-vung');
+  const kinhEl    = document.getElementById('hvv-filter-kinh');
+  const toggleEl  = document.getElementById('hvv-toggle-el');
+  const countEl   = document.getElementById('hvv-filter-count');
+  const resetEl   = document.getElementById('hvv-reset');
+
+  /* ── Count-up animation ── */
+  function countUp(el, target, duration) {
+    let start = 0;
+    const step = Math.ceil(target / (duration / 16));
+    function update() {
+      start = Math.min(start + step, target);
+      el.textContent = start;
+      if (start < target) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  /* ── Populate kinh select ── */
+  function buildKinhSelect(vung) {
+    const data = (typeof HUYET_VUNG_DATA !== 'undefined') ? HUYET_VUNG_DATA : [];
+    const filtered = vung ? data.filter(h => h.vung === vung) : data;
+    const kinhs = [...new Set(filtered.map(h => h.kinhMac))].sort();
+    const prev = kinhEl.value;
+    kinhEl.innerHTML = '<option value="">Tất cả kinh mạch</option>';
+    kinhs.forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = k; opt.textContent = k;
+      if (k === prev) opt.selected = true;
+      kinhEl.appendChild(opt);
+    });
+  }
+
+  /* ── Build a single card ── */
+  function buildCard(h, jsData) {
+    const kc = getKinhColor(h.kinhMac);
+    const hasData = !!jsData;
+    const ma  = esc(h.maHuyet);
+    const ten = esc(h.tenViet);
+    const viTri = esc(h.viTri || '');
+    const kinh  = esc(h.kinhMac);
+    const imgSrc = hasData && jsData.urlHinhAnh ? esc(jsData.urlHinhAnh) : '';
+    const excerpt = hasData
+      ? esc((jsData.tacDung || jsData.chuTri || '').substring(0, 90).trim())
+      : viTri.substring(0, 90);
+
+    let imgHtml = imgSrc
+      ? `<img src="${imgSrc}" alt="${ten}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      + `<div class="hvv-card-placeholder" style="display:none;font-size:1.5rem;color:var(--jade-light)">☯</div>`
+      : `<div class="hvv-card-placeholder" style="font-size:1.5rem;color:var(--jade-light)">☯</div>`;
+
+    const footerHtml = hasData
+      ? `<a class="hvv-card-btn" href="detail.html?ma=${encodeURIComponent(h.maHuyet)}" onclick="event.stopPropagation()">Xem chi tiết →</a>`
+      : `<div class="hvv-card-no-data-badge">⏳ Đang cập nhật dữ liệu</div>`;
+
+    return `<div class="hvv-card${hasData ? '' : ' no-data'}"
+        style="--card-color:${kc.color};--card-border-color:${kc.border};--card-badge-bg:${kc.badge};"
+        title="${ten} (${ma})"
+        onclick="${hasData ? `window.location.href='detail.html?ma=${encodeURIComponent(h.maHuyet)}'` : `showToast('Huyệt ${ten} chưa có dữ liệu chi tiết, đang cập nhật...')`}"
+      >
+      <span class="hvv-vung-tag">${esc(h.vung)}</span>
+      <div class="hvv-card-image-wrap">
+        <div class="hvv-card-circle">${imgHtml}</div>
+      </div>
+      <div class="hvv-card-body">
+        <span class="hvv-card-code">${ma}</span>
+        <div class="hvv-card-name">${ten}</div>
+        <div class="hvv-card-kinh">
+          <span class="hvv-card-kinh-dot" style="background:${kc.color}"></span>
+          ${kinh}
+        </div>
+        <div class="hvv-card-vitri">${excerpt}</div>
+        <div class="hvv-card-footer">${footerHtml}</div>
+      </div>
+    </div>`;
+  }
+
+  /* ── Filter & render all ── */
+  function getFiltered() {
+    const data = (typeof HUYET_VUNG_DATA !== 'undefined') ? HUYET_VUNG_DATA : [];
+    const sq = norm(filterSearch);
+    return data.filter(h => {
+      if (filterVung && h.vung !== filterVung) return false;
+      if (filterKinh && h.kinhMac !== filterKinh) return false;
+      if (filterDataOnly && !h.coData) return false;
+      if (sq && !norm(h.tenViet).includes(sq) && !norm(h.maHuyet).includes(sq)) return false;
+      return true;
+    });
+  }
+
+  /* ── Render sections ── */
+  function render() {
+    const filtered = getFiltered();
+    const isGlobalFilter = filterSearch || filterKinh || filterVung || filterDataOnly;
+
+    countEl.textContent = `${filtered.length} huyệt`;
+
+    if (isGlobalFilter) {
+      renderFlat(filtered);
+    } else {
+      renderBySections();
+    }
+  }
+
+  /* ── Flat mode (khi có filter) ── */
+  function renderFlat(list) {
+    if (!list.length) {
+      mainEl.innerHTML = `<div style="text-align:center;padding:4rem 1rem;color:var(--text-light);">
+        <div style="font-size:2.5rem;opacity:.4;margin-bottom:.75rem;">🔍</div>
+        <h3 style="color:var(--jade)">Không tìm thấy huyệt vị</h3>
+        <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+      </div>`;
+      return;
+    }
+    const cards = list.map(h => buildCard(h, JS_MAP[h.maHuyet.toUpperCase()])).join('');
+    mainEl.innerHTML = `<div class="hvv-grid" style="padding-top:1rem">${cards}</div>`;
+  }
+
+  /* ── Section mode (mặc định) ── */
+  function renderBySections() {
+    const data = (typeof HUYET_VUNG_DATA !== 'undefined') ? HUYET_VUNG_DATA : [];
+
+    // Group by vung
+    const byVung = {};
+    data.forEach(h => {
+      if (!byVung[h.vung]) byVung[h.vung] = [];
+      byVung[h.vung].push(h);
+    });
+
+    const html = VUNG_CONFIG.map(vc => {
+      const list = byVung[vc.csvKey] || [];
+      const withData = list.filter(h => h.coData).length;
+      const kinhs = [...new Set(list.map(h => h.kinhMac))];
+
+      // Build kinh tabs
+      const tabsHtml = kinhs.map(k => {
+        const kc = getKinhColor(k);
+        return `<button class="hvv-kinh-tab" data-vung="${vc.id}" data-kinh="${esc(k)}"
+          style="--tab-color:${kc.color}" onclick="filterKinhInVung('${vc.id}', this)">${esc(k)}</button>`;
+      }).join('');
+
+      // Show first 12, lazy expand rest
+      const INITIAL = 12;
+      const visible = list.slice(0, INITIAL);
+      const remaining = list.slice(INITIAL);
+
+      const cardsHtml = visible.map(h => buildCard(h, JS_MAP[h.maHuyet.toUpperCase()])).join('');
+      const expandHtml = remaining.length
+        ? `<div class="hvv-expand-wrap">
+            <button class="hvv-expand-btn" onclick="expandVung('${vc.id}', ${JSON.stringify(remaining.map(h=>h.maHuyet)).replace(/"/g,'&quot;')})">
+              Xem thêm ${remaining.length} huyệt ▼
+            </button>
+           </div>`
+        : '';
+
+      return `<section class="hvv-vung-section" id="${vc.id}">
+        <div class="hvv-vung-header">
+          <span class="hvv-vung-icon">${vc.icon}</span>
+          <span class="hvv-vung-title">${esc(vc.ten)}</span>
+          <div class="hvv-vung-mini-stats">
+            <span class="hvv-vung-mini-stat">📍 ${list.length} huyệt</span>
+            <span class="hvv-vung-mini-stat">⛩ ${kinhs.length} kinh</span>
+            <span class="hvv-vung-mini-stat">✅ ${withData} có dữ liệu</span>
+          </div>
+        </div>
+        <div class="hvv-kinh-tabs" id="tabs-${vc.id}">
+          <button class="hvv-kinh-tab active" data-vung="${vc.id}" data-kinh=""
+            onclick="filterKinhInVung('${vc.id}', this)">Tất cả</button>
+          ${tabsHtml}
+        </div>
+        <div class="hvv-grid-wrap">
+          <div class="hvv-grid" id="grid-${vc.id}">${cardsHtml}</div>
+          <div id="expand-${vc.id}">${expandHtml}</div>
+        </div>
+      </section>`;
+    }).join('');
+
+    mainEl.innerHTML = html;
+
+    // Intersection observer for fade-in
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.querySelectorAll('.hvv-card').forEach((card, i) => {
+              setTimeout(() => card.classList.add('animating'), i * 30);
+            });
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.05 });
+      mainEl.querySelectorAll('.hvv-vung-section').forEach(s => observer.observe(s));
+    }
+  }
+
+  /* ── Filter kinh trong vùng ── */
+  window.filterKinhInVung = function(vungId, btn) {
+    const tabsWrap = document.getElementById('tabs-' + vungId);
+    if (!tabsWrap) return;
+    tabsWrap.querySelectorAll('.hvv-kinh-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    const kinh = btn.dataset.kinh || '';
+    const vc = VUNG_CONFIG.find(v => v.id === vungId);
+    if (!vc) return;
+
+    const data = (typeof HUYET_VUNG_DATA !== 'undefined') ? HUYET_VUNG_DATA : [];
+    let list = data.filter(h => h.vung === vc.csvKey);
+    if (kinh) list = list.filter(h => h.kinhMac === kinh);
+
+    const grid = document.getElementById('grid-' + vungId);
+    if (grid) {
+      grid.innerHTML = list.map(h => buildCard(h, JS_MAP[h.maHuyet.toUpperCase()])).join('');
+    }
+    // Hide expand btn when filtering by kinh
+    const expEl = document.getElementById('expand-' + vungId);
+    if (expEl) expEl.innerHTML = '';
+  };
+
+  /* ── Expand vung ── */
+  window.expandVung = function(vungId, maHuyetList) {
+    const data = (typeof HUYET_VUNG_DATA !== 'undefined') ? HUYET_VUNG_DATA : [];
+    const addItems = data.filter(h => maHuyetList.includes(h.maHuyet));
+    const grid = document.getElementById('grid-' + vungId);
+    if (grid) {
+      grid.insertAdjacentHTML('beforeend',
+        addItems.map(h => buildCard(h, JS_MAP[h.maHuyet.toUpperCase()])).join('')
+      );
+    }
+    const expEl = document.getElementById('expand-' + vungId);
+    if (expEl) expEl.innerHTML = '';
+  };
+
+  /* ── Toast ── */
+  window.showToast = function(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  };
+
+  /* ── Build explore cards ── */
+  function buildExploreCards() {
+    const data = (typeof HUYET_VUNG_DATA !== 'undefined') ? HUYET_VUNG_DATA : [];
+    const byVung = {};
+    data.forEach(h => { if (!byVung[h.vung]) byVung[h.vung] = []; byVung[h.vung].push(h); });
+
+    const grid = document.getElementById('hvv-explore-grid');
+    if (!grid) return;
+
+    grid.innerHTML = VUNG_CONFIG.map(vc => {
+      const list = byVung[vc.csvKey] || [];
+      const withData = list.filter(h => h.coData).length;
+      const notableTags = vc.notable
+        .map(n => `<span class="hvv-explore-notable-tag">${esc(n)}</span>`).join('');
+      return `<a class="hvv-explore-card" href="#${vc.id}">
+        <div class="hvv-explore-card-top">
+          <div class="hvv-explore-card-icon">${vc.icon}</div>
+          <div>
+            <div class="hvv-explore-card-title">${esc(vc.ten)}</div>
+            <div class="hvv-explore-card-count">${list.length} huyệt · ${withData} có dữ liệu</div>
+          </div>
+        </div>
+        <div class="hvv-explore-notable">${notableTags}</div>
+        <span class="hvv-explore-link">Khám phá →</span>
+      </a>`;
+    }).join('');
+  }
+
+  /* ── Event listeners ── */
+  let searchTimer;
+  if (searchEl) {
+    searchEl.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => { filterSearch = this.value.trim(); render(); }, 280);
+    });
+  }
+  if (vungEl) {
+    vungEl.addEventListener('change', function() {
+      filterVung = this.value;
+      buildKinhSelect(filterVung);
+      filterKinh = '';
+      kinhEl.value = '';
+      render();
+    });
+  }
+  if (kinhEl) {
+    kinhEl.addEventListener('change', function() {
+      filterKinh = this.value;
+      render();
+    });
+  }
+  if (toggleEl) {
+    toggleEl.addEventListener('click', function() {
+      filterDataOnly = !filterDataOnly;
+      this.classList.toggle('on', filterDataOnly);
+      render();
+    });
+    // Hidden checkbox for label
+    toggleEl.setAttribute('id', 'hvv-toggle-el');
+    toggleEl.setAttribute('role', 'switch');
+    toggleEl.setAttribute('tabindex', '0');
+    toggleEl.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleEl.click(); } });
+  }
+  if (resetEl) {
+    resetEl.addEventListener('click', function() {
+      filterSearch = ''; filterVung = ''; filterKinh = ''; filterDataOnly = false;
+      if (searchEl) searchEl.value = '';
+      if (vungEl) vungEl.value = '';
+      if (kinhEl) kinhEl.value = '';
+      if (toggleEl) toggleEl.classList.remove('on');
+      buildKinhSelect('');
+      render();
+    });
+  }
+
+  /* ── Dropdown nav ── */
+  const navBtn   = document.getElementById('map-nav-btn');
+  const navDd    = document.getElementById('map-nav-dd');
+  if (navBtn && navDd) {
+    navBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      navDd.classList.toggle('open');
+    });
+    document.addEventListener('click', () => navDd.classList.remove('open'));
+    document.getElementById('map-nav-panel')?.addEventListener('click', e => e.stopPropagation());
+  }
+
+  /* ── Smooth scroll for hash links ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.pushState(null, '', a.getAttribute('href'));
+      }
+    });
+  });
+
+  /* ── Handle hash on load ── */
+  function scrollToHash() {
+    const hash = location.hash;
+    if (!hash) return;
+    const vc = VUNG_CONFIG.find(v => '#' + v.id === hash);
+    if (vc) {
+      filterVung = vc.csvKey;
+      if (vungEl) vungEl.value = vc.csvKey;
+    }
+  }
+
+  /* ── Init ── */
+  function init() {
+    if (typeof HUYET_VUNG_DATA === 'undefined') {
+      mainEl.innerHTML = '<p style="text-align:center;padding:3rem;color:var(--text-light)">Không tìm thấy file dữ liệu huyet-vung-data.js</p>';
+      return;
+    }
+
+    buildKinhSelect('');
+    scrollToHash();
+    render();
+    buildExploreCards();
+
+    // Count-up animation
+    const statEls = document.querySelectorAll('.hvv-stat-num[data-target]');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const target = parseInt(e.target.dataset.target);
+          countUp(e.target, target, 1000);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    statEls.forEach(el => observer.observe(el));
+
+    // Scroll to hash after render
+    if (location.hash) {
+      setTimeout(() => {
+        const el = document.querySelector(location.hash);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  }
+
+  // Wait for DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+
+</body>
+</html>

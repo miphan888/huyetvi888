@@ -6,6 +6,8 @@
   <title>Huyệt Vị 888 — Tra cứu huyệt vị Đông Y</title>
   <meta name="description" content="Tra cứu huyệt vị Đông Y chính xác, đầy đủ. Hơn 400 huyệt vị với hình ảnh, vị trí, tác dụng và video hướng dẫn.">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/hero_override.css">
+
 </head>
 <body>
 
@@ -29,12 +31,48 @@
       <a href="index.html" class="active">Trang Chủ</a>
       <a href="search.html">Tra Cứu</a>
       <div class="map-nav-dropdown" id="map-nav-dd">
-        <button class="map-nav-btn" id="map-nav-btn">🗺️ Huyệt Theo Vùng ▾</button>
-        <div class="map-nav-panel" id="map-nav-panel">
-          <div class="mnd-loading" style="padding:.75rem;color:#aaa;font-size:.82rem;">Đang tải...</div>
-        </div>
-      </div>
-      <a href="benh.html">🔍 Hội Chứng</a>
+  <button class="map-nav-btn" id="map-nav-btn">📍 Huyệt Theo Vùng ▾</button>
+  <div class="map-nav-panel" id="map-nav-panel">
+    <div class="mnd-header">Chọn Vùng Cơ Thể</div>
+    <a class="mnd-item" href="huyet-theo-vung.html">
+      <span class="mnd-icon">🗂️</span>
+      <span class="mnd-name">Tất cả vùng</span>
+      <span class="mnd-badge">408</span>
+    </a>
+    <div class="mnd-divider"></div>
+    <a class="mnd-item" href="huyet-theo-vung.html#dau-mat-co">
+      <span class="mnd-icon">🧠</span>
+      <span class="mnd-name">Đầu – Mặt – Cổ</span>
+      <span class="mnd-badge">88</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#nguc">
+      <span class="mnd-icon">🫁</span>
+      <span class="mnd-name">Ngực</span>
+      <span class="mnd-badge">31</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#bung">
+      <span class="mnd-icon">🫃</span>
+      <span class="mnd-name">Bụng</span>
+      <span class="mnd-badge">48</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#lung">
+      <span class="mnd-icon">🦴</span>
+      <span class="mnd-name">Lưng – Thắt lưng – Xương cùng</span>
+      <span class="mnd-badge">64</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#chi-tren">
+      <span class="mnd-icon">💪</span>
+      <span class="mnd-name">Chi Trên</span>
+      <span class="mnd-badge">85</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#chi-duoi">
+      <span class="mnd-icon">🦵</span>
+      <span class="mnd-name">Chi Dưới</span>
+      <span class="mnd-badge">92</span>
+    </a>
+  </div>
+</div>
+      <a href="benh.html">🔍 Tìm Huyệt Theo Hội Chứng</a>
       <a href="about.html">Giới Thiệu</a>
     </div>
     <div class="theme-switcher" id="theme-switcher" title="Đổi giao diện">
@@ -58,12 +96,18 @@
   <a href="index.html">🏠 Trang Chủ</a>
   <a href="search.html">🔍 Tra Cứu</a>
   <details class="mobile-map-details">
-    <summary>🗺️ Huyệt Theo Vùng</summary>
-    <div id="mobile-map-links" class="mobile-map-links">
-      <a href="map-viewer.html">🗺️ Xem bản đồ huyệt vị →</a>
-    </div>
-  </details>
-  <a href="benh.html">🩺 Hội Chứng</a>
+  <summary>📍 Huyệt Theo Vùng</summary>
+  <div class="mobile-map-links">
+    <a href="huyet-theo-vung.html">🗂️ Tất cả vùng (408 huyệt)</a>
+    <a href="huyet-theo-vung.html#dau-mat-co">🧠 Đầu – Mặt – Cổ (88)</a>
+    <a href="huyet-theo-vung.html#nguc">🫁 Ngực (31)</a>
+    <a href="huyet-theo-vung.html#bung">🫃 Bụng (48)</a>
+    <a href="huyet-theo-vung.html#lung">🦴 Lưng – Thắt lưng (64)</a>
+    <a href="huyet-theo-vung.html#chi-tren">💪 Chi Trên (85)</a>
+    <a href="huyet-theo-vung.html#chi-duoi">🦵 Chi Dưới (92)</a>
+  </div>
+</details>
+  <a href="benh.html">🩺 Tìm Huyệt Theo Hội Chứng</a>
   <a href="about.html">ℹ️ Giới Thiệu</a>
 </div>
 
@@ -148,7 +192,7 @@
         <!-- Nút nhanh -->
         <div class="hv-quick">
           <a href="search.html" class="hv-btn">📚 Tra Cứu Huyệt</a>
-          <a href="benh.html"   class="hv-btn">🩺 Hội Chứng</a>
+          <a href="benh.html"   class="hv-btn">🩺 Tìm Huyệt Theo Hội Chứng</a>
         </div>
       </div>
 
@@ -263,7 +307,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">☯ Huyệt Vị 888</div>
+  <div class="footer-logo">Huyệt Vị 888</div>
   <div class="footer-divider"></div>
   <p class="footer-disclaimer">
     © 2025 Huyệt Vị 888 — Thông tin mang tính tham khảo, không thay thế chẩn đoán y khoa.<br>
@@ -325,43 +369,15 @@
 </script>
 
 <script>
-/* ── Map Nav Dropdown ── */
 (function() {
-  var btn=document.getElementById('map-nav-btn'),dd=document.getElementById('map-nav-dd'),panel=document.getElementById('map-nav-panel');
-  if (!btn||!dd||!panel) return;
-  function getMaps() {
-    try { var raw=localStorage.getItem('huyet888-maps'); if(raw){var d=JSON.parse(raw);if(d&&Array.isArray(d.maps)&&d.maps.length)return Promise.resolve(d.maps);}} catch(e){}
-    return fetch('assets/js/map-data.json').then(function(r){return r.json();}).then(function(d){return(d&&d.maps)?d.maps:[];}).catch(function(){return[];});
-  }
-  function renderMaps(maps) {
-    if (!maps.length){panel.innerHTML='<div class="mnd-empty">Chưa có bản đồ. <a href="admin.html#map">Vào Admin →</a></div>';return;}
-    panel.innerHTML=maps.map(function(m){
-      var thumb=m.imageData?'<img src="'+m.imageData+'" alt="">':'🗺️';
-      return '<a class="mnd-card" href="map-viewer.html?id='+encodeURIComponent(m.id)+'">'
-        +'<div class="mnd-thumb">'+thumb+'</div>'
-        +'<div class="mnd-info"><div class="mnd-name">'+(m.title||'Bản đồ')+'</div>'
-        +'<div class="mnd-count">'+((m.points||[]).length)+' huyệt vị</div></div></a>';
-    }).join('');
-  }
-  function toggle(open){dd.classList.toggle('open',open);if(open)getMaps().then(renderMaps);}
-  btn.addEventListener('click',function(e){e.stopPropagation();toggle(!dd.classList.contains('open'));});
-  document.addEventListener('click',function(){toggle(false);});
-  panel.addEventListener('click',function(e){e.stopPropagation();});
+  const btn = document.getElementById('map-nav-btn');
+  const dd  = document.getElementById('map-nav-dd');
+  if (!btn || !dd) return;
+  btn.addEventListener('click', e => { e.stopPropagation(); dd.classList.toggle('open'); });
+  document.addEventListener('click', () => dd.classList.remove('open'));
+  document.getElementById('map-nav-panel')?.addEventListener('click', e => e.stopPropagation());
 })();
-
-  // Clear button hero search
-  (function(){
-    var inp=document.getElementById('hero-search');
-    var clr=document.getElementById('hero-clear-btn');
-    if(!inp||!clr) return;
-    inp.addEventListener('input',function(){
-      clr.style.display=this.value?'block':'none';
-    });
-    clr.addEventListener('click',function(){
-      inp.value=''; inp.focus(); clr.style.display='none';
-    });
-  })();
-
 </script>
+
 </body>
 </html>

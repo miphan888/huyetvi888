@@ -7,48 +7,6 @@
   <meta name="description" content="Tìm kiếm huyệt vị theo tên, mã huyệt, đường kinh hoặc triệu chứng. Hỗ trợ gõ không dấu tiếng Việt.">
   <link rel="stylesheet" href="assets/css/style.css">
 
-<style>
-.map-nav-dropdown { position: relative; }
-.map-nav-btn {
-  background: none; border: none; cursor: pointer;
-  color: var(--cream, #f5f0e8); font: inherit; font-size: 0.88rem;
-  font-weight: 500; letter-spacing: 0.02em;
-  padding: 0.4rem 0.85rem; border-radius: 4px;
-  transition: color 0.2s, background 0.2s; white-space: nowrap;
-}
-.map-nav-btn:hover { background: rgba(201,168,76,0.1); color: var(--gold, #c9a84c); }
-.map-nav-panel {
-  position: absolute; top: calc(100% + 10px); left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  min-width: 280px; max-width: 340px;
-  background: #fff; border-radius: 10px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 500; padding: 0.5rem;
-  border: 1px solid rgba(0,0,0,0.08);
-}
-.map-nav-dropdown.open .map-nav-panel {
-  opacity: 1; pointer-events: all;
-  transform: translateX(-50%) translateY(0);
-}
-.mnd-card {
-  display: flex; align-items: center; gap: 0.6rem;
-  padding: 0.5rem 0.6rem; border-radius: 7px; cursor: pointer;
-  transition: background 0.15s; text-decoration: none; color: #1a3c34;
-}
-.mnd-card:hover { background: rgba(26,60,52,0.07); }
-.mnd-thumb {
-  width: 48px; height: 36px; border-radius: 5px;
-  background: #e8e2d6; overflow: hidden; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-}
-.mnd-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.mnd-info .mnd-name { font-size: 0.85rem; font-weight: 700; color: #1a3c34; }
-.mnd-info .mnd-count { font-size: 0.72rem; color: #555; }
-.mnd-empty { padding: 0.75rem; font-size: 0.82rem; color: #aaa; text-align: center; }
-.mnd-empty a { color: #1a3c34; font-weight: 600; }
-</style>
 </head>
 <body>
 
@@ -72,11 +30,47 @@
       <a href="index.html">Trang Chủ</a>
       <a href="search.html">Tra Cứu</a>
             <div class="map-nav-dropdown" id="map-nav-dd">
-        <button class="map-nav-btn" id="map-nav-btn">🗺️ Huyệt Theo Vùng ▾</button>
-        <div class="map-nav-panel" id="map-nav-panel">
-          <div class="mnd-loading" style="padding:.75rem;color:#aaa;font-size:.82rem;">Đang tải...</div>
-        </div>
-      </div>
+  <button class="map-nav-btn" id="map-nav-btn">📍 Huyệt Theo Vùng ▾</button>
+  <div class="map-nav-panel" id="map-nav-panel">
+    <div class="mnd-header">Chọn Vùng Cơ Thể</div>
+    <a class="mnd-item" href="huyet-theo-vung.html">
+      <span class="mnd-icon">🗂️</span>
+      <span class="mnd-name">Tất cả vùng</span>
+      <span class="mnd-badge">408</span>
+    </a>
+    <div class="mnd-divider"></div>
+    <a class="mnd-item" href="huyet-theo-vung.html#dau-mat-co">
+      <span class="mnd-icon">🧠</span>
+      <span class="mnd-name">Đầu – Mặt – Cổ</span>
+      <span class="mnd-badge">88</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#nguc">
+      <span class="mnd-icon">🫁</span>
+      <span class="mnd-name">Ngực</span>
+      <span class="mnd-badge">31</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#bung">
+      <span class="mnd-icon">🫃</span>
+      <span class="mnd-name">Bụng</span>
+      <span class="mnd-badge">48</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#lung">
+      <span class="mnd-icon">🦴</span>
+      <span class="mnd-name">Lưng – Thắt lưng – Xương cùng</span>
+      <span class="mnd-badge">64</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#chi-tren">
+      <span class="mnd-icon">💪</span>
+      <span class="mnd-name">Chi Trên</span>
+      <span class="mnd-badge">85</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#chi-duoi">
+      <span class="mnd-icon">🦵</span>
+      <span class="mnd-name">Chi Dưới</span>
+      <span class="mnd-badge">92</span>
+    </a>
+  </div>
+</div>
       <a href="benh.html">🔍 Hội Chứng</a>
       <a href="about.html">Giới Thiệu</a>
     </div>
@@ -110,11 +104,17 @@
   <a href="index.html">🏠 Trang Chủ</a>
   <a href="search.html">🔍 Tra Cứu</a>
   <details class="mobile-map-details">
-    <summary>🗺️ Huyệt Theo Vùng</summary>
-    <div id="mobile-map-links" class="mobile-map-links">
-      <a href="map-viewer.html">🗺️ Xem bản đồ huyệt vị →</a>
-    </div>
-  </details>
+  <summary>📍 Huyệt Theo Vùng</summary>
+  <div class="mobile-map-links">
+    <a href="huyet-theo-vung.html">🗂️ Tất cả vùng (408 huyệt)</a>
+    <a href="huyet-theo-vung.html#dau-mat-co">🧠 Đầu – Mặt – Cổ (88)</a>
+    <a href="huyet-theo-vung.html#nguc">🫁 Ngực (31)</a>
+    <a href="huyet-theo-vung.html#bung">🫃 Bụng (48)</a>
+    <a href="huyet-theo-vung.html#lung">🦴 Lưng – Thắt lưng (64)</a>
+    <a href="huyet-theo-vung.html#chi-tren">💪 Chi Trên (85)</a>
+    <a href="huyet-theo-vung.html#chi-duoi">🦵 Chi Dưới (92)</a>
+  </div>
+</details>
   <a href="benh.html">🩺 Hội Chứng</a>
   <a href="about.html">ℹ️ Giới Thiệu</a>
 </div>
@@ -195,38 +195,39 @@
 
 
 <script>
+/* ── Stats + Meridian chips + Hero search ── */
 (function() {
-  const btn   = document.getElementById('map-nav-btn');
-  const dd    = document.getElementById('map-nav-dd');
-  const panel = document.getElementById('map-nav-panel');
-  if (!btn || !dd || !panel) return;
-  function getMaps() {
-    try {
-      const raw = localStorage.getItem('huyet888-maps');
-      if (raw) { const data = JSON.parse(raw); if (data && Array.isArray(data.maps) && data.maps.length) return Promise.resolve(data.maps); }
-    } catch(e) {}
-    return fetch('assets/js/map-data.json').then(r => r.json()).then(data => (data && data.maps) ? data.maps : []).catch(() => []);
-  }
-  function renderMaps(maps) {
-    if (!maps.length) { panel.innerHTML = '<div class="mnd-empty">Chưa có bản đồ. <a href="admin.html">Vào Admin để tạo →</a></div>'; return; }
-    panel.innerHTML = maps.map(m => {
-      const thumb = m.imageData ? '<img src="' + m.imageData + '" alt="">' : '🗺️';
-      const count = (m.points || []).length;
-      return '<a class="mnd-card" href="map-viewer.html?id=' + encodeURIComponent(m.id) + '">' +
-        '<div class="mnd-thumb">' + thumb + '</div>' +
-        '<div class="mnd-info"><div class="mnd-name">' + (m.title || 'Bản đồ') + '</div>' +
-        '<div class="mnd-count">' + count + ' huyệt vị</div></div></a>';
+  var data = (typeof HUYET_DATA !== 'undefined') ? HUYET_DATA : [];
+  var totalEl=document.getElementById('stat-total'),merEl=document.getElementById('stat-meridians'),videoEl=document.getElementById('stat-video');
+  if (totalEl) totalEl.textContent = data.length;
+  if (merEl) { var m={}; data.forEach(function(h){if(h.duongKinh)m[h.duongKinh]=1;}); merEl.textContent=Object.keys(m).length; }
+  if (videoEl) videoEl.textContent = data.filter(function(h){return h.videoURL;}).length;
+  var chipsWrap = document.getElementById('meridian-chips');
+  if (chipsWrap && data.length) {
+    var merMap = {};
+    data.forEach(function(h){ if(!h.duongKinh)return; if(!merMap[h.duongKinh])merMap[h.duongKinh]=0; merMap[h.duongKinh]++; });
+    chipsWrap.innerHTML = Object.keys(merMap).map(function(mer) {
+      return '<a href="search.html?q='+encodeURIComponent(mer)+'" class="chip">'+mer+' <small style="opacity:.6">('+merMap[mer]+')</small></a>';
     }).join('');
   }
-  function toggle(open) {
-    dd.classList.toggle('open', open);
-    if (open) { getMaps().then(renderMaps); }
-  }
-  btn.addEventListener('click', e => { e.stopPropagation(); toggle(!dd.classList.contains('open')); });
-  document.addEventListener('click', () => toggle(false));
-  panel.addEventListener('click', e => e.stopPropagation());
+  var heroInput=document.getElementById('hero-search'),heroBtn=document.getElementById('hero-search-btn');
+  function doSearch(){var q=heroInput?heroInput.value.trim():'';if(q)window.location.href='search.html?q='+encodeURIComponent(q);}
+  if (heroBtn) heroBtn.addEventListener('click',doSearch);
+  if (heroInput) heroInput.addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
 })();
 </script>
+
+<script>
+(function() {
+  const btn = document.getElementById('map-nav-btn');
+  const dd  = document.getElementById('map-nav-dd');
+  if (!btn || !dd) return;
+  btn.addEventListener('click', e => { e.stopPropagation(); dd.classList.toggle('open'); });
+  document.addEventListener('click', () => dd.classList.remove('open'));
+  document.getElementById('map-nav-panel')?.addEventListener('click', e => e.stopPropagation());
+})();
+</script>
+
 
 <script>
 // ── Augment search to include hội chứng results ─────────────
@@ -332,5 +333,7 @@
   }
 })();
 </script>
+
+
 </body>
 </html>
