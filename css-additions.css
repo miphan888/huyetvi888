@@ -1,0 +1,84 @@
+/* =====================================================
+   HUYỆT VỊ 888 — CSS bổ sung cho Huyệt Theo Vùng
+   Thêm vào cuối file assets/css/style.css
+   ===================================================== */
+
+/* ─── NAV DROPDOWN — Huyệt Theo Vùng (phiên bản mới) ─── */
+.mnd-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+  color: #1a3c34;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.mnd-item:hover {
+  background: rgba(26, 60, 52, 0.07);
+}
+.mnd-item .mnd-icon {
+  font-size: 1.1rem;
+  width: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.mnd-item .mnd-name {
+  flex: 1;
+}
+.mnd-item .mnd-badge {
+  background: rgba(201, 168, 76, 0.15);
+  color: #a88630;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  white-space: nowrap;
+}
+.mnd-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.07);
+  margin: 0.3rem 0.5rem;
+}
+.mnd-header {
+  padding: 0.45rem 0.65rem 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #999;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* ─── MAP-NAV-PANEL — rộng hơn cho menu mới ─── */
+.map-nav-panel {
+  min-width: 300px !important;
+}
+
+/* ─── TOAST (nếu chưa có trong style.css) ─── */
+#toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--jade-dark, #0f2520);
+  color: var(--gold-pale, #f0dea0);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  z-index: 9998;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  max-width: 90vw;
+  text-align: center;
+}
+#toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}

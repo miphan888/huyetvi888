@@ -1,0 +1,154 @@
+<!-- ================================================================
+     HƯỚNG DẪN CẬP NHẬT NAVIGATION — "Huyệt Theo Vùng"
+     ================================================================
+
+     Áp dụng cho TẤT CẢ các file HTML:
+     index.html, benh.html, benh-detail.html, search.html,
+     detail.html, filter.html, map-viewer.html, about.html
+
+     BƯỚC 1: Thay phần nav-links > map-nav-dropdown
+     ================================================================ -->
+
+<!-- ❌ XÓA ĐOẠN CŨ (trong thẻ <div class="nav-links">) -->
+<!--
+<div class="map-nav-dropdown" id="map-nav-dd">
+  <button class="map-nav-btn" id="map-nav-btn">🗺️ Huyệt Theo Vùng ▾</button>
+  <div class="map-nav-panel" id="map-nav-panel">
+    <div class="mnd-loading" ...>Đang tải...</div>
+  </div>
+</div>
+-->
+
+<!-- ✅ THAY BẰNG ĐOẠN MỚI -->
+<div class="map-nav-dropdown" id="map-nav-dd">
+  <button class="map-nav-btn" id="map-nav-btn">📍 Huyệt Theo Vùng ▾</button>
+  <div class="map-nav-panel" id="map-nav-panel">
+    <div class="mnd-header">Chọn Vùng Cơ Thể</div>
+    <a class="mnd-item" href="huyet-theo-vung.html">
+      <span class="mnd-icon">🗂️</span>
+      <span class="mnd-name">Tất cả vùng</span>
+      <span class="mnd-badge">408</span>
+    </a>
+    <div class="mnd-divider"></div>
+    <a class="mnd-item" href="huyet-theo-vung.html#dau-mat-co">
+      <span class="mnd-icon">🧠</span>
+      <span class="mnd-name">Đầu – Mặt – Cổ</span>
+      <span class="mnd-badge">88</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#nguc">
+      <span class="mnd-icon">🫁</span>
+      <span class="mnd-name">Ngực</span>
+      <span class="mnd-badge">31</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#bung">
+      <span class="mnd-icon">🫃</span>
+      <span class="mnd-name">Bụng</span>
+      <span class="mnd-badge">48</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#lung">
+      <span class="mnd-icon">🦴</span>
+      <span class="mnd-name">Lưng – Thắt lưng – Xương cùng</span>
+      <span class="mnd-badge">64</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#chi-tren">
+      <span class="mnd-icon">💪</span>
+      <span class="mnd-name">Chi Trên</span>
+      <span class="mnd-badge">85</span>
+    </a>
+    <a class="mnd-item" href="huyet-theo-vung.html#chi-duoi">
+      <span class="mnd-icon">🦵</span>
+      <span class="mnd-name">Chi Dưới</span>
+      <span class="mnd-badge">92</span>
+    </a>
+  </div>
+</div>
+
+<!-- ================================================================
+     BƯỚC 2: Thêm CSS mới vào <style> trong TỪNG file HTML
+     Hoặc thêm vào cuối assets/css/style.css
+     ================================================================ -->
+
+<style>
+/* ─── NAV DROPDOWN MỚI — Huyệt Theo Vùng ─── */
+.mnd-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0.5rem 0.65rem; border-radius: 7px; cursor: pointer;
+  transition: background 0.15s; text-decoration: none; color: #1a3c34;
+  font-size: 0.85rem; font-weight: 500;
+}
+.mnd-item:hover { background: rgba(26,60,52,0.07); }
+.mnd-item .mnd-icon { font-size: 1.1rem; width: 1.5rem; text-align: center; flex-shrink: 0; }
+.mnd-item .mnd-name { flex: 1; }
+.mnd-item .mnd-badge {
+  background: rgba(201,168,76,0.15); color: #a88630;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+  padding: 0.1rem 0.5rem; white-space: nowrap;
+}
+.mnd-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 0.3rem 0.5rem; }
+.mnd-header {
+  padding: 0.45rem 0.65rem 0.2rem;
+  font-size: 0.72rem; font-weight: 700; color: #999;
+  letter-spacing: 0.07em; text-transform: uppercase;
+}
+</style>
+
+<!-- ================================================================
+     BƯỚC 3: Thay phần mobile-nav > details
+     ================================================================ -->
+
+<!-- ❌ XÓA ĐOẠN CŨ -->
+<!--
+<details class="mobile-map-details">
+  <summary>🗺️ Huyệt Theo Vùng</summary>
+  <div id="mobile-map-links" class="mobile-map-links">
+    <a href="map-viewer.html">🗺️ Xem bản đồ huyệt vị →</a>
+  </div>
+</details>
+-->
+
+<!-- ✅ THAY BẰNG -->
+<details class="mobile-map-details">
+  <summary>📍 Huyệt Theo Vùng</summary>
+  <div class="mobile-map-links">
+    <a href="huyet-theo-vung.html">🗂️ Tất cả vùng (408 huyệt)</a>
+    <a href="huyet-theo-vung.html#dau-mat-co">🧠 Đầu – Mặt – Cổ (88)</a>
+    <a href="huyet-theo-vung.html#nguc">🫁 Ngực (31)</a>
+    <a href="huyet-theo-vung.html#bung">🫃 Bụng (48)</a>
+    <a href="huyet-theo-vung.html#lung">🦴 Lưng – Thắt lưng (64)</a>
+    <a href="huyet-theo-vung.html#chi-tren">💪 Chi Trên (85)</a>
+    <a href="huyet-theo-vung.html#chi-duoi">🦵 Chi Dưới (92)</a>
+  </div>
+</details>
+
+<!-- ================================================================
+     BƯỚC 4: Xóa đoạn script cũ (cuối mỗi file HTML)
+     Đoạn script dưới đây dùng để load map-data.json — KHÔNG CẦN NỮA
+     ================================================================ -->
+
+<!-- ❌ XÓA ĐOẠN SCRIPT NÀY trong từng file HTML -->
+<!--
+<script>
+(function() {
+  const btn   = document.getElementById('map-nav-btn');
+  const dd    = document.getElementById('map-nav-dd');
+  const panel = document.getElementById('map-nav-panel');
+  ...
+  function getMaps() { ... }
+  function renderMaps(maps) { ... }
+  ...
+})();
+</script>
+-->
+
+<!-- ✅ THAY BẰNG script đơn giản hơn (hoặc để main.js xử lý) -->
+<script>
+(function() {
+  const btn = document.getElementById('map-nav-btn');
+  const dd  = document.getElementById('map-nav-dd');
+  if (!btn || !dd) return;
+  btn.addEventListener('click', e => { e.stopPropagation(); dd.classList.toggle('open'); });
+  document.addEventListener('click', () => dd.classList.remove('open'));
+  document.getElementById('map-nav-panel')?.addEventListener('click', e => e.stopPropagation());
+})();
+</script>
