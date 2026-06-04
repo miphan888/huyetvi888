@@ -1612,18 +1612,19 @@ function editItem(idx) {
 
 // ── Add new ────────────────────────────────────────
 function addNew() {
-  editingIdx = -1;
-  selectState.style.display = 'none';
-  formArea.style.display    = 'block';
-  $('form-title').textContent    = '➕ Thêm huyệt vị mới';
-  $('form-subtitle').textContent = 'Điền đầy đủ thông tin bên dưới';
-  $('btn-delete-current').style.display = 'none';
-  ['f-ma','f-ten','f-duong','f-vitri','f-cachxacdinh','f-cachcham','f-tacdung','f-chutri','f-hinhanh','f-video']
-    .forEach(id => $(id).value = '');
-  $('f-featured').checked = false;
-  updateFeaturedLabel();
-  updateMediaPreviews();
-  $('admin-main').scrollTop = 0;
+    editingIdx = -1;
+    welcomePanel.style.display = 'none';
+    selectState.style.display  = 'none';
+    formArea.style.display     = 'block';
+    $('form-title').textContent    = '➕ Thêm huyệt vị mới';
+    $('form-subtitle').textContent = 'Điền đầy đủ thông tin bên dưới';
+    $('btn-delete-current').style.display = 'none';
+    ['f-ma','f-ten','f-duong','f-vitri','f-cachxacdinh','f-cachcham','f-tacdung','f-chutri','f-hinhanh','f-video']
+        .forEach(id => $(id).value = '');
+    $('f-featured').checked = false;
+    updateFeaturedLabel();
+    updateMediaPreviews();
+    $('admin-main').scrollTop = 0;
 }
 
 // ── Delete ─────────────────────────────────────────
@@ -1688,7 +1689,14 @@ function escH(s) {
 $('btn-open-file').addEventListener('click',   openFileSystemFile);
 $('btn-open-file-2').addEventListener('click', openFileSystemFile);
 $('btn-paste-data').addEventListener('click',  showPasteModal);
-$('btn-add-new').addEventListener('click',     () => { if (!DATA.length) { toast('⚠️ Chưa có dữ liệu'); return; } addNew(); });
+$('btn-add-new').addEventListener('click', () => {
+    // Cho phép thêm mới ngay cả khi chưa có dữ liệu
+    if (!DATA.length) {
+        // Ẩn welcome panel, hiện form
+        welcomePanel.style.display = 'none';
+    }
+    addNew();
+});
 $('btn-save-item').addEventListener('click',   saveItem);
 $('btn-cancel-edit').addEventListener('click',  cancelEdit);
 $('btn-cancel-edit2').addEventListener('click', cancelEdit);
