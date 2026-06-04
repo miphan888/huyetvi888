@@ -3172,197 +3172,450 @@ renderBenhList();
 })(); // end BenhAdmin IIFE
 
 /* ═══════════════════════════════════════════════════════════
-   GITHUB INTEGRATION
+   GITHUB INTEGRATION — Push data trực tiếp lên GitHub
    ═══════════════════════════════════════════════════════════ */
 (function GitHubIntegration() {
 
-const GH_LS_KEY = 'huyet888-github-config';
-let ghConfig = { token:'', repo:'', datajsPath:'assets/js/data.js', benhjsPath:'assets/js/benh-data.js', mapjsPath:'assets/js/map-data.json' };
+var GH_LS_KEY = 'huyet888-github-config';
+var ghConfig = {
+    token: '',
+    repo: '',
+    datajsPath: 'assets/js/data.js',
+    benhjsPath: 'assets/js/benh-data.js',
+    mapjsPath: 'assets/js/map-data.json'
+};
 
+/* ── Load config từ localStorage ── */
 function loadGHConfig() {
     try {
         var raw = localStorage.getItem(GH_LS_KEY);
         if (raw) {
             var saved = JSON.parse(raw);
-            ghConfig = Object.assign(ghConfig, saved);
-            $('gh-token').value = ghConfig.token || '';
-            $('gh-repo').value = ghConfig.repo || '';
-            $('gh-datajs-path').value = ghConfig.datajsPath;
-            $('gh-benhjs-path').value = ghConfig.benhjsPath;
-            $('gh-mapjs-path').value = ghConfig.mapjsPath;
-            if (ghConfig.token && ghConfig.repo) showGHConnected();
+            ghConfig.token = saved.token || '';
+            ghConfig.repo = saved.repo || '';
+            ghConfig.datajsPath = saved.datajsPath || 'assets/js/data.js';
+            ghConfig.benhjsPath = saved.benhjsPath || 'assets/js/benh-data.js';
+            ghConfig.mapjsPath = saved.mapjsPath || 'assets/js/map-data.json';
         }
-    } catch(e) {}
-}
+    } catch(e) { console.warn('GH config load error:', e); }
 
-function saveGHConfig() {
-    ghConfig.token = $('gh-token').value.trim();
-    ghConfig.repo = $('gh-repo').value.trim();
-    ghConfig.datajsPath = $('gh-datajs-path').value.trim();
-    ghConfig.benhjsPath = $('gh-benhjs-path').value.trim();
-    ghConfig.mapjsPath = $('gh-mapjs-path').value.trim();
-    if ($('gh-remember').checked) {
-        try { localStorage.setItem(GH_LS_KEY, JSON.stringify(ghConfig)); } catch(e) {}
+    var el1 = document.getElementById('gh-token');
+    var el2 = document.getElementById('gh-repo');
+    var el3 = document.getElementById('gh-datajs-path');
+    var el4 = document.getElementById('gh-benhjs-path');
+    var el5 = document.getElementById('gh-mapjs-path');
+
+    if (el1) el1.value = ghConfig.token;
+    if (el2) el2.value = ghConfig.repo;
+    if (el3) el3.value = ghConfig.datajsPath;
+    if (el4) el4.value = ghConfig.benhjsPath;
+    if (el5) el5.value = ghConfig.mapjsPath;
+
+    if (ghConfig.token && ghConfig.repo) {
+        showGHConnected();
     }
 }
 
+/* ── Save config ── */
+function doSaveConfig() {
+    var el1 = document.getElementById('gh-token');
+    var el2 = document.getElementById('gh-repo');
+    var el3 = document.getElementById('gh-datajs-path');
+    var el4 = document.getElementById('gh-benhjs-path');
+    var el5 = document.getElementById('gh-mapjs-path');
+    var el6 = document.getElementById('gh-remember');
+
+    if (!el1 || !el2) {
+        console.error('GitHub config elements not found!');
+        alert('Lỗi: Không tìm thấy form cấu hình GitHub');
+        return false;
+    }
+
+    ghConfig.token = el1.value.trim();
+    ghConfig.repo = el2.value.trim();
+    ghConfig.datajsPath = el3 ? el3.value.trim() : 'assets/js/data.js';
+    ghConfig.benhjsPath = el4 ? el4.value.trim() : 'assets/js/benh-data.js';
+    ghConfig.mapjsPath = el5 ? el5.value.trim() : 'assets/js/map-data.json';
+
+    if (!ghConfig.token || !ghConfig.repo) {
+        toast('⚠️ Vui lòng nhập Token và Repository');
+        return false;
+    }
+
+    if (el6 && el6.checked) {
+        try {
+            localStorage.setItem(GH_LS_KEY, JSON.stringify(ghConfig));
+        } catch(e) { console.warn('Save config error:', e); }
+    }
+    return true;
+}
+
+/* ── UI helpers ── */
 function showGHConnected() {
-    var btn = $('btn-push-github');
+    var btn = document.getElementById('btn-push-github');
+    var st = document.getElementById('github-status');
     if (btn) btn.style.display = 'inline-flex';
-    var st = $('github-status');
     if (st) st.textContent = '✅ ' + ghConfig.repo;
 }
 
+/* ── UTF-8 → Base64 ── */
 function encodeUTF8Base64(str) {
-    var encoder = new TextEncoder();
-    var uint8 = encoder.encode(str);
-    var binary = '';
-    for (var i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
-    return btoa(binary);
+    try {
+        var encoder = new TextEncoder();
+        var uint8 = encoder.encode(str);
+        var binary = '';
+        for (var i = 0; i < uint8.length; i++) {
+            binary += String.fromCharCode(uint8[i]);
+        }
+        return btoa(binary);
+    } catch(e) {
+        console.error('Encode error:', e);
+        return '';
+    }
 }
 
+/* ── Lấy SHA của file trên GitHub ── */
 async function getFileSHA(filePath) {
     try {
-        var resp = await fetch('https://api.github.com/repos/' + ghConfig.repo + '/contents/' + filePath, {
+        var url = 'https://api.github.com/repos/' + ghConfig.repo + '/contents/' + filePath;
+        var resp = await fetch(url, {
             headers: { 'Authorization': 'token ' + ghConfig.token }
         });
-        if (resp.ok) { var d = await resp.json(); return d.sha; }
-    } catch(e) {}
+        if (resp.ok) {
+            var data = await resp.json();
+            return data.sha;
+        }
+    } catch(e) {
+        console.warn('Get SHA error:', e);
+    }
     return null;
 }
 
+/* ── Push 1 file lên GitHub ── */
 async function pushFile(filePath, content, message) {
     var sha = await getFileSHA(filePath);
-    var body = { message: message, content: encodeUTF8Base64(content) };
+    var body = {
+        message: message,
+        content: encodeUTF8Base64(content)
+    };
     if (sha) body.sha = sha;
-    var resp = await fetch('https://api.github.com/repos/' + ghConfig.repo + '/contents/' + filePath, {
+
+    var url = 'https://api.github.com/repos/' + ghConfig.repo + '/contents/' + filePath;
+    var resp = await fetch(url, {
         method: 'PUT',
-        headers: { 'Authorization': 'token ' + ghConfig.token, 'Content-Type': 'application/json' },
+        headers: {
+            'Authorization': 'token ' + ghConfig.token,
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(body)
     });
-    if (!resp.ok) { var err = await resp.json(); throw new Error(err.message || 'Lỗi push'); }
+
+    if (!resp.ok) {
+        var err = await resp.json();
+        throw new Error(err.message || 'Lỗi push ' + filePath);
+    }
+
     return await resp.json();
 }
 
-async function testConnection() {
-    var r = $('gh-test-result');
-    r.style.display = 'block';
-    r.style.background = '#fff3cd'; r.style.color = '#856404';
-    r.textContent = '⏳ Đang kiểm tra...';
+/* ── Test kết nối GitHub ── */
+async function doTestConnection() {
+    console.log('Testing GitHub connection...');
+    var resultEl = document.getElementById('gh-test-result');
+    if (!resultEl) {
+        alert('Lỗi: Không tìm thấy element gh-test-result');
+        return;
+    }
+
+    var tokenEl = document.getElementById('gh-token');
+    var repoEl = document.getElementById('gh-repo');
+
+    if (!tokenEl || !repoEl) {
+        alert('Lỗi: Không tìm thấy form inputs');
+        return;
+    }
+
+    var testToken = tokenEl.value.trim();
+    var testRepo = repoEl.value.trim();
+
+    if (!testToken || !testRepo) {
+        resultEl.style.display = 'block';
+        resultEl.style.background = '#f8d7da';
+        resultEl.style.color = '#721c24';
+        resultEl.textContent = '❌ Vui lòng nhập Token và Repository';
+        return;
+    }
+
+    resultEl.style.display = 'block';
+    resultEl.style.background = '#fff3cd';
+    resultEl.style.color = '#856404';
+    resultEl.textContent = '⏳ Đang kiểm tra kết nối...';
+
     try {
-        var resp = await fetch('https://api.github.com/repos/' + $('gh-repo').value.trim(), {
-            headers: { 'Authorization': 'token ' + $('gh-token').value.trim() }
+        var resp = await fetch('https://api.github.com/repos/' + testRepo, {
+            headers: { 'Authorization': 'token ' + testToken }
         });
-        if (!resp.ok) throw new Error((await resp.json()).message);
-        var repo = await resp.json();
-        r.style.background = '#d4edda'; r.style.color = '#155724';
-        r.innerHTML = '✅ Kết nối OK!<br>📂 ' + repo.full_name + '<br>🔒 Push: ' + (repo.permissions.push ? 'Có' : 'Không');
+
+        if (!resp.ok) {
+            var errData = await resp.json();
+            throw new Error(errData.message || 'Không thể kết nối');
+        }
+
+        var repoData = await resp.json();
+
+        var pathEl = document.getElementById('gh-datajs-path');
+        var filePath = pathEl ? pathEl.value.trim() : 'assets/js/data.js';
+
+        var fileResp = await fetch(
+            'https://api.github.com/repos/' + testRepo + '/contents/' + filePath,
+            { headers: { 'Authorization': 'token ' + testToken } }
+        );
+
+        var fileInfo = '';
+        if (fileResp.ok) {
+            var fileData = await fileResp.json();
+            fileInfo = '✅ File data.js tồn tại (' + (fileData.size / 1024).toFixed(1) + ' KB)';
+        } else {
+            fileInfo = '⚠️ File data.js chưa tồn tại (sẽ tạo mới khi push)';
+        }
+
+        resultEl.style.background = '#d4edda';
+        resultEl.style.color = '#155724';
+        resultEl.innerHTML =
+            '✅ Kết nối thành công!<br>' +
+            '📂 Repo: <b>' + repoData.full_name + '</b><br>' +
+            '🔒 Push: ' + (repoData.permissions && repoData.permissions.push ? '✅ Có quyền' : '❌ Không có quyền') + '<br>' +
+            fileInfo;
+
     } catch(e) {
-        r.style.background = '#f8d7da'; r.style.color = '#721c24';
-        r.textContent = '❌ ' + e.message;
+        console.error('Test connection error:', e);
+        resultEl.style.background = '#f8d7da';
+        resultEl.style.color = '#721c24';
+        resultEl.textContent = '❌ Lỗi: ' + e.message;
     }
 }
 
+/* ── Push lên GitHub ── */
 async function doPush() {
-    var msg = $('push-message').value.trim() || ('Cập nhật ' + new Date().toLocaleString('vi-VN'));
-    var bar = $('push-bar');
-    var status = $('push-status');
-    $('push-progress').style.display = 'block';
-    $('push-confirm').disabled = true;
+    var msgEl = document.getElementById('push-message');
+    var barEl = document.getElementById('push-bar');
+    var statusEl = document.getElementById('push-status');
+    var progressEl = document.getElementById('push-progress');
+    var confirmBtn = document.getElementById('push-confirm');
+
+    var msg = (msgEl ? msgEl.value.trim() : '') || ('Cập nhật ' + new Date().toLocaleString('vi-VN'));
+
+    if (progressEl) progressEl.style.display = 'block';
+    if (confirmBtn) confirmBtn.disabled = true;
+
     var steps = [];
-    var total = 0;
 
-    if ($('push-datajs').checked && typeof DATA !== 'undefined' && DATA.length) {
-        steps.push({ path: ghConfig.datajsPath, content: 'const HUYET_DATA = ' + JSON.stringify(DATA, null, 2) + ';\n', label: 'data.js' });
+    /* data.js */
+    var pushDatajs = document.getElementById('push-datajs');
+    if (pushDatajs && pushDatajs.checked && typeof DATA !== 'undefined' && DATA.length) {
+        steps.push({
+            path: ghConfig.datajsPath,
+            content: 'const HUYET_DATA = ' + JSON.stringify(DATA, null, 2) + ';\n',
+            label: 'data.js'
+        });
     }
-    if ($('push-benhjs').checked) {
+
+    /* benh-data.js */
+    var pushBenhjs = document.getElementById('push-benhjs');
+    if (pushBenhjs && pushBenhjs.checked) {
         var benhArr = [];
-        try { var raw = localStorage.getItem('huyet888-benh-data'); if (raw) benhArr = JSON.parse(raw); } catch(e) {}
-        if (!benhArr.length && typeof BENH_DATA !== 'undefined') benhArr = BENH_DATA;
+        try {
+            var rawBenh = localStorage.getItem('huyet888-benh-data');
+            if (rawBenh) benhArr = JSON.parse(rawBenh);
+        } catch(e) {}
+        if (!benhArr.length && typeof BENH_DATA !== 'undefined') {
+            benhArr = BENH_DATA;
+        }
         if (benhArr.length) {
-            steps.push({ path: ghConfig.benhjsPath, content: 'const BENH_DATA = ' + JSON.stringify(benhArr, null, 2) + ';\n', label: 'benh-data.js' });
+            steps.push({
+                path: ghConfig.benhjsPath,
+                content: 'const BENH_DATA = ' + JSON.stringify(benhArr, null, 2) + ';\n',
+                label: 'benh-data.js'
+            });
         }
     }
-    if ($('push-mapjs').checked) {
+
+    /* map-data.json */
+    var pushMapjs = document.getElementById('push-mapjs');
+    if (pushMapjs && pushMapjs.checked) {
         var mapData = { maps: [] };
-        try { var raw2 = localStorage.getItem('huyet888-maps'); if (raw2) mapData = JSON.parse(raw2); } catch(e) {}
+        try {
+            var rawMap = localStorage.getItem('huyet888-maps');
+            if (rawMap) mapData = JSON.parse(rawMap);
+        } catch(e) {}
         if (mapData.maps && mapData.maps.length) {
-            steps.push({ path: ghConfig.mapjsPath, content: JSON.stringify(mapData, null, 2), label: 'map-data.json' });
+            steps.push({
+                path: ghConfig.mapjsPath,
+                content: JSON.stringify(mapData, null, 2),
+                label: 'map-data.json'
+            });
         }
     }
 
-    if (!steps.length) { toast('⚠️ Không có dữ liệu nào để push'); $('push-confirm').disabled = false; return; }
+    if (!steps.length) {
+        toast('⚠️ Không có dữ liệu nào để push');
+        if (confirmBtn) confirmBtn.disabled = false;
+        return;
+    }
 
-    total = steps.length;
     var success = 0;
     var errors = [];
 
     for (var i = 0; i < steps.length; i++) {
         var step = steps[i];
-        status.textContent = '📤 Đang push ' + step.label + '...';
-        bar.style.width = ((i / total) * 100) + '%';
+        if (statusEl) statusEl.textContent = '📤 Đang push ' + step.label + ' (' + (i+1) + '/' + steps.length + ')...';
+        if (barEl) barEl.style.width = ((i / steps.length) * 100) + '%';
+
         try {
             await pushFile(step.path, step.content, msg + ' [' + step.label + ']');
             success++;
+            console.log('Pushed:', step.label);
         } catch(e) {
+            console.error('Push error ' + step.label + ':', e);
             errors.push(step.label + ': ' + e.message);
         }
     }
 
-    bar.style.width = '100%';
-    $('push-confirm').disabled = false;
+    if (barEl) barEl.style.width = '100%';
+    if (confirmBtn) confirmBtn.disabled = false;
 
     if (errors.length) {
-        status.textContent = '⚠️ ' + success + '/' + total + ' thành công. Lỗi: ' + errors.join(', ');
+        if (statusEl) statusEl.textContent = '⚠️ ' + success + '/' + steps.length + ' OK. Lỗi: ' + errors.join(', ');
         toast('⚠️ Push có lỗi: ' + errors.join(', '), 4000);
     } else {
-        status.textContent = '✅ Push thành công ' + success + ' file!';
-        toast('✅ Đã push ' + success + ' file lên GitHub!');
-        hideUnsavedBadge();
-        setTimeout(function() { $('github-push-overlay').classList.remove('open'); }, 1500);
+        if (statusEl) statusEl.textContent = '✅ Push thành công ' + success + ' file!';
+        toast('✅ Đã push ' + success + ' file lên GitHub! Netlify sẽ tự deploy.');
+
+        if (typeof hideUnsavedBadge === 'function') hideUnsavedBadge();
+
+        setTimeout(function() {
+            var overlay = document.getElementById('github-push-overlay');
+            if (overlay) overlay.classList.remove('open');
+        }, 2000);
     }
 }
 
-// ── Event bindings ──
-$('btn-github-config').addEventListener('click', function() {
-    $('github-overlay').classList.add('open');
-    $('gh-test-result').style.display = 'none';
-});
-$$('gh-cancel').addEventListener('click', function() { $$('github-overlay').classList.remove('open'); });
-$('gh-test').addEventListener('click', testConnection);
-$('gh-save-config').addEventListener('click', function() {
-    if (!$$('gh-token').value.trim() || !$$('gh-repo').value.trim()) { toast('⚠️ Nhập Token và Repo'); return; }
-    saveGHConfig();
-    showGHConnected();
-    $('github-overlay').classList.remove('open');
-    toast('✅ Đã lưu cấu hình GitHub');
-});
-$('btn-push-github').addEventListener('click', function() {
-    $('push-progress').style.display = 'none';
-    $('push-bar').style.width = '0%';
-    $('push-message').value = '';
-    $('push-confirm').disabled = false;
-    var di = $('push-datajs-info');
-    if (di) di.textContent = (typeof DATA !== 'undefined' ? DATA.length : 0) + ' huyệt';
-    var bi = $('push-benhjs-info');
-    if (bi) {
-        var bc = 0;
-        try { var r = localStorage.getItem('huyet888-benh-data'); if (r) bc = JSON.parse(r).length; } catch(e) {}
-        if (!bc && typeof BENH_DATA !== 'undefined') bc = BENH_DATA.length;
-        bi.textContent = bc + ' hội chứng';
+/* ── Bind events ── */
+function bindEvents() {
+    /* Nút mở config modal */
+    var btnConfig = document.getElementById('btn-github-config');
+    if (btnConfig) {
+        btnConfig.addEventListener('click', function() {
+            console.log('Open GitHub config');
+            var overlay = document.getElementById('github-overlay');
+            if (overlay) {
+                overlay.classList.add('open');
+                var resultEl = document.getElementById('gh-test-result');
+                if (resultEl) resultEl.style.display = 'none';
+            } else {
+                alert('Lỗi: Không tìm thấy modal #github-overlay. Kiểm tra HTML.');
+            }
+        });
+    } else {
+        console.warn('btn-github-config not found');
     }
-    var mi = $('push-mapjs-info');
-    if (mi) {
-        var mc = 0;
-        try { var r2 = localStorage.getItem('huyet888-maps'); if (r2) mc = JSON.parse(r2).maps.length; } catch(e) {}
-        mi.textContent = mc + ' bản đồ';
-    }
-    $('github-push-overlay').classList.add('open');
-});
-$$('push-cancel').addEventListener('click', function() { $$('github-push-overlay').classList.remove('open'); });
-$('push-confirm').addEventListener('click', doPush);
 
+    /* Nút hủy config */
+    var btnCancel = document.getElementById('gh-cancel');
+    if (btnCancel) {
+        btnCancel.addEventListener('click', function() {
+            document.getElementById('github-overlay').classList.remove('open');
+        });
+    }
+
+    /* Nút test kết nối */
+    var btnTest = document.getElementById('gh-test');
+    if (btnTest) {
+        btnTest.addEventListener('click', function() {
+            console.log('Test connection clicked');
+            doTestConnection();
+        });
+    } else {
+        console.warn('gh-test button not found');
+    }
+
+    /* Nút lưu config */
+    var btnSave = document.getElementById('gh-save-config');
+    if (btnSave) {
+        btnSave.addEventListener('click', function() {
+            console.log('Save config clicked');
+            if (doSaveConfig()) {
+                showGHConnected();
+                document.getElementById('github-overlay').classList.remove('open');
+                toast('✅ Đã lưu cấu hình GitHub');
+            }
+        });
+    } else {
+        console.warn('gh-save-config button not found');
+    }
+
+        /* Nút mở push modal */
+    var btnPush = document.getElementById('btn-push-github');
+    if (btnPush) {
+        btnPush.addEventListener('click', function() {
+            if (!ghConfig.token || !ghConfig.repo) {
+                toast('⚠️ Chưa cấu hình GitHub. Nhấn ⚙️ GitHub để thiết lập.');
+                return;
+            }
+
+            var progressEl = document.getElementById('push-progress');
+            var barEl = document.getElementById('push-bar');
+            var confirmBtn = document.getElementById('push-confirm');
+            var msgEl = document.getElementById('push-message');
+
+            if (progressEl) progressEl.style.display = 'none';
+            if (barEl) barEl.style.width = '0%';
+            if (confirmBtn) confirmBtn.disabled = false;
+            if (msgEl) msgEl.value = '';
+
+            var di = document.getElementById('push-datajs-info');
+            if (di) di.textContent = (typeof DATA !== 'undefined' ? DATA.length : 0) + ' huyệt';
+
+            var bi = document.getElementById('push-benhjs-info');
+            if (bi) {
+                var bc = 0;
+                try { var r = localStorage.getItem('huyet888-benh-data'); if (r) bc = JSON.parse(r).length; } catch(e) {}
+                if (!bc && typeof BENH_DATA !== 'undefined') bc = BENH_DATA.length;
+                bi.textContent = bc + ' hội chứng';
+            }
+
+            var mi = document.getElementById('push-mapjs-info');
+            if (mi) {
+                var mc = 0;
+                try { var r2 = localStorage.getItem('huyet888-maps'); if (r2) mc = JSON.parse(r2).maps.length; } catch(e) {}
+                mi.textContent = mc + ' bản đồ';
+            }
+
+            document.getElementById('github-push-overlay').classList.add('open');
+        });
+    }
+
+    /* Nút hủy push */
+    var btnPushCancel = document.getElementById('push-cancel');
+    if (btnPushCancel) {
+        btnPushCancel.addEventListener('click', function() {
+            document.getElementById('github-push-overlay').classList.remove('open');
+        });
+    }
+
+    /* Nút xác nhận push */
+    var btnPushConfirm = document.getElementById('push-confirm');
+    if (btnPushConfirm) {
+        btnPushConfirm.addEventListener('click', function() {
+            doPush();
+        });
+    }
+}
+
+/* ── Init ── */
+bindEvents();
 loadGHConfig();
+console.log('GitHub Integration loaded');
 
 })();
 </script>
